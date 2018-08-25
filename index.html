@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Genesys Character Generator</title>
+
+    <link href="./style/main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="left">
+    <table id="characterlist" class="characterlist">
+    </table>
+</div>
+
+<div id="main" class="disabled">
+    XP Spent: <label id="xp_spent"></label>
+
+    <h3 class="sheet-full-header">Character</h3>
+    <div class="segment-blue">
+        <table>
+            <tr>
+                <td> Character Name:</td>
+                <td><input type="text" id="character_name"></td>
+            </tr>
+            <tr>
+                <td>Player Name:</td>
+                <td><input type="text" id="character_player"></td>
+            </tr>
+            <tr>
+                <td>Campaign Name:</td>
+                <td><input type="text" id="character_campaign"></td>
+            </tr>
+            <tr>
+                <td>Gender:</td>
+                <td><input type="text" id="character_gender"></td>
+            </tr>
+            <tr>
+                <td>Age:</td>
+                <td><input type="text" id="character_age"></td>
+            </tr>
+            <tr>
+                <td>Height:</td>
+                <td><input type="text" id="character_height"></td>
+            </tr>
+            <tr>
+                <td>Build:</td>
+                <td><input type="text" id="character_build"></td>
+            </tr>
+            <tr>
+                <td>Hair:</td>
+                <td><input type="text" id="character_hair"></td>
+            </tr>
+            <tr>
+                <td>Eyes:</td>
+                <td><input type="text" id="character_eyes"></td>
+            </tr>
+            <tr>
+                <td>Notable Features:</td>
+                <td><textarea id="character_features"></textarea></td>
+            </tr>
+        </table>
+    </div>
+
+    <h3 class="sheet-full-header">Archetype / Species</h3>
+    <div class="segment-blue">
+        <table>
+            <tr>
+                <td>
+                    <select id="character_archetype">
+                    </select>
+                </td>
+                <td rowspan="2">
+                    <ul>
+                        <li><b>Starting Wound Threshold:</b> <span id="archetype_wounds">10</span>+ Brawn</li>
+                        <li><b>Starting Strain Threshold:</b> <span id="archetype_strain">10</span>+ Willpower</li>
+                        <li><b>Starting Experience:</b> <span id="archetype_xp">100</span></li>
+                        <li><b>Starting Skills:</b> <span id="archetype_skills"></span></li>
+                        <li></li>
+                    </ul>
+                </td>
+            </tr>
+            <tr class="archetype-characteristics">
+                <td>
+                    <input name="archetype_brawn" type="number" max="7" min="1" value="1" readonly/>
+                    <label>BRAWN</label>
+                </td>
+                <td>
+                    <input name="archetype_agility" type="number" max="7" min="1" value="1" readonly/>
+                    <label>AGILITY</label>
+                </td>
+                <td>
+                    <input name="archetype_intellect" type="number" max="7" min="1" value="1" readonly/>
+                    <label>INTELLECT</label>
+                </td>
+                <td>
+                    <input name="archetype_cunning" type="number" max="7" min="1" value="1" readonly/>
+                    <label>CUNNING</label>
+                </td>
+                <td>
+                    <input name="archetype_willpower" type="number" max="7" min="1" value="1" readonly/>
+                    <label>WILLPOWER</label>
+                </td>
+                <td>
+                    <input id="archetype_presence" type="number" max="7" min="1" value="1" readonly/>
+                    <label>PRESENCE</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <h3 class="sheet-full-header">Career</h3>
+    <div class="segment-blue">
+        <table>
+            <tr>
+                <td>
+                    <select id="character_career">
+                    </select>
+                </td>
+                <td>
+                    <ul class="no-style">
+                        <li><input type="checkbox" id="careerskill_0_freerank"><span id="careerskill_0"></span></li>
+                        <li><input type="checkbox" id="careerskill_1_freerank"><span id="careerskill_1"></span></li>
+                        <li><input type="checkbox" id="careerskill_2_freerank"><span id="careerskill_2"></span></li>
+                        <li><input type="checkbox" id="careerskill_3_freerank"><span id="careerskill_3"></span></li>
+                        <li><input type="checkbox" id="careerskill_4_freerank"><span id="careerskill_4"></span></li>
+                        <li><input type="checkbox" id="careerskill_5_freerank"><span id="careerskill_5"></span></li>
+                        <li><input type="checkbox" id="careerskill_6_freerank"><span id="careerskill_6"></span></li>
+                        <li><input type="checkbox" id="careerskill_7_freerank"><span id="careerskill_7"></span></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div style="text-align: center;">
+        <table class="sheet-stats" cellspacing="0" cellpadding="0" border="0" align="center">
+            <tbody>
+            <tr class="sheet-stat-background">
+                <td class="sheet-stat-single">
+                    <div><label class="sheet-label-title">SOAK VALUE</label></div>
+                    <div><input id="character_soak" type="number" min="-1" value="0" style="width: 50px !important;"
+                                onkeypress="if(event.preventDefault) event.preventDefault();">
+                    </div>
+                </td>
+                <td class="sheet-stat-double">
+                    <div><label class="sheet-label-title">WOUNDS</label></div>
+                    <div><input class="sheet-left" id="character_wound_threshold" type="number" min="-1" value="0"
+                                onkeypress="if(event.preventDefault) event.preventDefault();">
+                        <input id="character_wounds" type="number" min="0" value="0"></div>
+                    <div><span class="sheet-subtitle">
+                            <label>Threshold</label>
+                            <label>Current</label>
+                        </span></div>
+                </td>
+                <td class="sheet-stat-double sheet-stat-minion-off">
+                    <div><label class="sheet-label-title">STRAIN</label></div>
+                    <div><input class="sheet-left" id="character_strain_threshold" type="number" min="-1" value="0"
+                                onkeypress="if(event.preventDefault) event.preventDefault();">
+                        <input id="character_strain" type="number" min="0" value="0"></div>
+                    <div><span class="sheet-subtitle">
+                            <label>Threshold</label>
+                            <label>Current</label>
+                        </span></div>
+                </td>
+                <td class="sheet-stat-double">
+                    <div><label class="sheet-label-title">DEFENSE</label></div>
+                    <div><input class="sheet-left" id="character_defense_ranged" type="number" max="10" min="0"
+                                value="0">
+                        <input id="character_defense_melee" type="number" max="10" min="0" value="0"></div>
+                    <div><span class="sheet-subtitle">
+                            <label>Range</label>
+                            <label>Melee</label>
+                        </span></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="section_characteristics">
+        <input type="checkbox" id="detail_brawn" class="hidden">
+        <input type="checkbox" id="detail_agility" class="hidden">
+        <input type="checkbox" id="detail_intellect" class="hidden">
+        <input type="checkbox" id="detail_cunning" class="hidden">
+        <input type="checkbox" id="detail_willpower" class="hidden">
+        <input type="checkbox" id="detail_presence" class="hidden">
+
+        <table class="characteristics" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            <tr>
+                <td></td>
+                <td>
+                    <label name="attr_brawn" class="char_value"></label>
+                    <label class="char_label">BRAWN</label>
+                    <label class="char_clickable" for="detail_brawn">&#x25BC;</label>
+                </td>
+                <td>
+                    <label name="attr_agility" class="char_value"></label>
+                    <label class="char_label">AGILITY</label>
+                    <label class="char_clickable" for="detail_agility">&#x25BC;</label>
+                </td>
+                <td>
+                    <label name="attr_intellect" class="char_value"></label>
+                    <label class="char_label">INTELLECT</label>
+                    <label class="char_clickable" for="detail_intellect">&#x25BC;</label>
+                </td>
+                <td>
+                    <label name="attr_cunning" class="char_value"></label>
+                    <label class="char_label">CUNNING</label>
+                    <label class="char_clickable" for="detail_cunning">&#x25BC;</label>
+                </td>
+                <td>
+                    <label name="attr_willpower" class="char_value"></label>
+                    <label class="char_label">WILLPOWER</label>
+                    <label class="char_clickable" for="detail_willpower">&#x25BC;</label>
+                </td>
+                <td>
+                    <label name="attr_presence" class="char_value"></label>
+                    <label class="char_label">PRESENCE</label>
+                    <label class="char_clickable" for="detail_presence">&#x25BC;</label>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="adjuststats">
+                        <ul class="no-style">
+                            <li>
+                                From Archetype: <span name="archetype_brawn">2</span>
+                            </li>
+                            <li>
+                                Bought with XP: <input type="number" id="bought_brawn" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Talents: <input type="number" id="talent_brawn" min="0" max="5" value="0">
+                            </li>
+                            <li>From Equipment: <input type="number" id="equipment_brawn" min="0" max="5" value="0">
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="adjuststats">
+                        <ul class="no-style">
+                            <li>
+                                From Archetype: <span name="archetype_agility">2</span>
+                            </li>
+                            <li>
+                                Bought with XP: <input type="number" id="bought_agility" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Talents: <input type="number" id="talent_agility" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Equipment: <input type="number" id="equipment_agility" min="0" max="5" value="0">
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="adjuststats">
+                        <ul class="no-style">
+                            <li>
+                                From Archetype: <span name="archetype_intellect">2</span>
+                            </li>
+                            <li>
+                                Bought with XP: <input type="number" id="bought_intellect" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Talents: <input type="number" id="talent_intellect" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Equipment: <input type="number" id="equipment_intellect" min="0" max="5" value="0">
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="adjuststats">
+                        <ul class="no-style">
+                            <li>
+                                From Archetype: <span name="archetype_cunning">2</span>
+                            </li>
+                            <li>
+                                Bought with XP: <input type="number" id="bought_cunning" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Talents: <input type="number" id="talent_cunning" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Equipment: <input type="number" id="equipment_cunning" min="0" max="5" value="0">
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="adjuststats">
+                        <ul class="no-style">
+                            <li>
+                                From Archetype: <span name="archetype_willpower">2</span>
+                            </li>
+                            <li>
+                                Bought with XP: <input type="number" id="bought_willpower" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Talents: <input type="number" id="talent_willpower" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Equipment: <input type="number" id="equipment_willpower" min="0" max="5" value="0">
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="adjuststats">
+                        <ul class="no-style">
+                            <li>
+                                From Archetype: <span name="archetype_presence">2</span>
+                            </li>
+                            <li>
+                                Bought with XP: <input type="number" id="bought_presence" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Talents: <input type="number" id="talent_presence" min="0" max="5" value="0">
+                            </li>
+                            <li>
+                                From Equipment: <input type="number" id="equipment_presence" min="0" max="5" value="0">
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <h3 class="sheet-full-header">Skills</h3>
+    <div id="skilllist" class="segment-blue">
+    </div>
+</div>
+
+<script>
+    // You can also require other files to run in this process
+    console.log("yooooo, internal script");
+
+    require('./renderer.js')
+</script>
+</body>
+</html>

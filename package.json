@@ -1,0 +1,17 @@
+{
+  "name": "genesys-character-generator",
+  "version": "0.0.5",
+  "description": "Electron App for building Characters for the Genesys RPG System",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+  ],
+  "author": "BluSunrize",
+  "devDependencies": {
+    "electron": "^2.0.0",
+    "electron-store": "^2.0.0",
+    "less": "^3.8.1"
+  }
+}

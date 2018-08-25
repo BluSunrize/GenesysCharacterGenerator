@@ -1,0 +1,431 @@
+h3 {
+  line-height: 25px;
+  margin: 0 0 -13px;
+  padding: 5px 0 0;
+  text-align: center;
+  color: white;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: normal;
+  font-family: "ElektraLight", sans-serif;
+  letter-spacing: 0.1em;
+  clear: both;
+  position: relative;
+  z-index: 1;
+  background: url('http://roll20.foxes.rocks/genesys-header.svg') no-repeat center center;
+  background-size: 130%;
+}
+body {
+  display: grid;
+  grid-template-columns: 150px auto;
+}
+.left {
+  grid-column: 1;
+  height: 600px;
+  overflow-y: auto;
+}
+#main {
+  max-width: 750px;
+  margin: 0 auto auto;
+  grid-column: 2;
+}
+#main.disabled {
+  display: none;
+}
+.segment-blue {
+  background: #eef5f6;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+ul {
+  list-style: none;
+}
+ul:not(.no-style) li::before {
+  content: '•';
+  color: #f8a23e;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+ul.no-style {
+  padding-left: 0;
+}
+.hidden {
+  display: none;
+}
+.no-spinner {
+  text-align: center !important;
+  -moz-appearance: textfield !important;
+  -webkit-appearance: textfield !important;
+}
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+input[type=checkbox].hidden {
+  display: none;
+}
+.no-select {
+  background: none;
+  border: none;
+  color: black;
+  text-align: center !important;
+  -moz-appearance: textfield !important;
+  -webkit-appearance: textfield !important;
+}
+.no-select::-webkit-outer-spin-button,
+.no-select::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.characterlist tr.selected {
+  background: #eef5f6;
+}
+.characterlist td {
+  width: 150px;
+  height: 85px;
+  border: 2px solid #f8a23e;
+  border-radius: 2px;
+}
+.archetype-characteristics {
+  background: url('http://roll20.foxes.rocks/genesys-characteristics-bar.svg') no-repeat center center;
+  background-size: 85%;
+  display: inline-block;
+  width: auto;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  padding-top: 5px;
+}
+.archetype-characteristics td {
+  text-align: center;
+  height: 40.5px;
+  width: 40px;
+  vertical-align: top;
+  background: url('http://roll20.foxes.rocks/genesys-characteristics-overlay.svg') no-repeat center center;
+  background-size: 40px 40px;
+  border: none;
+}
+.archetype-characteristics td label {
+  text-align: center;
+  color: #fff;
+  font-weight: normal;
+  font-size: 6px;
+  display: block;
+  font-family: "Teuton Mager", sans-serif;
+}
+.archetype-characteristics td [type=number] {
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 6.5px;
+  margin-bottom: 3px;
+  background: none;
+  border: none;
+  text-align: center;
+  height: 20px;
+  box-shadow: none;
+  font-family: "Teuton Mager", sans-serif;
+  width: 3.2em !important;
+  text-align: center !important;
+  -moz-appearance: textfield !important;
+  -webkit-appearance: textfield !important;
+}
+.archetype-characteristics td [type=number]::-webkit-outer-spin-button,
+.archetype-characteristics td [type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+label.sheet-label-title {
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  color: #fff;
+  font-size: 11px;
+  line-height: 25px;
+  padding-top: 2px;
+  padding-bottom: 8px;
+  font-family: "Teuton Mager", sans-serif;
+  font-weight: normal;
+  letter-spacing: 0.05em;
+}
+.sheet-stats {
+  width: auto !important;
+  display: inline-block;
+}
+.sheet-stats td {
+  text-align: center;
+  vertical-align: top;
+  border: none;
+  width: 153px !important;
+  height: 87px;
+}
+.sheet-stats td:first-child,
+.sheet-stats td:last-child {
+  width: 150px;
+}
+.sheet-stats tr td div {
+  width: 100%;
+}
+.sheet-stats tr td div:first-child {
+  height: 25px;
+  padding-top: 5px;
+}
+.sheet-stats tr td div:nth-child(2) {
+  height: 28px;
+  padding-top: 7px;
+}
+.sheet-stats tr td.sheet-stat-single {
+  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background-size: contain;
+}
+.sheet-stats tr td.sheet-stat-single:first-child {
+  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background-size: contain;
+}
+.sheet-stats tr td.sheet-stat-single:last-child {
+  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background-size: contain;
+}
+.sheet-stats tr td.sheet-stat-double {
+  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background-size: contain;
+}
+.sheet-stats tr td.sheet-stat-double:first-child {
+  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background-size: contain;
+}
+.sheet-stats tr td.sheet-stat-double:last-child {
+  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background-size: contain;
+}
+.sheet-stats tr.sheet-stat-background td.sheet-stat-single {
+  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background-size: contain, contain;
+}
+.sheet-stats tr.sheet-stat-background td.sheet-stat-single:first-child {
+  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background-size: contain, contain;
+}
+.sheet-stats tr.sheet-stat-background td.sheet-stat-single:last-child {
+  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background-size: contain, contain;
+}
+.sheet-stats tr.sheet-stat-background td.sheet-stat-double {
+  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background-size: contain, contain;
+}
+.sheet-stats tr.sheet-stat-background td.sheet-stat-double:first-child {
+  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background-size: contain, contain;
+}
+.sheet-stats tr.sheet-stat-background td.sheet-stat-double:last-child {
+  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background-size: contain, contain;
+}
+.sheet-stats [type=number] {
+  font-size: 16px;
+  font-weight: bold;
+  width: 45px !important;
+  margin-bottom: 7px;
+}
+.sheet-stats span.sheet-subtitle label {
+  width: 70px !important;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: normal;
+  display: inline-block;
+  padding: 0;
+  font-family: "Teuton Hell", sans-serif;
+  letter-spacing: 0.03em;
+}
+.sheet-stats span.sheet-subtitle label:first-child {
+  text-align: right;
+  margin-right: 3px;
+}
+.sheet-stats span.sheet-subtitle label:last-child {
+  text-align: left;
+  margin-left: 3px;
+}
+.characteristics {
+  background: url('http://roll20.foxes.rocks/genesys-characteristics-bar.svg') no-repeat center center;
+  background-size: 90%;
+  background-position-y: top;
+  display: inline-block;
+  width: auto;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  padding-top: 5px;
+}
+.characteristics tr:first-child td {
+  text-align: center;
+  height: 105.5px;
+  width: 150px;
+  background: url('http://roll20.foxes.rocks/genesys-characteristics-overlay.svg') no-repeat center center;
+  background-size: 100px 100px;
+  border: none;
+}
+.characteristics tr:first-child td:first-child,
+.characteristics tr:first-child td:last-child {
+  background: none;
+}
+.characteristics tr:first-child label.char_value {
+  font-size: 32px;
+  font-weight: bold;
+  position: relative;
+  top: 7px;
+  padding-left: 40px;
+  padding-right: 40px;
+  box-shadow: none;
+  font-family: "Teuton Mager", sans-serif;
+}
+.characteristics tr:first-child label.char_label {
+  text-align: center;
+  color: #fff;
+  position: relative;
+  top: 30px;
+  font-weight: normal;
+  font-size: 12px;
+  display: block;
+  font-family: "Teuton Mager", sans-serif;
+}
+.characteristics tr:first-child label.char_clickable {
+  position: relative;
+  color: white;
+  left: 35px;
+  top: 15px;
+  cursor: pointer;
+}
+.characteristics .adjuststats {
+  display: none;
+  width: 88.5%;
+  margin-left: 6%;
+  padding-left: 5px;
+  padding-right: 0;
+  margin-top: -9.5px;
+  font-size: 10px;
+  font-family: "Teuton Mager", sans-serif;
+  background: #26497b;
+  border: 1px solid #26497b;
+  box-shadow: inset 0px -1px 0px 1px white;
+  box-sizing: border-box;
+  float: left;
+  color: white;
+}
+.characteristics .adjuststats ul li {
+  line-height: 22px;
+}
+.characteristics .adjuststats span,
+.characteristics .adjuststats input {
+  width: 2em !important;
+  float: right;
+  position: relative;
+  right: -11px;
+  color: white;
+  font-family: "Teuton Mager", sans-serif;
+  font-size: 13px !important;
+  font-weight: bold;
+  box-shadow: none;
+  background: none;
+  border: none;
+}
+#skilllist {
+  columns: 2;
+  font-family: "Teuton Mager", sans-serif;
+}
+#skilllist table {
+  width: 100%;
+  border-collapse: collapse;
+  -webkit-column-break-inside: avoid;
+}
+#skilllist table thead {
+  text-align: center;
+  color: #6d6e71;
+}
+#skilllist table tbody tr td {
+  border-bottom: 1px dashed #6d6e71;
+  border-right: 1px dashed #6d6e71;
+}
+#skilllist table tbody tr td:nth-child(1) {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-left: 8px;
+}
+#skilllist table tbody tr td:nth-child(2) {
+  width: 15%;
+  text-align: center;
+}
+#skilllist table tbody tr td:nth-child(3) {
+  width: 30%;
+}
+#skilllist table tbody tr:first-child td {
+  border-top: 1px solid black;
+}
+#skilllist table tbody tr:last-child td {
+  border-bottom: 1px solid black;
+}
+#skilllist table tbody tr td:first-child {
+  border-left: 1px solid black;
+}
+#skilllist table tbody tr td:last-child {
+  border-right: 1px solid black;
+}
+#skilllist label.skill {
+  border: 1px dotted #6d6e71;
+  border-radius: 50%;
+  font-size: 14px;
+  padding: 2px 4px;
+}
+#skilllist label.skill::before {
+  content: '\00a0\00a0\00a0';
+}
+#skilllist label.skill.checked {
+  padding-left: 0;
+  padding-right: 0;
+}
+#skilllist label.skill.checked::before {
+  content: '\00a0\2713\00a0';
+}
+#skilllist input[type=number].skill {
+  display: none;
+}
+#skilllist input[type=range].skill {
+  -webkit-appearance: none;
+  background: url("../img/skills_empty.png") no-repeat center center;
+  background-size: 100%;
+  height: 21px;
+  width: 129px;
+}
+#skilllist input[type=range].skill::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0;
+  height: 0;
+}
+#skilllist input[type=range].skill.rank1 {
+  background-image: url("../img/skills_1.png");
+}
+#skilllist input[type=range].skill.rank2 {
+  background-image: url("../img/skills_2.png");
+}
+#skilllist input[type=range].skill.rank3 {
+  background-image: url("../img/skills_3.png");
+}
+#skilllist input[type=range].skill.rank4 {
+  background-image: url("../img/skills_4.png");
+}
+#skilllist input[type=range].skill.rank5 {
+  background-image: url("../img/skills_5.png");
+}
+#detail_brawn:checked  ~ table tr td:nth-child(2) div.adjuststats,
+#detail_agility:checked  ~ table tr td:nth-child(3) div.adjuststats,
+#detail_intellect:checked  ~ table tr td:nth-child(4) div.adjuststats,
+#detail_cunning:checked  ~ table tr td:nth-child(5) div.adjuststats,
+#detail_willpower:checked  ~ table tr td:nth-child(6) div.adjuststats,
+#detail_presence:checked  ~ table tr td:nth-child(7) div.adjuststats {
+  display: block;
+}
+/*# sourceMappingURL=main.css.map */

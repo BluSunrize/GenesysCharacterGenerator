@@ -1,0 +1,494 @@
+@import "mixins.less";
+
+@image: "http://roll20.foxes.rocks/";
+
+@genesys-grey: #6d6e71;
+@genesys-lightblue: #eef5f6;
+@genesys-orange: #f8a23e;
+@genesys-blue: #26497b;
+@genesys-red: #902322;
+
+@ElektraLight: "ElektraLight", sans-serif;
+@TeutonMager: "Teuton Mager", sans-serif;
+@TeutonHell: "Teuton Hell", sans-serif;
+
+// Headlines
+h3 {
+  line-height: 25px;
+  margin: 0 0 -13px;
+  padding: 5px 0 0;
+  text-align: center;
+  color: white;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: normal;
+  font-family: @ElektraLight;
+  letter-spacing: 0.1em;
+  clear: both;
+  position: relative;
+  z-index: 1;
+  background+: url('@{image}genesys-header.svg') no-repeat center center;
+  background-size+: 130%;
+}
+
+// Base Structure
+body {
+  display: grid;
+  grid-template-columns: 150px auto;
+}
+
+.left {
+  grid-column: 1;
+  height: 600px;
+  overflow-y: auto;
+}
+
+#main {
+  max-width: 750px;
+  margin: 0 auto auto;
+  grid-column: 2;
+
+  &.disabled {
+    display: none;
+  }
+}
+
+.segment-blue {
+  background: @genesys-lightblue;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style: none;
+
+  &:not(.no-style) li::before {
+    content: '•';
+    color: @genesys-orange;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+  }
+
+  &.no-style {
+    padding-left: 0;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.no-spinner {
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  text-align: center !important;
+  -moz-appearance: textfield !important;
+  -webkit-appearance: textfield !important;
+}
+
+input[type=checkbox].hidden {
+  display: none;
+}
+
+.no-select {
+  background: none;
+  border: none;
+  color: black;
+  .no-spinner();
+}
+
+// Elements
+.characterlist {
+  tr.selected {
+    background: @genesys-lightblue;
+  }
+
+  td {
+    width: 150px;
+    height: 85px;
+    border: 2px solid @genesys-orange;
+    border-radius: 2px;
+  }
+}
+
+.archetype-characteristics {
+  background+: url('@{image}genesys-characteristics-bar.svg') no-repeat center center;
+  background-size: 85%;
+  display: inline-block;
+  width: auto;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  padding-top: 5px;
+
+  td {
+    text-align: center;
+    height: 40.5px;
+    width: 40px;
+    vertical-align: top;
+    background+: url('@{image}genesys-characteristics-overlay.svg') no-repeat center center;
+    background-size: 40px 40px;
+    border: none;
+
+    label {
+      text-align: center;
+      color: #fff;
+      font-weight: normal;
+      font-size: 6px;
+      display: block;
+      font-family: @TeutonMager;
+    }
+
+    [type=number] {
+      font-size: 13px;
+      font-weight: bold;
+      margin-top: 6.5px;
+      margin-bottom: 3px;
+      background: none;
+      border: none;
+      text-align: center;
+      height: 20px;
+      box-shadow: none;
+      font-family: @TeutonMager;
+      width: 3.2em !important;
+      .no-spinner();
+    }
+  }
+}
+
+label.sheet-label-title {
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  color: #fff;
+  font-size: 11px;
+  line-height: 25px;
+  padding-top: 2px;
+  padding-bottom: 8px;
+  font-family: @TeutonMager;
+  font-weight: normal;
+  letter-spacing: 0.05em;
+}
+
+.sheet-stats {
+  width: auto !important;
+  display: inline-block;
+
+  td {
+    text-align: center;
+    vertical-align: top;
+    border: none;
+    width: 153px !important;
+    height: 87px;
+
+    &:first-child,
+    &:last-child {
+      width: 150px;
+    }
+  }
+
+  // todo there must be a way to do this progmatically
+  tr td {
+    div {
+      width: 100%;
+      &:first-child {
+        height: 25px;
+        padding-top: 5px;
+      }
+      &:nth-child(2) {
+        height: 28px;
+        padding-top: 7px;
+      }
+    }
+
+    &.sheet-stat-single {
+      .stat-single();
+
+      &:first-child {
+        .stat-single();
+      }
+
+      &:last-child {
+        .stat-single();
+      }
+    }
+
+    &.sheet-stat-double {
+      .stat-double();
+
+      &:first-child {
+        .stat-double();
+      }
+
+      &:last-child {
+        .stat-double();
+      }
+    }
+  }
+
+  tr.sheet-stat-background td {
+    &.sheet-stat-single {
+      .stat-single();
+      background-size+: contain;
+
+      &:first-child {
+        .stat-single();
+        background-size+: contain;
+      }
+
+      &:last-child {
+        .stat-single();
+        background-size+: contain;
+      }
+    }
+
+    &.sheet-stat-double {
+      .stat-double();
+      background-size+: contain;
+
+      &:first-child {
+        .stat-double();
+        background-size+: contain;
+      }
+
+      &:last-child {
+        .stat-double();
+        background-size+: contain;
+      }
+    }
+  }
+
+  [type=number] {
+    font-size: 16px;
+    font-weight: bold;
+    width: 45px !important;
+    margin-bottom: 7px;
+  }
+
+  span.sheet-subtitle label {
+    width: 70px !important;
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: normal;
+    display: inline-block;
+    padding: 0;
+    font-family: @TeutonHell;
+    letter-spacing: 0.03em;
+
+    &:first-child {
+      text-align: right;
+      margin-right: 3px;
+    }
+
+    &:last-child {
+      text-align: left;
+      margin-left: 3px;
+    }
+  }
+}
+
+.characteristics {
+  background+: url('@{image}genesys-characteristics-bar.svg') no-repeat center center;
+  background-size: 90%;
+  background-position-y: top;
+  display: inline-block;
+  width: auto;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  padding-top: 5px;
+
+  tr:first-child {
+    td {
+      text-align: center;
+      height: 105.5px;
+      width: 150px;
+      //vertical-align: top;
+      background+: url('@{image}genesys-characteristics-overlay.svg') no-repeat center center;
+      background-size: 100px 100px;
+      border: none;
+
+      &:first-child,
+      &:last-child {
+        background: none;
+      }
+    }
+
+    label.char_value {
+      font-size: 32px;
+      font-weight: bold;
+      position: relative;
+      top: 7px;
+      padding-left: 40px;
+      padding-right: 40px;
+      box-shadow: none;
+      font-family: @TeutonMager;
+    }
+
+    label.char_label {
+      text-align: center;
+      color: #fff;
+      position: relative;
+      top: 30px;
+      font-weight: normal;
+      font-size: 12px;
+      display: block;
+      font-family: @TeutonMager;
+    }
+    label.char_clickable {
+      position: relative;
+      color: white;
+      left: 35px;
+      top: 15px;
+      cursor: pointer;
+    }
+  }
+
+  .adjuststats {
+    display: none;
+    width: 88.5%;
+    margin-left: 6%;
+    padding-left: 5px;
+    padding-right: 0;
+    margin-top: -9.5px;
+    font-size: 10px;
+    font-family: @TeutonMager;
+    background: @genesys-blue;
+    border: 1px solid @genesys-blue;
+    box-shadow: inset 0px -1px 0px 1px white;
+    box-sizing: border-box;
+    float: left;
+    color: white;
+
+    ul li {
+      line-height: 22px;
+    }
+    span, input {
+      width: 2em !important;
+      float: right;
+      position: relative;
+      right: -11px;
+      color: white;
+      font-family: @TeutonMager;
+      font-size: 13px !important;
+      font-weight: bold;
+
+      box-shadow: none;
+      background: none;
+      border: none;
+    }
+  }
+}
+
+#skilllist {
+  columns: 2;
+  font-family: @TeutonMager;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    -webkit-column-break-inside: avoid;
+
+    thead {
+      text-align: center;
+      color: @genesys-grey;
+    }
+    tbody tr {
+      td {
+        border-bottom: 1px dashed @genesys-grey;
+        border-right: 1px dashed @genesys-grey;
+
+        &:nth-child(1) {
+          font-size: 11px;
+          font-weight: bold;
+          text-transform: uppercase;
+          padding-left: 8px;
+        }
+        &:nth-child(2) {
+          width: 15%;
+          text-align: center;
+        }
+        &:nth-child(3) {
+          width: 30%;
+        }
+      }
+
+      &:first-child td {
+        border-top: 1px solid black;
+      }
+      &:last-child td {
+        border-bottom: 1px solid black;
+      }
+      td:first-child {
+        border-left: 1px solid black;
+      }
+      td:last-child {
+        border-right: 1px solid black;
+      }
+    }
+  }
+
+  label.skill {
+    border: 1px dotted @genesys-grey;
+    border-radius: 50%;
+    font-size: 14px;
+    padding: 2px 4px;
+
+    &::before {
+      content: '\00a0\00a0\00a0';
+    }
+    &.checked {
+      padding-left: 0;
+      padding-right: 0;
+      &::before {
+        content: '\00a0\2713\00a0';
+      }
+    }
+  }
+  input[type=number].skill {
+    display: none;
+  }
+  input[type=range].skill {
+    -webkit-appearance: none;
+    background: url("../img/skills_empty.png") no-repeat center center;
+    background-size: 100%;
+    height: 21px;
+    width: 129px;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 0;
+      height: 0;
+    }
+
+    &.rank1 {
+      background-image: url("../img/skills_1.png");
+    }
+    &.rank2 {
+      background-image: url("../img/skills_2.png");
+    }
+    &.rank3 {
+      background-image: url("../img/skills_3.png");
+    }
+    &.rank4 {
+      background-image: url("../img/skills_4.png");
+    }
+    &.rank5 {
+      background-image: url("../img/skills_5.png");
+    }
+  }
+}
+
+//Hiding things with checkboxes!
+#detail_brawn:checked & ~ table tr td:nth-child(2) div.adjuststats,
+#detail_agility:checked & ~ table tr td:nth-child(3) div.adjuststats,
+#detail_intellect:checked & ~ table tr td:nth-child(4) div.adjuststats,
+#detail_cunning:checked & ~ table tr td:nth-child(5) div.adjuststats,
+#detail_willpower:checked & ~ table tr td:nth-child(6) div.adjuststats,
+#detail_presence:checked & ~ table tr td:nth-child(7) div.adjuststats {
+  display: block;
+}
