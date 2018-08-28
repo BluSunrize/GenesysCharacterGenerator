@@ -9,6 +9,7 @@
   "keywords": [
   ],
   "author": "BluSunrize",
+  "license": "GNU GPLv3",
   "devDependencies": {
     "electron": "^2.0.0",
     "electron-store": "^2.0.0",
