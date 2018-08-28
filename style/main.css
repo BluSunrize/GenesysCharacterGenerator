@@ -12,7 +12,7 @@ h3 {
   clear: both;
   position: relative;
   z-index: 1;
-  background: url('http://roll20.foxes.rocks/genesys-header.svg') no-repeat center center;
+  background: url('../img/genesys-header.svg') no-repeat center center;
   background-size: 130%;
 }
 body {
@@ -92,7 +92,7 @@ input[type=checkbox].hidden {
   border-radius: 2px;
 }
 .archetype-characteristics {
-  background: url('http://roll20.foxes.rocks/genesys-characteristics-bar.svg') no-repeat center center;
+  background: url('../img/genesys-characteristics-bar.svg') no-repeat center center;
   background-size: 85%;
   display: inline-block;
   width: auto;
@@ -105,7 +105,7 @@ input[type=checkbox].hidden {
   height: 40.5px;
   width: 40px;
   vertical-align: top;
-  background: url('http://roll20.foxes.rocks/genesys-characteristics-overlay.svg') no-repeat center center;
+  background: url('../img/genesys-characteristics-overlay.svg') no-repeat center center;
   background-size: 40px 40px;
   border: none;
 }
@@ -179,51 +179,51 @@ label.sheet-label-title {
   padding-top: 7px;
 }
 .sheet-stats tr td.sheet-stat-single {
-  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background: url('../img/genesys-stat-single.svg') no-repeat center center;
   background-size: contain;
 }
 .sheet-stats tr td.sheet-stat-single:first-child {
-  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background: url('../img/genesys-stat-single.svg') no-repeat center center;
   background-size: contain;
 }
 .sheet-stats tr td.sheet-stat-single:last-child {
-  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background: url('../img/genesys-stat-single.svg') no-repeat center center;
   background-size: contain;
 }
 .sheet-stats tr td.sheet-stat-double {
-  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background: url('../img/genesys-stat-double.svg') no-repeat center center;
   background-size: contain;
 }
 .sheet-stats tr td.sheet-stat-double:first-child {
-  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background: url('../img/genesys-stat-double.svg') no-repeat center center;
   background-size: contain;
 }
 .sheet-stats tr td.sheet-stat-double:last-child {
-  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background: url('../img/genesys-stat-double.svg') no-repeat center center;
   background-size: contain;
 }
 .sheet-stats tr.sheet-stat-background td.sheet-stat-single {
-  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background: url('../img/genesys-stat-single.svg') no-repeat center center;
   background-size: contain, contain;
 }
 .sheet-stats tr.sheet-stat-background td.sheet-stat-single:first-child {
-  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background: url('../img/genesys-stat-single.svg') no-repeat center center;
   background-size: contain, contain;
 }
 .sheet-stats tr.sheet-stat-background td.sheet-stat-single:last-child {
-  background: url('http://roll20.foxes.rocks/genesys-stat-single.svg') no-repeat center center;
+  background: url('../img/genesys-stat-single.svg') no-repeat center center;
   background-size: contain, contain;
 }
 .sheet-stats tr.sheet-stat-background td.sheet-stat-double {
-  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background: url('../img/genesys-stat-double.svg') no-repeat center center;
   background-size: contain, contain;
 }
 .sheet-stats tr.sheet-stat-background td.sheet-stat-double:first-child {
-  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background: url('../img/genesys-stat-double.svg') no-repeat center center;
   background-size: contain, contain;
 }
 .sheet-stats tr.sheet-stat-background td.sheet-stat-double:last-child {
-  background: url('http://roll20.foxes.rocks/genesys-stat-double.svg') no-repeat center center;
+  background: url('../img/genesys-stat-double.svg') no-repeat center center;
   background-size: contain, contain;
 }
 .sheet-stats [type=number] {
@@ -251,7 +251,7 @@ label.sheet-label-title {
   margin-left: 3px;
 }
 .characteristics {
-  background: url('http://roll20.foxes.rocks/genesys-characteristics-bar.svg') no-repeat center center;
+  background: url('../img/genesys-characteristics-bar.svg') no-repeat center center;
   background-size: 90%;
   background-position-y: top;
   display: inline-block;
@@ -264,7 +264,7 @@ label.sheet-label-title {
   text-align: center;
   height: 105.5px;
   width: 150px;
-  background: url('http://roll20.foxes.rocks/genesys-characteristics-overlay.svg') no-repeat center center;
+  background: url('../img/genesys-characteristics-overlay.svg') no-repeat center center;
   background-size: 100px 100px;
   border: none;
 }
