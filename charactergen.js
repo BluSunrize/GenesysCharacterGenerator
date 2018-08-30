@@ -4,14 +4,38 @@
 
 console.log("init renderer js");
 
+const {Dataset, createDefaultDataset} = require("./js/dataset");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
 
-const ipcRenderer = require("electron").ipcRenderer;
+const electron = require("electron");
+const fs = require("fs");
 const Store = require("electron-store");
+let cwd = (electron.app || electron.remote.app).getPath('userData');
+if(!fs.existsSync(cwd+"/dataset"))
+{
+    console.log("NO DATASET FOLDEEEEEEEEEEERRRRR!!!");
+    fs.mkdirSync(cwd+"/dataset");
+}
+if(!fs.existsSync(cwd+"/dataset/default1.json"))
+{
+    console.log("NO DEFAULT DATASET!!!!");
+    fs.writeFile(cwd+"/dataset/default1.json", createDefaultDataset());
+}
+let files_dataset = fs.readdirSync(cwd+"/dataset");
+for(let ds of files_dataset)
+    console.log("dataset: "+ds);
 const dataset_default = new Store({"name": "dataset/default"});
+
 //todo: Dataset selection
 const dataset = dataset_default;
 const character_store = new Store({"name": "characters"});
+
+
+let files = fs.readdirSync(cwd);
+console.log("files in "+cwd+": ");
+console.log(files);
+electron.ipcRenderer.send("test", "Test message!");
+
 
 const {Skill, Characteristic, SkillCategory, buildSkillDropdown, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
 const Archetype = require("./js/archetype");
@@ -20,12 +44,6 @@ const Character = require("./js/character");
 const Ability = require("./js/ability");
 
 const characteristics = ["brawn", "agility", "intellect", "cunning", "willpower", "presence"];
-// var archetypes = {
-//     human: new Archetype("Average Human", [2, 2, 2, 2, 2, 2], 10, 10, 110, [new SkillSelection([], SkillSelectionPredicate.NON_CAREER), new SkillSelection([], SkillSelectionPredicate.NON_CAREER)], [new Ability("Ready for Anything", "Once per session as an out-ofturn incidental, a Human may move one Story Point from the Game Master's pool to the players' pool.", null)]),
-//     laborer: new Archetype("The Laborer", [3, 2, 2, 2, 1, 2], 12, 8, 100, [new SkillSelection("Athletics")], [new Ability("Tough as Nails", "Once per session, your character may spend a Story Point as an out-of-turn incidental immediately after suffering a Critical Injury and determining the result. If they do so, they count the result rolled as \"01\".", null)]),
-//     intellectual: new Archetype("The Intellectual", [2, 1, 3, 2, 2, 2], 8, 12, 100, [new SkillSelection([], SkillSelectionPredicate.KNOWLEDGE)], [new Ability("Brilliant!", "Once per session, your character may spend a Story Point as an incidental. If they do so, during the next check they make during that turn, you count their ranks in the skill being used as equal to their Intellect.", null)]),
-// };
-// dataset.set("archetypes", archetypes);
 
 // HTML Elements
 const element_main = document.getElementById("main");
@@ -40,15 +58,6 @@ window.onbeforeunload = function () {
 //     console.log(message);
 // });
 
-//Load Skills
-// var skills = [
-//     new Skill("Alchemy", Characteristic.INT, SkillCategory.GENERAL),
-//     new Skill("Ranged (Light)", Characteristic.AG, SkillCategory.COMBAT),
-//     new Skill("Coercion", Characteristic.WILL, SkillCategory.SOCIAL),
-//     new Skill("Arcana", Characteristic.INT, SkillCategory.POWER),
-//     new Skill("Knowledge", Characteristic.INT, SkillCategory.KNOWLEDGE)
-// ];
-// dataset.set("skills", skills);
 var skills = dataset.get("skills");
 let element_skilllist = document.getElementById("skilllist");
 let elements_skilltable = {};

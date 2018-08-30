@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 
 // var arch_human = new Archetype("human", [2,2,2,2,2,2], 10, 10, 110, ["athletics", "ranged (light)"], ["Once per session as an out-ofturn incidental, a Human may move one Story Point from the Game Master's pool to the players' pool."]);
 //
@@ -11,12 +11,11 @@ const {app, BrowserWindow} = require('electron');
 let mainWindow;
 
 function createWindow() {
-    console.log("hello world");
     // Create the browser window.
     mainWindow = new BrowserWindow({width: 800, height: 600});
 
-    // and load the index.html of the app.
-    mainWindow.loadFile('index.html');
+    // and load the charactergen.html of the app.
+    mainWindow.loadFile('charactergen.html');
 
     // console.log("path: "+app.getAppPath());
     // console.log(mainWindow.getTitle());
@@ -38,6 +37,12 @@ function createWindow() {
         e.returnValue = false;
     };
 }
+
+ipcMain.on("test", function (event, data) {
+    console.log("got a test message:");
+    console.log("event: "+event);
+    console.log("data: "+data);
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

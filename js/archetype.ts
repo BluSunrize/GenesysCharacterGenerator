@@ -22,4 +22,5 @@ export class Archetype {
         this.abilities = abilities;
     }
 }
-module.exports = Archetype;
+
+module.exports = {Archetype};

@@ -10,4 +10,4 @@ export class Career {
     }
 }
 
-module.exports = Career;
+module.exports = {Career};

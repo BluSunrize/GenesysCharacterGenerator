@@ -5,11 +5,10 @@ export class Ability {
     description: string;
     affect_stats: Function;
 
-    constructor(name: string, description: string, affect_stats: Function) {
+    constructor(name: string, description: string) {
         this.name = name;
         this.description = description;
-        this.affect_stats = affect_stats;
     }
 }
 
-module.exports = Ability;
+module.exports = {Ability};
