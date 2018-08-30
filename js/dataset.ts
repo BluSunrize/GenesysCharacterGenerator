@@ -2,6 +2,7 @@ import {Characteristic, Skill, SkillCategory, SkillSelection, SkillSelectionPred
 import {Archetype} from "./archetype";
 import {Career} from "./career";
 import {Ability} from "./ability";
+import {ElectronStore} from "electron-store";
 
 export class Dataset {
     name: string;
@@ -83,4 +84,13 @@ export function createDefaultDataset(): string {
     return JSON.stringify(defaultSet, null, "\t");
 }
 
-module.exports = {Dataset, createDefaultDataset};
+export function fromStore(store: ElectronStore): Dataset
+{
+    let dataset = new Dataset(store.get("name"));
+    dataset.skills = store.get("skills");
+    dataset.archetypes = store.get("archetypes");
+    dataset.careers = store.get("careers");
+    return dataset;
+}
+
+module.exports = {Dataset, createDefaultDataset, fromStore};

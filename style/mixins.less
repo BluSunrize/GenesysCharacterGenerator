@@ -7,3 +7,30 @@
   background+: url('@{image}genesys-stat-double.svg') no-repeat center center;
   background-size+: contain;
 }
+
+.skilltable() {
+  thead {
+    text-align: center;
+    color: @genesys-grey;
+  }
+  tbody tr {
+    td {
+      border-bottom: 1px dashed @genesys-grey;
+      border-right: 1px dashed @genesys-grey;
+    }
+
+    &:first-child td {
+      border-top: 1px solid black;
+    }
+    &:last-child td {
+      border-bottom: 1px solid black;
+    }
+    td:first-child {
+      border-left: 1px solid black;
+    }
+    td:last-child {
+      border-right: 1px solid black;
+    }
+  }
+
+}
