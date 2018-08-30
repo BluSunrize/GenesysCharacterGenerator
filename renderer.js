@@ -280,8 +280,17 @@ function updateArchetype(e) {
     setIDedAttribute("archetype_wounds", selectedArchetype.wound_threshold);
     setIDedAttribute("archetype_strain", selectedArchetype.strain_threshold);
     setIDedAttribute("archetype_xp", selectedArchetype.experience);
-    if (selectedChar >= 0) {
+    let element_list = document.getElementById("archetype_abilities");
+    while (element_list.children.length > 4)
+        element_list.removeChild(element_list.lastChild);
+    for (let ability of selectedArchetype.abilities) {
+        let element_li = document.createElement("li");
+        element_li.innerHTML = `<b>${ability.name}:</b> ${ability.description}`;
+        element_list.appendChild(element_li);
+    }
 
+
+    if (selectedChar >= 0) {
         updateArchetypeSkillSelection();
         autocalcCharacteristics();
     }
@@ -461,7 +470,7 @@ function autocalcXPSpent(spentOnSkills) {
 }
 
 function autocalcXPAvailable(xpTotal, xpSpent) {
-    if(!xpSpent)
+    if (!xpSpent)
         xpSpent = getIDedAttribute("character_experience_spent");
     setIDedAttribute("available_experience", xpTotal - xpSpent);
 }

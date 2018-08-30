@@ -11,4 +11,5 @@ export class Ability {
         this.affect_stats = affect_stats;
     }
 }
+
 module.exports = Ability;
