@@ -145,7 +145,10 @@ export function syncAttributesToObject(prefix: string, object: object) {
     for (let i = 0; i < inputs.length; i++)
         if (inputs[i].id.indexOf(prefix) === 0) {
             let key = inputs[i].id.substr(prefix.length);
-            object[key] = (<HTMLInputElement>inputs[i]).value;
+            if ((<HTMLInputElement>inputs[i]).type == "number" || (<HTMLInputElement>inputs[i]).type == "range")
+                object[key] = (<HTMLInputElement>inputs[i]).valueAsNumber;
+            else
+                object[key] = (<HTMLInputElement>inputs[i]).value;
         }
 
     let textAreas = document.getElementsByTagName("textarea");

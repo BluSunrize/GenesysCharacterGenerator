@@ -103,6 +103,8 @@ for (let key in careers) {
 
 //Load Characters
 var characters = character_store.get("characters");
+console.log("characters: ");
+console.log(Object.keys(character_store.store));
 if (!characters)
     characters = [];
 var selectedChar = -1;
@@ -124,6 +126,7 @@ attachOnChangeById("character_player", updateCharacterList);
 attachOnChangeById("character_campaign", updateCharacterList);
 element_archetype.onchange = updateArchetype;
 element_career.onchange = updateCareer;
+attachOnChangeById("total_experience", updateXPEarned);
 for (let i = 0; i < characteristics.length; i++) {
     attachOnChangeById(`bought_${characteristics[i]}`, autocalcCharacteristics);
     attachOnChangeById(`talent_${characteristics[i]}`, autocalcCharacteristics);
@@ -416,8 +419,18 @@ function autocalcSkills() {
     }
 }
 
+function updateXPEarned(e) {
+    let total = e.srcElement.valueAsNumber;
+    let diff = total - e.srcElement.min;
+    if (diff < 0) {
+        e.srcElement.value = e.srcElement.min;
+        diff = 0;
+    }
+    setIDedAttribute("character_experience_earned", diff);
+    autocalcXPAvailable(total);
+}
+
 function autocalcXPSpent(spentOnSkills) {
-    console.log("Start XP Calculation");
     let xpSpent = 0;
     for (let i = 0; i < characteristics.length; i++) {
         let baseChar = archetypes[getIDedAttribute("character_archetype")].characteristics[i];
@@ -439,4 +452,16 @@ function autocalcXPSpent(spentOnSkills) {
             }
         }
 
+    let xpArch = parseInt(getIDedAttribute("archetype_xp"));
+    let xpTotal = xpArch + getIDedAttribute("character_experience_earned");
+    setIDedAttribute("total_experience", xpTotal);
+    document.getElementById("total_experience").min = xpArch;
+    setIDedAttribute("character_experience_spent", xpSpent);
+    autocalcXPAvailable(xpTotal, xpSpent);
+}
+
+function autocalcXPAvailable(xpTotal, xpSpent) {
+    if(!xpSpent)
+        xpSpent = getIDedAttribute("character_experience_spent");
+    setIDedAttribute("available_experience", xpTotal - xpSpent);
 }

@@ -31,8 +31,8 @@ export class Character {
     defense_melee: number;
 
     //XP
-    experience_earned: number;
-    experience_spent: number;
+    experience_earned: number = 0;
+    experience_spent: number = 0;
 
     //Skills
     archetype_skills: string[] = [];

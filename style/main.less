@@ -175,6 +175,39 @@ label.sheet-label-title {
   letter-spacing: 0.05em;
 }
 
+.xp {
+  background: url('@{image}genesys-xp.svg') no-repeat center center;
+  background-size: contain;
+  height: 83px;
+  width: 150px;
+  text-align: center;
+
+  div {
+    width: 100%;
+    &:first-child {
+      height: 25px;
+      padding-top: 13px;
+    }
+    &:nth-child(2) {
+      height: 20px;
+      padding-top: 16px;
+    }
+  }
+
+  input {
+    font-size: 32px;
+    font-weight: bold;
+    width: 100px !important;
+    margin-left: 15px;
+    margin-bottom: 7px;
+    text-align: center;
+
+    box-shadow: none;
+    background: none;
+    border: none;
+  }
+}
+
 .sheet-stats {
   width: auto !important;
   display: inline-block;

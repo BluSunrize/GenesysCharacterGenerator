@@ -152,6 +152,35 @@ label.sheet-label-title {
   font-weight: normal;
   letter-spacing: 0.05em;
 }
+.xp {
+  background: url('../img/genesys-xp.svg') no-repeat center center;
+  background-size: contain;
+  height: 83px;
+  width: 150px;
+  text-align: center;
+}
+.xp div {
+  width: 100%;
+}
+.xp div:first-child {
+  height: 25px;
+  padding-top: 13px;
+}
+.xp div:nth-child(2) {
+  height: 20px;
+  padding-top: 16px;
+}
+.xp input {
+  font-size: 32px;
+  font-weight: bold;
+  width: 100px !important;
+  margin-left: 15px;
+  margin-bottom: 7px;
+  text-align: center;
+  box-shadow: none;
+  background: none;
+  border: none;
+}
 .sheet-stats {
   width: auto !important;
   display: inline-block;
@@ -428,4 +457,3 @@ label.sheet-label-title {
 #detail_presence:checked  ~ table tr td:nth-child(7) div.adjuststats {
   display: block;
 }
-/*# sourceMappingURL=main.css.map */
