@@ -49,10 +49,11 @@ export function getNamedAttribute(name: string) {
     let val;
     for (let i = 0; i < elements.length; i++) {
         let thisVal;
-        if (elements[i] instanceof HTMLInputElement)
-        {
+        if (elements[i] instanceof HTMLInputElement) {
             if ((<HTMLInputElement>elements[i]).type == "checkbox")
                 return (<HTMLInputElement>elements[i]).checked;
+            else if ((<HTMLInputElement>elements[i]).type == "number" || (<HTMLInputElement>elements[i]).type == "range")
+                return (<HTMLInputElement>elements[i]).valueAsNumber;
             else
                 return (<HTMLInputElement>elements[i]).value;
         }
@@ -99,6 +100,8 @@ export function getIDedAttribute(id: string) {
     if (element instanceof HTMLInputElement) {
         if ((<HTMLInputElement>element).type == "checkbox")
             return (<HTMLInputElement>element).checked;
+        else if ((<HTMLInputElement>element).type == "number" || (<HTMLInputElement>element).type == "range")
+            return (<HTMLInputElement>element).valueAsNumber;
         else
             return (<HTMLInputElement>element).value;
     }

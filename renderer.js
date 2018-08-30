@@ -163,9 +163,9 @@ function saveDisplayAttributes() {
     //Characteristics
     for (let i = 0; i < characteristics.length; i++)
         character.characteristics[i] = [
-            parseInt(getIDedAttribute(`bought_${characteristics[i]}`)),
-            parseInt(getIDedAttribute(`talent_${characteristics[i]}`)),
-            parseInt(getIDedAttribute(`equipment_${characteristics[i]}`))];
+            getIDedAttribute(`bought_${characteristics[i]}`),
+            getIDedAttribute(`talent_${characteristics[i]}`),
+            getIDedAttribute(`equipment_${characteristics[i]}`)];
     //Archetype Skills
     let archetype_skills = document.getElementById("archetype_skills").children;
     character.archetype_skills = [];
@@ -278,6 +278,7 @@ function updateArchetype(e) {
     setIDedAttribute("archetype_strain", selectedArchetype.strain_threshold);
     setIDedAttribute("archetype_xp", selectedArchetype.experience);
     if (selectedChar >= 0) {
+
         updateArchetypeSkillSelection();
         autocalcCharacteristics();
     }
@@ -370,10 +371,10 @@ function autocalcCharacteristics(e) {
     if (selectedChar >= 0) {
         let totalChars = [];
         for (let i = 0; i < characteristics.length; i++) {
-            let total = parseInt(archetypes[getIDedAttribute("character_archetype")].characteristics[i]);
-            total += parseInt(getIDedAttribute(`bought_${characteristics[i]}`));
-            total += parseInt(getIDedAttribute(`talent_${characteristics[i]}`));
-            total += parseInt(getIDedAttribute(`equipment_${characteristics[i]}`));
+            let total = archetypes[getIDedAttribute("character_archetype")].characteristics[i];
+            total += getIDedAttribute(`bought_${characteristics[i]}`);
+            total += getIDedAttribute(`talent_${characteristics[i]}`);
+            total += getIDedAttribute(`equipment_${characteristics[i]}`);
             setNamedAttribute(`attr_${characteristics[i]}`, total);
             totalChars[i] = total;
         }
@@ -402,8 +403,8 @@ function autocalcSkills() {
         for (let skill of skills) {
             let freeRank = freeRanks[skill.name] || 0;
             let boughtRank = characters[selectedChar].skills_bought[skill.name] || 0;
-            for(let j=0; j<boughtRank; j++)
-                xpSpent += 5*(freeRank+j);
+            for (let j = 0; j < boughtRank; j++)
+                xpSpent += 5 * (freeRank + j);
 
             let skill_free = document.getElementById(`skill_${skill.name}_free`);
             skill_free.value = freeRank;
@@ -419,8 +420,8 @@ function autocalcXPSpent(spentOnSkills) {
     console.log("Start XP Calculation");
     let xpSpent = 0;
     for (let i = 0; i < characteristics.length; i++) {
-        let baseChar = parseInt(archetypes[getIDedAttribute("character_archetype")].characteristics[i]);
-        let boughtChar = parseInt(getIDedAttribute(`bought_${characteristics[i]}`));
+        let baseChar = archetypes[getIDedAttribute("character_archetype")].characteristics[i];
+        let boughtChar = getIDedAttribute(`bought_${characteristics[i]}`);
         for (let j = 1; j <= boughtChar; j++)
             xpSpent += 10 * (baseChar + j);
     }
@@ -429,15 +430,13 @@ function autocalcXPSpent(spentOnSkills) {
         xpSpent += spentOnSkills;
     else
         for (let skill of skills) {
-            let freeRank = parseInt(getIDedAttribute(`skill_${skill.name}_free`))||0;
-            let boughtRank = (parseInt(getIDedAttribute(`skill_${skill.name}`))||0);
-            for(let j=freeRank+1; j<=boughtRank; j++)
-            {
-                let cost = 5*j;
-                console.log("cost for "+skill.name+", rank "+j+": "+cost);
+            let freeRank = getIDedAttribute(`skill_${skill.name}_free`) || 0;
+            let boughtRank = getIDedAttribute(`skill_${skill.name}`) || 0;
+            for (let j = freeRank + 1; j <= boughtRank; j++) {
+                let cost = 5 * j;
+                console.log("cost for " + skill.name + ", rank " + j + ": " + cost);
                 xpSpent += cost;
             }
         }
 
-    setIDedAttribute("xp_spent", xpSpent);
 }
