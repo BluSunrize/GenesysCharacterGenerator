@@ -91,9 +91,33 @@ input.no-background {
   -moz-appearance: none;
   appearance: none;
 }
+.grabbed {
+  box-shadow: 0 0 13px #000;
+}
+.grab-cursor {
+  cursor: -webkit-grabbing !important;
+}
+body.grab-cursor {
+  user-select: none;
+}
+.grab-cursor * {
+  cursor: -webkit-grabbing !important;
+}
+.grab:not(:disabled) {
+  cursor: -webkit-grab;
+}
 /* INDEX */
 #dataset-header {
   text-align: center;
+}
+.button-up {
+  height: 9px;
+}
+.button-down {
+  height: 9px;
+  position: relative;
+  top: 9px;
+  left: -22px;
 }
 /* CHARACTERGEN */
 .characterlist tr.selected {

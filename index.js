@@ -2,6 +2,7 @@ const electron = require("electron");
 const fs = require("fs");
 const Store = require("electron-store");
 
+const {makeDragable} = require("./js/table_utils");
 const {Skill, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
 const element_datasets = document.getElementById("datasets");
 const element_button_new = document.getElementById("button_dataset_new");
@@ -49,11 +50,14 @@ readDataset();
 document.getElementById("allow_dataset_edit").onchange = toggleEdit;
 
 function removeDataset(e) {
-    console.log("removing dataset: " + element_datasets.value + ", #" + element_datasets.selectedIndex);
     if ("default" === element_datasets.value)
         return;
-    // fs.writeFileSync(`${cwd}/dataset/${element_datasets.value}.json`, "");
-    // element_datasets.selected
+    fs.unlinkSync(`${cwd}/dataset/${element_datasets.value}.json`);
+    let idx = element_datasets.selectedIndex;
+    element_datasets.remove(idx);
+    idx = Math.max(idx - 1, 0);
+    element_datasets.selectedIndex = idx;
+    readDataset();
 }
 
 function toggleEdit(e) {
@@ -76,7 +80,13 @@ function addSkill(e) {
 
 function populateSkillRow(row, skill) {
     let cell = row.insertCell();
+    let button_move = document.createElement("button");
+    button_move.textContent = "⭥";
+    button_move.classList.add("toggleEdit");
+    makeDragable(button_move);
+    cell.appendChild(button_move);
 
+    cell = row.insertCell();
     let name = document.createElement("input");
     name.type = "text";
     name.classList.add("toggleEdit");
@@ -102,7 +112,7 @@ function populateSkillRow(row, skill) {
     if (skill) {
         name.value = skill.name;
         characteristic.value = skill.characteristic;
-        name.disabled = characteristic.disabled = remove.disabled = true;
+        button_move.disabled = name.disabled = characteristic.disabled = remove.disabled = true;
     }
 }
 
