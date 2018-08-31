@@ -8,27 +8,94 @@
 </head>
 <body>
 <div id="main">
-    <select id="datasets">
-    </select>
+
+    <div id="dataset-header" class="segment-orange">
+        <p><b>Select Dataset:</b> <select id="datasets"></select></p>
+
+        <p>
+            <button id="button_dataset_new">New</button>
+            <button id="button_dataset_copy">Copy</button>
+            <button id="button_dataset_remove">Remove</button>
+            <button id="button_dataset_save">Save</button>
+        </p>
+        <br>
+        <input type="checkbox" id="allow_dataset_edit">
+        <label for="allow_dataset_edit" id="label_allow_dataset_edit">Edit Dataset</label>
+        <p>
+            <input type="text" id="name" class="toggleEdit" disabled>
+        </p>
+    </div>
 
     <h3 class="sheet-full-header">Skills</h3>
-    <div class="segment-blue">
-        <table id="skills">
+    <div id="skilllist" class="segment-blue">
+        <table id="skills_general">
             <thead>
             <tr>
-                <th>Skill</th>
-                <th>Characteristic</th>
-                <th>Category</th>
+                <th>General Skills</th>
+                <th>Attribute</th>
             </tr>
             </thead>
             <tr>
                 <td colspan="4">
-                    <button>
-                        Add
-                    </button>
+                    <button name="button_add_skill" class="toggleEdit" disabled>Add</button>
                 </td>
             </tr>
+        </table>
 
+        <table id="skills_social">
+            <thead>
+            <tr>
+                <th>Social Skills</th>
+                <th>Attribute</th>
+            </tr>
+            </thead>
+            <tr>
+                <td colspan="4">
+                    <button name="button_add_skill" class="toggleEdit" disabled>Add</button>
+                </td>
+            </tr>
+        </table>
+
+        <table id="skills_combat">
+            <thead>
+            <tr>
+                <th>Combat Skills</th>
+                <th>Attribute</th>
+            </tr>
+            </thead>
+            <tr>
+                <td colspan="4">
+                    <button name="button_add_skill" class="toggleEdit" disabled>Add</button>
+                </td>
+            </tr>
+        </table>
+
+        <table id="skills_power">
+            <thead>
+            <tr>
+                <th>Power/Magic Skills</th>
+                <th>Attribute</th>
+            </tr>
+            </thead>
+            <tr>
+                <td colspan="4">
+                    <button name="button_add_skill" class="toggleEdit" disabled>Add</button>
+                </td>
+            </tr>
+        </table>
+
+        <table id="skills_knowledge">
+            <thead>
+            <tr>
+                <th>Knowledge Skills</th>
+                <th>Attribute</th>
+            </tr>
+            </thead>
+            <tr>
+                <td colspan="4">
+                    <button name="button_add_skill" class="toggleEdit" disabled>Add</button>
+                </td>
+            </tr>
         </table>
 
     </div>
