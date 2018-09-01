@@ -10,10 +10,13 @@ const Character = require("./js/character");
 const Ability = require("./js/ability");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
 
+let initialCharacterLoad = false;
+
 electron.ipcRenderer.on("init", function (event, message) {
     console.log("initializing chargen");
     init(message);
 });
+console.log("send init request");
 electron.ipcRenderer.send("init");
 
 function init(dataset_path) {
@@ -101,6 +104,7 @@ function init(dataset_path) {
         insertCharacter(characters[i]);
 
     window.onbeforeunload = function () {
+        console.log("unloading window, run save");
         saveDisplayAttributes();
     };
 
@@ -134,7 +138,6 @@ function init(dataset_path) {
         }
         for (let i = 0; i < 8; i++)
             setIDedAttribute(`careerskill_${i}_freerank`, character.career_skills_free_ranks[i]);
-
 
         updateArchetype();
         updateCareer();
@@ -215,7 +218,9 @@ function init(dataset_path) {
         else
             element_main.classList.remove("disabled");
         selectedChar = i;
+        initialCharacterLoad = true;
         loadDisplayAttributes();
+        initialCharacterLoad = false;
     }
 
 
@@ -238,7 +243,7 @@ function init(dataset_path) {
     function autocalcDerrived(characteristics) {
         for (let d of derrived) {
             let element = document.getElementById(`character_${d}`);
-            let curBoost = element.value - element.min;
+            let curBoost = element.valueAsNumber - element.min;
             let newMin = 0;
             if (d === "soak")
                 newMin = characteristics[0];
@@ -246,10 +251,12 @@ function init(dataset_path) {
                 newMin = parseInt(getIDedAttribute("archetype_wounds")) + characteristics[0];
             else if (d === "strain_threshold")
                 newMin = parseInt(getIDedAttribute("archetype_strain")) + characteristics[4];
-            if (element.min < 0)//Initial setup
-                curBoost = element.value - newMin;
+            if (initialCharacterLoad)//Initial setup
+                curBoost = element.valueAsNumber - newMin;
+            if(element.valueAsNumber===0)
+                curBoost = 0;
             element.min = newMin;
-            element.value = newMin + curBoost;
+            element.valueAsNumber = newMin + curBoost;
         }
     }
 

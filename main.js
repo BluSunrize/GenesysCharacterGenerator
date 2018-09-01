@@ -12,7 +12,7 @@ let mainWindow;
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 1000, height: 600});
+    mainWindow = new BrowserWindow({minWidth: 1000, minHeight: 600});
 
     mainWindow.loadFile('index.html');
 
@@ -30,13 +30,13 @@ function createWindow() {
         mainWindow = null
     });
 
-    // switchToChargen();
+    switchToChargen();
 }
 
 function switchToChargen() {
     mainWindow.loadFile('charactergen.html');
 
-    ipcMain.once("init", function (event, data) {
+    ipcMain.on("init", function (event, data) {
         console.log("MAIN got request for init :");
         mainWindow.webContents.send("init", "default");
     });
