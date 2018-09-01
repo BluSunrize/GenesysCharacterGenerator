@@ -2,6 +2,7 @@
 
 import {Character} from "./character";
 
+export const characteristics = ["brawn", "agility", "intellect", "cunning", "willpower", "presence"];
 export enum Characteristic {
     BR = "BR",
     AG = "AG",
@@ -97,4 +98,4 @@ export class SkillSelection {
     }
 }
 
-module.exports = {Skill, Characteristic, SkillCategory, buildSkillDropdown, SkillSelectionPredicate, SkillSelection};
+module.exports = {Skill, characteristics, Characteristic, SkillCategory, buildSkillDropdown, SkillSelectionPredicate, SkillSelection};

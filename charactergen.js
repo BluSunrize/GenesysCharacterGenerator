@@ -3,13 +3,12 @@ const fs = require("fs");
 const Store = require("electron-store");
 
 const {Dataset, createDefaultDataset, fromStore} = require("./js/dataset");
-const {Skill, Characteristic, SkillCategory, buildSkillDropdown, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
+const {Skill, characteristics, Characteristic, SkillCategory, buildSkillDropdown, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
 const Archetype = require("./js/archetype");
 const Career = require("./js/career");
 const Character = require("./js/character");
 const Ability = require("./js/ability");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
-const characteristics = ["brawn", "agility", "intellect", "cunning", "willpower", "presence"];
 
 electron.ipcRenderer.on("init", function (event, message) {
     console.log("initializing chargen");

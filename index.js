@@ -3,12 +3,13 @@ const fs = require("fs");
 const Store = require("electron-store");
 
 const {makeDragable} = require("./js/table_utils");
-const {Skill, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
+const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
 const element_datasets = document.getElementById("datasets");
 const element_button_new = document.getElementById("button_dataset_new");
 const element_button_copy = document.getElementById("button_dataset_copy");
 const element_button_remove = document.getElementById("button_dataset_remove");
 const element_button_save = document.getElementById("button_dataset_save");
+const element_archetypes = document.getElementById("archetypes");
 
 const cwd = (electron.app || electron.remote.app).getPath('userData');
 if (!fs.existsSync(cwd + "/dataset")) {
@@ -82,7 +83,6 @@ function populateSkillRow(row, skill) {
     let cell = row.insertCell();
     let button_move = document.createElement("button");
     button_move.textContent = "⭥";
-    button_move.classList.add("toggleEdit");
     makeDragable(button_move);
     cell.appendChild(button_move);
 
@@ -99,7 +99,6 @@ function populateSkillRow(row, skill) {
         option.value = option.innerText = Characteristic[char];
         characteristic.appendChild(option);
     }
-    characteristic.classList.add("toggleEdit");
     cell.appendChild(characteristic);
 
     cell = row.insertCell();
@@ -109,10 +108,96 @@ function populateSkillRow(row, skill) {
     remove.classList.add("toggleEdit");
     cell.appendChild(remove);
 
+    for (let e of [button_move, name, characteristic, remove]) {
+        e.classList.add("toggleEdit");
+        if (skill)
+            e.disabled = true;
+    }
     if (skill) {
         name.value = skill.name;
         characteristic.value = skill.characteristic;
-        button_move.disabled = name.disabled = characteristic.disabled = remove.disabled = true;
+    }
+}
+
+function populateArchetypeRow(row, archetype_key, archetype) {
+    let cell = row.insertCell();
+    let button_move = document.createElement("button");
+    button_move.textContent = "⭥";
+    button_move.classList.add("toggleEdit");
+    makeDragable(button_move);
+    cell.appendChild(button_move);
+
+    cell = row.insertCell();
+    let innerTable = document.createElement("table");
+    cell.appendChild(innerTable);
+
+    let topRow = innerTable.insertRow();
+    cell = topRow.insertCell();
+    let key = document.createElement("input");
+    key.type = "text";
+    key.placeholder = "Unique Key";
+    cell.appendChild(key);
+    let name = document.createElement("input");
+    name.type = "text";
+    name.placeholder = "Name";
+    cell.appendChild(name);
+
+    cell = topRow.insertCell();
+    cell.rowSpan = 2;
+    let ul = document.createElement("ul");
+    cell.appendChild(ul);
+    let li = document.createElement("li");
+    li.innerHTML = "<b>Starting Wound Threshold:</b> ";
+    let wounds = document.createElement("input");
+    wounds.type = "number";
+    li.appendChild(wounds);
+    ul.appendChild(li);
+
+    li = document.createElement("li");
+    li.innerHTML = "<b>Starting Strain Threshold:</b> ";
+    let strain = document.createElement("input");
+    strain.type = "number";
+    li.appendChild(strain);
+    ul.appendChild(li);
+
+    li = document.createElement("li");
+    li.innerHTML = "<b>Starting Experience:</b> ";
+    let xp = document.createElement("input");
+    xp.type = "number";
+    li.appendChild(xp);
+    ul.appendChild(li);
+
+    let bottomRow = innerTable.insertRow();
+    bottomRow.classList.add("archetype-characteristics");
+    let chars = [];
+    for (let i = 0; i < characteristics.length; i++) {
+        cell = bottomRow.insertCell();
+        chars.push(document.createElement("input"));
+        chars[i].type = "number";
+        chars[i].min = 1;
+        chars[i].max = 5;
+        cell.appendChild(chars[i]);
+        let label = document.createElement("label");
+        label.innerText = characteristics[i].toUpperCase();
+        cell.appendChild(chars[i]);
+        cell.appendChild(label);
+    }
+
+    let allElements = [button_move, key, name, wounds, strain, xp];
+    allElements = allElements.concat(chars);
+    for (let e of allElements) {
+        e.classList.add("toggleEdit");
+        if (archetype)
+            e.disabled = true;
+    }
+    if (archetype) {
+        key.value = archetype_key;
+        name.value = archetype.name;
+        wounds.valueAsNumber = archetype.wound_threshold;
+        strain.valueAsNumber = archetype.strain_threshold;
+        xp.valueAsNumber = archetype.experience;
+        for (let i = 0; i < characteristics.length; i++)
+            chars[i].valueAsNumber = archetype.characteristics[i];
     }
 }
 
@@ -145,6 +230,14 @@ function readDataset() {
         let table = element_skills[skill.category];
         let row = table.insertRow(table.rows.length - 1);
         populateSkillRow(row, skill);
+    }
+
+    let archetypes = dataset_store.get("archetypes");
+    while (element_archetypes.rows.length > 1)
+        element_archetypes.deleteRow(0);
+    for (let archetype_key in archetypes) {
+        let row = element_archetypes.insertRow(element_archetypes.rows.length - 1);
+        populateArchetypeRow(row, archetype_key, archetypes[archetype_key]);
     }
 }
 

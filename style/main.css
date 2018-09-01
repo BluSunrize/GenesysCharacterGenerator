@@ -170,15 +170,21 @@ body.grab-cursor {
   box-shadow: none;
   font-family: "Teuton Mager", sans-serif;
   width: 3.2em !important;
+}
+.archetype-characteristics td [type=number][readonly] {
   text-align: center !important;
   -moz-appearance: textfield !important;
   -webkit-appearance: textfield !important;
 }
-.archetype-characteristics td [type=number]::-webkit-outer-spin-button,
-.archetype-characteristics td [type=number]::-webkit-inner-spin-button {
+.archetype-characteristics td [type=number][readonly]::-webkit-outer-spin-button,
+.archetype-characteristics td [type=number][readonly]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+.archetype-characteristics td [type=number]:not([readony]) {
+  margin-left: -5px;
+  text-align: right;
 }
 label.sheet-label-title {
   width: 100%;

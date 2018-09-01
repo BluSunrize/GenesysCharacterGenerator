@@ -114,7 +114,6 @@ input.no-background {
   .no-spinner();
 }
 
-
 .grabbed {
   box-shadow: 0 0 13px #000;
 }
@@ -206,7 +205,13 @@ input.no-background {
       box-shadow: none;
       font-family: @TeutonMager;
       width: 3.2em !important;
-      .no-spinner();
+      &[readonly] {
+        .no-spinner();
+      }
+      &:not([readony]) {
+        margin-left: -5px;
+        text-align: right;
+      }
     }
   }
 }
