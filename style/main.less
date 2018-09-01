@@ -1,4 +1,5 @@
 @import "mixins.less";
+@import "fonts.less";
 
 @image: "../img/";
 
@@ -8,10 +9,6 @@
 @genesys-blue: #26497b;
 @genesys-red: #902322;
 
-@ElektraLight: "ElektraLight", sans-serif;
-@TeutonMager: "Teuton Mager", sans-serif;
-@TeutonHell: "Teuton Hell", sans-serif;
-
 // Headlines
 h3 {
   line-height: 25px;
@@ -19,10 +16,10 @@ h3 {
   padding: 5px 0 0;
   text-align: center;
   color: white;
-  font-size: 10px;
+  font-size: 15px;
   text-transform: uppercase;
   font-weight: normal;
-  font-family: @ElektraLight;
+  font-family: @BebasNeue;
   letter-spacing: 0.1em;
   clear: both;
   position: relative;
@@ -190,7 +187,8 @@ input.no-background {
       font-weight: normal;
       font-size: 6px;
       display: block;
-      font-family: @TeutonMager;
+      font-family: @FuturistReg;
+      letter-spacing: 0.05em;
     }
 
     [type=number] {
@@ -203,9 +201,11 @@ input.no-background {
       text-align: center;
       height: 20px;
       box-shadow: none;
-      font-family: @TeutonMager;
+      font-family: @FuturistReg;
+      letter-spacing: 0.05em;
       width: 3.2em !important;
       &[readonly] {
+        margin-left: 0 !important;
         .no-spinner();
       }
       &:not([readony]) {
@@ -222,12 +222,12 @@ label.sheet-label-title {
   vertical-align: middle;
   color: #fff;
   font-size: 11px;
-  line-height: 25px;
+  line-height: 24px;
   padding-top: 2px;
   padding-bottom: 8px;
-  font-family: @TeutonMager;
+  font-family: @FuturistReg;
+  letter-spacing: 0.1em;
   font-weight: normal;
-  letter-spacing: 0.05em;
 }
 
 .xp {
@@ -366,7 +366,8 @@ label.sheet-label-title {
     font-weight: normal;
     display: inline-block;
     padding: 0;
-    font-family: @TeutonHell;
+    margin-top: 6px;
+    font-family: @FuturistBold;
     letter-spacing: 0.03em;
 
     &:first-child {
@@ -415,7 +416,8 @@ label.sheet-label-title {
       padding-left: 40px;
       padding-right: 40px;
       box-shadow: none;
-      font-family: @TeutonMager;
+      font-family: @FuturistReg;
+      letter-spacing: 0.05em;
     }
 
     label.char_label {
@@ -426,7 +428,8 @@ label.sheet-label-title {
       font-weight: normal;
       font-size: 12px;
       display: block;
-      font-family: @TeutonMager;
+      font-family: @FuturistReg;
+      letter-spacing: 0.05em;
     }
     label.char_clickable {
       position: relative;
@@ -439,13 +442,14 @@ label.sheet-label-title {
 
   .adjuststats {
     display: none;
-    width: 88.5%;
-    margin-left: 6%;
-    padding-left: 5px;
+    width: 88%;
+    margin-left: 7%;
+    padding-left: 4px;
     padding-right: 0;
     margin-top: -9.5px;
-    font-size: 10px;
-    font-family: @TeutonMager;
+    font-size: 9px;
+    font-family: @FuturistReg;
+    letter-spacing: 0.05em;
     background: @genesys-blue;
     border: 1px solid @genesys-blue;
     box-shadow: inset 0px -1px 0px 1px white;
@@ -462,9 +466,8 @@ label.sheet-label-title {
       position: relative;
       right: -11px;
       color: white;
-      font-family: @TeutonMager;
+      font-family: @FuturistReg;
       font-size: 13px !important;
-      font-weight: bold;
 
       box-shadow: none;
       background: none;
@@ -475,7 +478,7 @@ label.sheet-label-title {
 
 #skilllist {
   columns: 2;
-  font-family: @TeutonMager;
+  font-family: @FuturistReg;
 
   table {
     width: 100%;

@@ -1,13 +1,28 @@
+@font-face {
+  font-family: "ForgottenFuturistRg-Regular";
+  font-display: swap;
+  src: url("../font/forgotten_futurist/typodermic-forgottenfuturistrg-regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "ForgottenFuturistRg-Bold";
+  font-display: swap;
+  src: url("../font/forgotten_futurist_bold/typodermic-forgottenfuturistrg-bold.otf") format("opentype");
+}
+@font-face {
+  font-family: "Bebas-Neue";
+  font-display: swap;
+  src: url("../font/bebas_neue/dharma_type-bebasneue.otf") format("opentype");
+}
 h3 {
   line-height: 25px;
   margin: 0 0 -13px;
   padding: 5px 0 0;
   text-align: center;
   color: white;
-  font-size: 10px;
+  font-size: 15px;
   text-transform: uppercase;
   font-weight: normal;
-  font-family: "ElektraLight", sans-serif;
+  font-family: "Bebas-Neue", sans-serif;
   letter-spacing: 0.1em;
   clear: both;
   position: relative;
@@ -156,7 +171,8 @@ body.grab-cursor {
   font-weight: normal;
   font-size: 6px;
   display: block;
-  font-family: "Teuton Mager", sans-serif;
+  font-family: "ForgottenFuturistRg-Regular", sans-serif;
+  letter-spacing: 0.05em;
 }
 .archetype-characteristics td [type=number] {
   font-size: 13px;
@@ -168,10 +184,12 @@ body.grab-cursor {
   text-align: center;
   height: 20px;
   box-shadow: none;
-  font-family: "Teuton Mager", sans-serif;
+  font-family: "ForgottenFuturistRg-Regular", sans-serif;
+  letter-spacing: 0.05em;
   width: 3.2em !important;
 }
 .archetype-characteristics td [type=number][readonly] {
+  margin-left: 0 !important;
   text-align: center !important;
   -moz-appearance: textfield !important;
   -webkit-appearance: textfield !important;
@@ -192,12 +210,12 @@ label.sheet-label-title {
   vertical-align: middle;
   color: #fff;
   font-size: 11px;
-  line-height: 25px;
+  line-height: 24px;
   padding-top: 2px;
   padding-bottom: 8px;
-  font-family: "Teuton Mager", sans-serif;
+  font-family: "ForgottenFuturistRg-Regular", sans-serif;
+  letter-spacing: 0.1em;
   font-weight: normal;
-  letter-spacing: 0.05em;
 }
 .xp {
   background: url('../img/genesys-xp.svg') no-repeat center center;
@@ -316,7 +334,8 @@ label.sheet-label-title {
   font-weight: normal;
   display: inline-block;
   padding: 0;
-  font-family: "Teuton Hell", sans-serif;
+  margin-top: 6px;
+  font-family: "ForgottenFuturistRg-Bold", sans-serif;
   letter-spacing: 0.03em;
 }
 .sheet-stats span.sheet-subtitle label:first-child {
@@ -357,7 +376,8 @@ label.sheet-label-title {
   padding-left: 40px;
   padding-right: 40px;
   box-shadow: none;
-  font-family: "Teuton Mager", sans-serif;
+  font-family: "ForgottenFuturistRg-Regular", sans-serif;
+  letter-spacing: 0.05em;
 }
 .characteristics tr:first-child label.char_label {
   text-align: center;
@@ -367,7 +387,8 @@ label.sheet-label-title {
   font-weight: normal;
   font-size: 12px;
   display: block;
-  font-family: "Teuton Mager", sans-serif;
+  font-family: "ForgottenFuturistRg-Regular", sans-serif;
+  letter-spacing: 0.05em;
 }
 .characteristics tr:first-child label.char_clickable {
   position: relative;
@@ -378,13 +399,14 @@ label.sheet-label-title {
 }
 .characteristics .adjuststats {
   display: none;
-  width: 88.5%;
-  margin-left: 6%;
-  padding-left: 5px;
+  width: 88%;
+  margin-left: 7%;
+  padding-left: 4px;
   padding-right: 0;
   margin-top: -9.5px;
-  font-size: 10px;
-  font-family: "Teuton Mager", sans-serif;
+  font-size: 9px;
+  font-family: "ForgottenFuturistRg-Regular", sans-serif;
+  letter-spacing: 0.05em;
   background: #26497b;
   border: 1px solid #26497b;
   box-shadow: inset 0px -1px 0px 1px white;
@@ -402,16 +424,15 @@ label.sheet-label-title {
   position: relative;
   right: -11px;
   color: white;
-  font-family: "Teuton Mager", sans-serif;
+  font-family: "ForgottenFuturistRg-Regular", sans-serif;
   font-size: 13px !important;
-  font-weight: bold;
   box-shadow: none;
   background: none;
   border: none;
 }
 #skilllist {
   columns: 2;
-  font-family: "Teuton Mager", sans-serif;
+  font-family: "ForgottenFuturistRg-Regular", sans-serif;
 }
 #skilllist table {
   width: 100%;
@@ -421,6 +442,10 @@ label.sheet-label-title {
 #skilllist table thead {
   text-align: center;
   color: #6d6e71;
+}
+#skilllist table thead td:first-child {
+  text-align: left;
+  padding-left: 8px;
 }
 #skilllist table tbody tr td {
   border-bottom: 1px dashed #6d6e71;
@@ -505,3 +530,4 @@ label.sheet-label-title {
 #detail_presence:checked  ~ table tr td:nth-child(7) div.adjuststats {
   display: block;
 }
+/*# sourceMappingURL=main.css.map */
