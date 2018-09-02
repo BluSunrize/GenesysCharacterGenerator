@@ -125,14 +125,33 @@ body.grab-cursor {
 #dataset-header {
   text-align: center;
 }
-.button-up {
-  height: 9px;
+#archetypes {
+  width: 100%;
+  border-collapse: collapse;
 }
-.button-down {
-  height: 9px;
-  position: relative;
-  top: 9px;
-  left: -22px;
+#archetypes > tbody > tr > td {
+  border: #f8a23e 1px dotted;
+  margin-bottom: 4px;
+}
+#archetypes > tbody > tr > td:first-child {
+  border-right: none;
+}
+#archetypes > tbody > tr > td:last-child {
+  border-left: none;
+}
+#archetypes .inner-table tr:first-child td:first-child {
+  width: 40%;
+}
+#archetypes .archetype-config-list li {
+  margin-bottom: 6px;
+}
+#archetypes .archetype-config-list li input[type=number] {
+  float: right;
+  width: 40px;
+}
+#archetypes .archetype-config-list li div.skillselection {
+  border: 1px solid black;
+  width: 255px !important;
 }
 /* CHARACTERGEN */
 .characterlist tr.selected {

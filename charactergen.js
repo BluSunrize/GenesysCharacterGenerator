@@ -311,7 +311,7 @@ function init(dataset_path) {
             let element_careerskill = document.getElementById(`careerskill_${i}`);
             while (element_careerskill.firstChild)
                 element_careerskill.removeChild(element_careerskill.firstChild);
-            let dropdown = buildSkillDropdown(skills, new SkillSelection(selectedCareer.skills[i], SkillSelectionPredicate.LIST), null);
+            let dropdown = buildSkillDropdown(skills, new SkillSelection(selectedCareer.skills[i], SkillSelectionPredicate.FROM_LIST), null);
             initDropdownStateWithOld(dropdown, characters[selectedChar].career_skills[i]);
             dropdown.onchange = updateCareerSkills;
             element_careerskill.appendChild(dropdown);

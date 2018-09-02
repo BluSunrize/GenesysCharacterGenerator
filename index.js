@@ -3,7 +3,7 @@ const fs = require("fs");
 const Store = require("electron-store");
 
 const {makeDragable} = require("./js/table_utils");
-const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
+const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate, buildSkillSelectionConfiguration} = require("./js/skill");
 const element_datasets = document.getElementById("datasets");
 const element_button_new = document.getElementById("button_dataset_new");
 const element_button_copy = document.getElementById("button_dataset_copy");
@@ -129,6 +129,7 @@ function populateArchetypeRow(row, archetype_key, archetype) {
 
     cell = row.insertCell();
     let innerTable = document.createElement("table");
+    innerTable.classList.add("inner-table");
     cell.appendChild(innerTable);
 
     let topRow = innerTable.insertRow();
@@ -143,8 +144,9 @@ function populateArchetypeRow(row, archetype_key, archetype) {
     cell.appendChild(name);
 
     cell = topRow.insertCell();
-    cell.rowSpan = 2;
+    cell.rowSpan = 3;
     let ul = document.createElement("ul");
+    ul.classList.add("archetype-config-list");
     cell.appendChild(ul);
     let li = document.createElement("li");
     li.innerHTML = "<b>Starting Wound Threshold:</b> ";
@@ -166,6 +168,16 @@ function populateArchetypeRow(row, archetype_key, archetype) {
     xp.type = "number";
     li.appendChild(xp);
     ul.appendChild(li);
+
+    li = document.createElement("li");
+    li.innerHTML = "<b>Starting Skills:</b> ";
+    const dataset_skills = dataset_stores[element_datasets.value].get("skills");
+    let skills = li;
+    let addSelectionFunc = function (skillSelection) {
+        skills.insertBefore(buildSkillSelectionConfiguration(dataset_skills, skillSelection), skills.lastChild);
+    };
+    ul.appendChild(li);
+
 
     let bottomRow = innerTable.insertRow();
     bottomRow.classList.add("archetype-characteristics");
@@ -198,6 +210,8 @@ function populateArchetypeRow(row, archetype_key, archetype) {
         xp.valueAsNumber = archetype.experience;
         for (let i = 0; i < characteristics.length; i++)
             chars[i].valueAsNumber = archetype.characteristics[i];
+        for (let skillSelection of archetype.skills)
+            addSelectionFunc(skillSelection);
     }
 }
 

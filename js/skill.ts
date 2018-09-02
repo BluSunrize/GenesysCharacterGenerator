@@ -3,6 +3,7 @@
 import {Character} from "./character";
 
 export const characteristics = ["brawn", "agility", "intellect", "cunning", "willpower", "presence"];
+
 export enum Characteristic {
     BR = "BR",
     AG = "AG",
@@ -42,8 +43,7 @@ export function buildSkillDropdown(skills: Skill[], selection: SkillSelection, c
         option.innerText = skill.name;
         element_select.appendChild(option);
     }
-    if(skills.length<2)
-    {
+    if (skills.length < 2) {
         element_select.classList.add("no-select");
         element_select.disabled = true
     }
@@ -51,15 +51,97 @@ export function buildSkillDropdown(skills: Skill[], selection: SkillSelection, c
 }
 
 export enum SkillSelectionPredicate {
-    LIST = "LIST",
-    NON_CAREER = "NON_CAREER",
-    SOCIAL = "SOCIAL",
-    COMBAT = "COMBAT",
-    POWER = "POWER",
-    KNOWLEDGE = "KNOWLEDGE",
-    NON_COMBAT = "NON_COMBAT",
-    NON_POWER = "NON_POWER"
+    FROM_LIST = "FROM_LIST",
+    ANY_NON_CAREER = "ANY_NON_CAREER",
+    ANY_SOCIAL = "ANY_SOCIAL",
+    ANY_COMBAT = "ANY_COMBAT",
+    ANY_POWER = "ANY_POWER",
+    ANY_KNOWLEDGE = "ANY_KNOWLEDGE",
+    ANY_NON_COMBAT = "ANY_NON_COMBAT",
+    ANY_NON_POWER = "ANY_NON_POWER"
 }
+
+const makeReadable = str => {
+    return str.toLowerCase().replace(/[^A-Za-z0-9]/g, ' ').split(' ')
+        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+        .join(' ');
+};
+
+export function buildSkillSelectionConfiguration(skills: Skill[], selection: SkillSelection) {
+    let div = document.createElement("div");
+    div.style.display = "inline-flex";
+    let dropdown = document.createElement("select");
+    dropdown.classList.add("toggleEdit");
+    dropdown.disabled = true;
+    dropdown.style.height = "18.8px";
+    div.appendChild(dropdown);
+    for (let predicate in SkillSelectionPredicate) {
+        let option = document.createElement("option");
+        option.value = predicate;
+        option.innerText = makeReadable(predicate);
+        dropdown.appendChild(option);
+    }
+
+    let listBuilder = document.createElement("div");
+    div.appendChild(listBuilder);
+    listBuilder.classList.add("skillselection");
+    let addButton = document.createElement("button");
+    listBuilder.appendChild(addButton);
+    addButton.classList.add("toggleEdit");
+    addButton.disabled = true;
+    addButton.innerText = "Add";
+    let addFunc = function (skill: string) {
+        let skillDrop = createSkillDropdown(skills, true);
+        skillDrop.classList.add("toggleEdit");
+        if (skill)
+        {
+            skillDrop.value = skill;
+            skillDrop.disabled = true;
+        }
+        listBuilder.insertBefore(skillDrop, listBuilder.lastChild);
+    };
+    addButton.onclick = () => addFunc;
+
+    dropdown.onchange = function () {
+        if (dropdown.value !== SkillSelectionPredicate.FROM_LIST)
+            listBuilder.style.display = "none";
+        else
+            listBuilder.style.display = "block";
+    };
+
+    if (selection) {
+        dropdown.value = selection.predicate;
+        dropdown.onchange.call(dropdown.onchange);
+        if (selection.predicate === SkillSelectionPredicate.FROM_LIST)
+            for (let skill of selection.skills)
+            {
+                console.log("adding option for skill "+skill);
+                addFunc(skill);
+            }
+    }
+
+    return div;
+}
+
+function createSkillDropdown(skills: Skill[], addRemoveOption: boolean) {
+    let dropdown = document.createElement("select");
+    for (let skill of skills) {
+        let option = document.createElement("option");
+        option.value = option.innerText = skill.name;
+        dropdown.appendChild(option);
+    }
+    if (addRemoveOption) {
+        let option = document.createElement("option");
+        option.innerText = "REMOVE";
+        dropdown.insertBefore(option, dropdown.firstChild);
+        dropdown.onchange = function () {
+            if (dropdown.value === "REMOVE")
+                dropdown.parentElement.removeChild(dropdown);
+        };
+    }
+    return dropdown;
+}
+
 
 export class SkillSelection {
     readonly predicate: SkillSelectionPredicate;
@@ -67,28 +149,28 @@ export class SkillSelection {
 
     constructor(skills: string[], predicate?: SkillSelectionPredicate) {
         this.skills = skills;
-        this.predicate = predicate ? predicate : SkillSelectionPredicate.LIST;
+        this.predicate = predicate ? predicate : SkillSelectionPredicate.FROM_LIST;
     }
 
     getSkills(skills: Skill[], character: Character) {
         let ret = [];
         for (let skill of skills) {
             let add = true;
-            if (this.predicate == SkillSelectionPredicate.LIST)
-                add = this.skills.indexOf(skill.name)!=-1;
-            else if (this.predicate == SkillSelectionPredicate.NON_CAREER)
+            if (this.predicate == SkillSelectionPredicate.FROM_LIST)
+                add = this.skills.indexOf(skill.name) != -1;
+            else if (this.predicate == SkillSelectionPredicate.ANY_NON_CAREER)
                 add = character.career_skills.indexOf(skill.name) < 0;
-            else if (this.predicate == SkillSelectionPredicate.SOCIAL)
+            else if (this.predicate == SkillSelectionPredicate.ANY_SOCIAL)
                 add = skill.category == SkillCategory.SOCIAL;
-            else if (this.predicate == SkillSelectionPredicate.COMBAT)
+            else if (this.predicate == SkillSelectionPredicate.ANY_COMBAT)
                 add = skill.category == SkillCategory.COMBAT;
-            else if (this.predicate == SkillSelectionPredicate.POWER)
+            else if (this.predicate == SkillSelectionPredicate.ANY_POWER)
                 add = skill.category == SkillCategory.POWER;
-            else if (this.predicate == SkillSelectionPredicate.KNOWLEDGE)
+            else if (this.predicate == SkillSelectionPredicate.ANY_KNOWLEDGE)
                 add = skill.category == SkillCategory.KNOWLEDGE;
-            else if (this.predicate == SkillSelectionPredicate.NON_COMBAT)
+            else if (this.predicate == SkillSelectionPredicate.ANY_NON_COMBAT)
                 add = skill.category != SkillCategory.COMBAT;
-            else if (this.predicate == SkillSelectionPredicate.NON_POWER)
+            else if (this.predicate == SkillSelectionPredicate.ANY_NON_POWER)
                 add = skill.category != SkillCategory.POWER;
 
             if (add)
@@ -98,4 +180,13 @@ export class SkillSelection {
     }
 }
 
-module.exports = {Skill, characteristics, Characteristic, SkillCategory, buildSkillDropdown, SkillSelectionPredicate, SkillSelection};
+module.exports = {
+    Skill,
+    characteristics,
+    Characteristic,
+    SkillCategory,
+    buildSkillDropdown,
+    SkillSelectionPredicate,
+    buildSkillSelectionConfiguration,
+    SkillSelection
+};

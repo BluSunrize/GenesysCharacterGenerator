@@ -30,7 +30,7 @@ function createWindow() {
         mainWindow = null
     });
 
-    switchToChargen();
+    // switchToChargen();
 }
 
 function switchToChargen() {

@@ -134,15 +134,40 @@ input.no-background {
   text-align: center;
 }
 
-.button-up {
-  height: 9px;
-}
+#archetypes {
+  width: 100%;
+  border-collapse: collapse;
 
-.button-down {
-  height: 9px;
-  position: relative;
-  top: 9px;
-  left: -22px;
+  & > tbody > tr > td {
+    border: @genesys-orange 1px dotted;
+    margin-bottom: 4px;
+    &:first-child {
+      border-right: none;
+    }
+    &:last-child {
+      border-left: none;
+    }
+  }
+
+  .inner-table {
+    tr:first-child td:first-child {
+      width: 40%;
+    }
+  }
+
+  .archetype-config-list {
+    li {
+      margin-bottom: 6px;
+      input[type=number] {
+        float: right;
+        width: 40px;
+      }
+      div.skillselection {
+        border: 1px solid black;
+        width: 255px !important;
+      }
+    }
+  }
 }
 
 /* CHARACTERGEN */
