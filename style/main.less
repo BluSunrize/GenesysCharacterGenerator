@@ -138,14 +138,26 @@ input.no-background {
   width: 100%;
   border-collapse: collapse;
 
-  & > tbody > tr > td {
-    border: @genesys-orange 1px dotted;
-    margin-bottom: 4px;
-    &:first-child {
-      border-right: none;
+  & > tbody > tr {
+    &:not(:last-child) > td {
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+      border-bottom: 1px dashed @genesys-grey;
+      margin-bottom: 4px;
+      &:first-child {
+        border-right: none;
+      }
+      &:last-child {
+        border-left: none;
+      }
     }
-    &:last-child {
-      border-left: none;
+    &:first-child > td {
+      border-top: 1px solid black;
+    }
+    &:last-child > td {
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
     }
   }
 
@@ -163,7 +175,7 @@ input.no-background {
         width: 40px;
       }
       div.skillselection {
-        border: 1px solid black;
+        border: 1px dotted @genesys-orange;
         width: 255px !important;
       }
     }

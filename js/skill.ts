@@ -72,7 +72,6 @@ export function buildSkillSelectionConfiguration(skills: Skill[], selection: Ski
     div.style.display = "inline-flex";
     let dropdown = document.createElement("select");
     dropdown.classList.add("toggleEdit");
-    dropdown.disabled = true;
     dropdown.style.height = "18.8px";
     div.appendChild(dropdown);
     for (let predicate in SkillSelectionPredicate) {
@@ -81,6 +80,10 @@ export function buildSkillSelectionConfiguration(skills: Skill[], selection: Ski
         option.innerText = makeReadable(predicate);
         dropdown.appendChild(option);
     }
+    let option = document.createElement("option");
+    option.innerText = "REMOVE";
+    dropdown.insertBefore(option, dropdown.firstChild);
+
 
     let listBuilder = document.createElement("div");
     div.appendChild(listBuilder);
@@ -88,40 +91,54 @@ export function buildSkillSelectionConfiguration(skills: Skill[], selection: Ski
     let addButton = document.createElement("button");
     listBuilder.appendChild(addButton);
     addButton.classList.add("toggleEdit");
-    addButton.disabled = true;
     addButton.innerText = "Add";
     let addFunc = function (skill: string) {
         let skillDrop = createSkillDropdown(skills, true);
         skillDrop.classList.add("toggleEdit");
-        if (skill)
-        {
+        if (skill) {
             skillDrop.value = skill;
             skillDrop.disabled = true;
         }
         listBuilder.insertBefore(skillDrop, listBuilder.lastChild);
     };
-    addButton.onclick = () => addFunc;
+    addButton.onclick = () => addFunc(null);
 
     dropdown.onchange = function () {
-        if (dropdown.value !== SkillSelectionPredicate.FROM_LIST)
+        if (dropdown.value === "REMOVE") {
+            let highestChild = <HTMLElement>div;
+            while (highestChild.parentElement.tagName !== "DIV" && highestChild.parentElement.tagName !== "TBODY")
+                highestChild = highestChild.parentElement;
+            highestChild.parentElement.removeChild(highestChild);
+        }
+        else if (dropdown.value !== SkillSelectionPredicate.FROM_LIST)
             listBuilder.style.display = "none";
         else
             listBuilder.style.display = "block";
     };
 
     if (selection) {
+        dropdown.disabled = addButton.disabled = true;
         dropdown.value = selection.predicate;
         dropdown.onchange.call(dropdown.onchange);
         if (selection.predicate === SkillSelectionPredicate.FROM_LIST)
             for (let skill of selection.skills)
-            {
-                console.log("adding option for skill "+skill);
                 addFunc(skill);
-            }
     }
 
     return div;
 }
+export function parseSkillSelectionConfiguration(element: HTMLElement): SkillSelection {
+    let skills = [];
+    let predicate = SkillSelectionPredicate.FROM_LIST;
+    if(element.firstChild instanceof HTMLSelectElement)
+        predicate = SkillSelectionPredicate[(<HTMLSelectElement>element.firstChild).value];
+    let builder = <HTMLElement>element.lastChild;
+    for(let i=0; i<builder.children.length; i++)
+    if(builder.children[i] instanceof HTMLSelectElement)
+        skills.push((<HTMLSelectElement>builder.children[i]).value);
+    return new SkillSelection(skills, predicate);
+}
+
 
 function createSkillDropdown(skills: Skill[], addRemoveOption: boolean) {
     let dropdown = document.createElement("select");
@@ -188,5 +205,6 @@ module.exports = {
     buildSkillDropdown,
     SkillSelectionPredicate,
     buildSkillSelectionConfiguration,
+    parseSkillSelectionConfiguration,
     SkillSelection
 };

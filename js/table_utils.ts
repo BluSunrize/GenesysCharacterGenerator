@@ -39,4 +39,22 @@ export function makeDragable(dragElement: HTMLElement) {
     }
 }
 
-module.exports = {makeDragable};
+export function wrapInRow(element: HTMLElement)
+{
+    if(element.tagName==="TR")
+        return element;
+    else if(element.tagName==="TD")
+    {
+        let tr = document.createElement("tr");
+        tr.appendChild(element);
+        return tr;
+    }
+    else
+    {
+        let tr = <HTMLTableRowElement>document.createElement("tr");
+        tr.insertCell().appendChild(element);
+        return tr;
+    }
+}
+
+module.exports = {makeDragable, wrapInRow};
