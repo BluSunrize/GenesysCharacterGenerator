@@ -1,3 +1,21 @@
+.button-rounded(@fontsize) {
+  height: 40px;
+  min-width: 4*@fontsize;
+  font-size: @fontsize;
+  background:  @genesys-lightblue;
+  border-color: @genesys-blue;
+  border-radius: 10px;
+
+  &:hover:not(:disabled){
+    font-weight: bold;
+    background: white;
+  }
+
+  &:after {
+    width+: 50px;
+  }
+}
+
 .stat-single() {
   background+: url('@{image}genesys-stat-single.svg') no-repeat center center;
   background-size+: contain;

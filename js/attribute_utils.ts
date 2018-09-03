@@ -119,8 +119,16 @@ export function syncAttributesFromObject(prefix: string, object: object) {
     for (let i = 0; i < inputs.length; i++)
         if (inputs[i].id.indexOf(prefix) === 0) {
             let key = inputs[i].id.substr(prefix.length);
-            if (object[key])
+            if ((<HTMLInputElement>inputs[i]).type == "number" || (<HTMLInputElement>inputs[i]).type == "range") {
+                if (object[key])
+                    (<HTMLInputElement>inputs[i]).valueAsNumber = object[key];
+                else
+                    (<HTMLInputElement>inputs[i]).valueAsNumber = parseInt((<HTMLInputElement>inputs[i]).min)||0;
+            }
+            else if (object[key])
                 (<HTMLInputElement>inputs[i]).value = object[key];
+            else
+                (<HTMLInputElement>inputs[i]).value = "";
         }
 
     let textAreas = document.getElementsByTagName("textarea");
@@ -129,6 +137,8 @@ export function syncAttributesFromObject(prefix: string, object: object) {
             let key = textAreas[i].id.substr(prefix.length);
             if (object[key])
                 (<HTMLTextAreaElement>textAreas[i]).innerText = object[key];
+            else
+                (<HTMLTextAreaElement>textAreas[i]).innerText = "";
         }
 
     let selections = document.getElementsByTagName("select");
@@ -137,6 +147,8 @@ export function syncAttributesFromObject(prefix: string, object: object) {
             let key = selections[i].id.substr(prefix.length);
             if (object[key])
                 (<HTMLSelectElement>selections[i]).value = object[key];
+            else
+                (<HTMLSelectElement>selections[i]).selectedIndex = 0;
         }
 }
 

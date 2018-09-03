@@ -108,6 +108,20 @@ function init(dataset_path) {
         saveDisplayAttributes();
     };
 
+    //Buttons
+    document.getElementById("button_save_character").onclick = () => {
+        saveDisplayAttributes();
+    };
+    document.getElementById("button_delete_character").onclick = () => {
+        console.log("Ask for confirm on delete");
+        if (confirm("Are you sure you want to delete this character?")) {
+            console.log("doing deletion!");
+            characters.splice(selectedChar, 1);
+            element_characterlist.removeChild(element_characterlist.rows[selectedChar]);
+            selectCharacter(-1);
+        }
+
+    };
     //Attach Change Handlers
     attachOnChangeById("character_name", updateCharacterList);
     attachOnChangeById("character_player", updateCharacterList);
@@ -190,7 +204,7 @@ function init(dataset_path) {
     function insertCharacter(character) {
         const i = element_characterlist.rows.length - 1;
         let tr = element_characterlist.insertRow(i);
-        tr.onclick = () => selectCharacter(i);
+        tr.onclick = () => selectCharacter(tr.rowIndex);
         let content = `<td>Character #${i + 1}<br>&nbsp&nbsp<span id='character${i}_name'>${character.name ? character.name : ""}</span><br>`;
         content += `&nbsp&nbsp&nbsp<span id='character${i}_archetype'>${character.archetype ? archetypes[character.archetype].name : ""}</span><br>`;
         content += `&nbsp&nbsp&nbsp<span id='character${i}_career'>${character.career ? careers[character.career].name : ""}</span><br>`;
@@ -212,15 +226,17 @@ function init(dataset_path) {
     function selectCharacter(i) {
         if (selectedChar >= 0)
             element_characterlist.rows[selectedChar].classList.remove("selected");
-        element_characterlist.rows[i].classList.add("selected");
+        selectedChar = i;
         if (i < 0)
             element_main.classList.add("disabled");
         else
+        {
+            element_characterlist.rows[i].classList.add("selected");
             element_main.classList.remove("disabled");
-        selectedChar = i;
-        initialCharacterLoad = true;
-        loadDisplayAttributes();
-        initialCharacterLoad = false;
+            initialCharacterLoad = true;
+            loadDisplayAttributes();
+            initialCharacterLoad = false;
+        }
     }
 
 
