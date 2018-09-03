@@ -20,12 +20,14 @@ if (!fs.existsSync(cwd + "/dataset")) {
     console.log("NO DATASET FOLDEEEEEEEEEEERRRRR!!!");
     fs.mkdirSync(cwd + "/dataset");
 }
-if (!fs.existsSync(cwd + "/dataset/default1.json")) {
+if (!fs.existsSync(cwd + "/dataset/default.json")) {
     console.log("NO DEFAULT DATASET!!!!");
-    fs.writeFileSync(cwd + "/dataset/default1.json", createDefaultDataset());
+    fs.writeFileSync(cwd + "/dataset/default.json", createDefaultDataset());
 }
 
 let files_dataset = fs.readdirSync(cwd + "/dataset");
+let nextCustomIndex = 1;
+let patternUsercreated = /usercreated_(\d+)/;
 const dataset_stores = {};
 for (let ds of files_dataset)
     if (ds.endsWith(".json")) {
@@ -43,10 +45,15 @@ for (let ds of files_dataset)
             else
                 element_datasets.appendChild(element_option);
         }
+        let res = patternUsercreated.exec(ds);
+        if (res)
+            nextCustomIndex = Math.max(nextCustomIndex, parseInt(res[1]) + 1);
     }
 element_datasets.selectedIndex = 0;
 element_datasets.onchange = readDataset;
 element_button_openfolder.onclick = () => electron.shell.showItemInFolder(cwd + "/dataset/.");
+element_button_new.onclick = newDataset;
+element_button_copy.onclick = copyDataset;
 element_button_remove.onclick = removeDataset;
 element_button_save.onclick = writeDataset;
 for (let button of document.getElementsByName("button_add_skill"))
@@ -54,6 +61,46 @@ for (let button of document.getElementsByName("button_add_skill"))
 readDataset();
 
 document.getElementById("allow_dataset_edit").onchange = toggleEdit;
+
+function newDataset(e) {
+    let key = "usercreated_" + nextCustomIndex;
+    let name = "Usercreated #" + (nextCustomIndex++);
+
+    let store = {
+        name: name,
+        skills: [],
+        archetypes: {},
+        careers: {}
+    };
+    fs.writeFileSync(cwd + "/dataset/" + key + ".json", JSON.stringify(store, null, "\t"));
+    let element_option = document.createElement("option");
+    dataset_stores[key] = new Store({"name": "dataset/" + key});
+    element_option.value = key;
+    element_option.innerText = store.name;
+    element_datasets.appendChild(element_option);
+    element_datasets.value = key;
+    readDataset();
+}
+
+
+function copyDataset(e) {
+    if ("default" !== element_datasets.value)
+        writeDataset();
+    let dataset_store = dataset_stores[element_datasets.value];
+    let key = "usercreated_" + (nextCustomIndex++);
+
+    let store = dataset_store.store;
+    store.name += " (Copy)";
+    fs.writeFileSync(cwd + "/dataset/" + key + ".json", JSON.stringify(store, null, "\t"));
+
+    let element_option = document.createElement("option");
+    dataset_stores[key] = new Store({"name": "dataset/" + key});
+    element_option.value = key;
+    element_option.innerText = store.name;
+    element_datasets.appendChild(element_option);
+    element_datasets.value = key;
+    readDataset();
+}
 
 function removeDataset(e) {
     if ("default" === element_datasets.value)
@@ -228,6 +275,7 @@ function populateArchetypeRow(row, archetype_key, archetype) {
 function readDataset() {
     console.log("reading selected dataset: " + element_datasets.value);
     let dataset_store = dataset_stores[element_datasets.value];
+    console.log(dataset_store);
 
     let toggleEdit = document.getElementById("allow_dataset_edit");
     toggleEdit.checked = false;
@@ -269,8 +317,9 @@ function writeDataset() {
     console.log("writing selected dataset: " + element_datasets.value);
     let dataset_store = dataset_stores[element_datasets.value];
 
-    // dataset_store.clear();
-    dataset_store.set("name", document.getElementById("name").value);
+    let name = document.getElementById("name").value;
+    dataset_store.set("name", name);
+    element_datasets.options[element_datasets.selectedIndex].innerText = name;
 
     let element_skills = {};
     let skills = [];
