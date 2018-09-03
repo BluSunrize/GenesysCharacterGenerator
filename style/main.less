@@ -174,9 +174,26 @@ input.no-background {
         float: right;
         width: 40px;
       }
-      div.skillselection {
-        border: 1px dotted @genesys-orange;
-        width: 255px !important;
+      div.skillrow {
+        display: inline-flex;
+        input[type=number] {
+          float: none;
+          width: 20px;
+          height: 15px;
+          margin-right: 3px;
+        }
+        select{
+          margin-left: 3px;
+          margin-right: 3px;
+        }
+        div.skillselection {
+          border: 1px dotted @genesys-orange;
+          padding: 1px;
+          width: 128px !important;
+          select{
+            margin: 0;
+          }
+        }
       }
     }
   }
@@ -198,6 +215,22 @@ input.no-background {
 
 #archetype_abilities li {
   margin-bottom: 4px;
+
+  #archetype_skills {
+    p{
+      margin: 0;
+      padding-left: 10px;
+
+      input {
+        width: 15px;
+        background: none;
+        box-shadow: none;
+        border: none;
+        .no-spinner();
+      }
+    }
+
+  }
 }
 
 .archetype-characteristics {

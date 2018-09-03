@@ -69,7 +69,14 @@ const makeReadable = str => {
 
 export function buildSkillSelectionConfiguration(skills: Skill[], selection: SkillSelection) {
     let div = document.createElement("div");
-    div.style.display = "inline-flex";
+    div.classList.add("skillrow");
+    div.innerText = " Rank(s) in ";
+    let count = document.createElement("input");
+    count.type = "number";
+    count.min = "1";
+    count.valueAsNumber = 1;
+    count.classList.add("toggleEdit");
+    div.insertBefore(count, div.firstChild);
     let dropdown = document.createElement("select");
     dropdown.classList.add("toggleEdit");
     dropdown.style.height = "18.8px";
@@ -117,7 +124,8 @@ export function buildSkillSelectionConfiguration(skills: Skill[], selection: Ski
     };
 
     if (selection) {
-        dropdown.disabled = addButton.disabled = true;
+        count.disabled = dropdown.disabled = addButton.disabled = true;
+        count.valueAsNumber = selection.ranks;
         dropdown.value = selection.predicate;
         dropdown.onchange.call(dropdown.onchange);
         if (selection.predicate === SkillSelectionPredicate.FROM_LIST)
@@ -127,16 +135,18 @@ export function buildSkillSelectionConfiguration(skills: Skill[], selection: Ski
 
     return div;
 }
+
 export function parseSkillSelectionConfiguration(element: HTMLElement): SkillSelection {
     let skills = [];
+    let ranks = element.firstChild instanceof HTMLInputElement ? (<HTMLInputElement>element.firstChild).valueAsNumber : 0;
     let predicate = SkillSelectionPredicate.FROM_LIST;
-    if(element.firstChild instanceof HTMLSelectElement)
-        predicate = SkillSelectionPredicate[(<HTMLSelectElement>element.firstChild).value];
+    if (element.children[1] instanceof HTMLSelectElement)
+        predicate = SkillSelectionPredicate[(<HTMLSelectElement>element.children[1]).value];
     let builder = <HTMLElement>element.lastChild;
-    for(let i=0; i<builder.children.length; i++)
-    if(builder.children[i] instanceof HTMLSelectElement)
-        skills.push((<HTMLSelectElement>builder.children[i]).value);
-    return new SkillSelection(skills, predicate);
+    for (let i = 0; i < builder.children.length; i++)
+        if (builder.children[i] instanceof HTMLSelectElement)
+            skills.push((<HTMLSelectElement>builder.children[i]).value);
+    return new SkillSelection(skills, predicate, ranks);
 }
 
 
@@ -163,10 +173,12 @@ function createSkillDropdown(skills: Skill[], addRemoveOption: boolean) {
 export class SkillSelection {
     readonly predicate: SkillSelectionPredicate;
     readonly skills: string[];
+    readonly ranks: number = 1;
 
-    constructor(skills: string[], predicate?: SkillSelectionPredicate) {
+    constructor(skills: string[], predicate?: SkillSelectionPredicate, ranks?: number) {
         this.skills = skills;
         this.predicate = predicate ? predicate : SkillSelectionPredicate.FROM_LIST;
+        this.ranks = ranks;
     }
 
     getSkills(skills: Skill[], character: Character) {

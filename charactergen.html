@@ -98,7 +98,7 @@
                     <label>WILLPOWER</label>
                 </td>
                 <td>
-                    <input id="archetype_presence" type="number" max="7" min="1" value="1" readonly/>
+                    <input name="archetype_presence" type="number" max="7" min="1" value="1" readonly/>
                     <label>PRESENCE</label>
                 </td>
             </tr>
@@ -107,6 +107,8 @@
 
     <h3 class="sheet-full-header">Career</h3>
     <div class="segment-blue">
+        <br>
+        <i>Choose a Career and pick </i><b><span id="archetype_free_careerskills"></span></b><i> Career Skills to gain a free rank in.</i>
         <table>
             <tr>
                 <td>
@@ -114,7 +116,7 @@
                     </select>
                 </td>
                 <td>
-                    <ul class="no-style">
+                    <ul class="no-style" style="columns: 4;">
                         <li><input type="checkbox" id="careerskill_0_freerank"><span id="careerskill_0"></span></li>
                         <li><input type="checkbox" id="careerskill_1_freerank"><span id="careerskill_1"></span></li>
                         <li><input type="checkbox" id="careerskill_2_freerank"><span id="careerskill_2"></span></li>

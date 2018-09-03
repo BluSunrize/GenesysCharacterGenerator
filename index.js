@@ -26,7 +26,7 @@ if (!fs.existsSync(cwd + "/dataset/default.json")) {
 }
 
 let files_dataset = fs.readdirSync(cwd + "/dataset");
-let nextCustomIndex = 1;
+let nextCustomIndex = 1 ;
 let patternUsercreated = /usercreated_(\d+)/;
 const dataset_stores = {};
 for (let ds of files_dataset)
@@ -222,10 +222,19 @@ function populateArchetypeRow(row, archetype_key, archetype) {
     ul.appendChild(li);
 
     li = document.createElement("li");
+    li.innerHTML = "<b>Free Ranks in Career Skills:</b> ";
+    let careerskills = document.createElement("input");
+    careerskills.type = "number";
+    careerskills.valueAsNumber = 4;
+    li.appendChild(careerskills);
+    ul.appendChild(li);
+
+    li = document.createElement("li");
     li.innerHTML = "<b>Starting Skills:</b> ";
     const dataset_skills = dataset_stores[element_datasets.value].get("skills");
     let skills = document.createElement("table").createTBody();
     let addSelectionFunc = function (skillSelection) {
+
         skills.insertBefore(wrapInRow(buildSkillSelectionConfiguration(dataset_skills, skillSelection)), skills.lastChild);
     };
     let addButton = document.createElement("button");
@@ -252,7 +261,7 @@ function populateArchetypeRow(row, archetype_key, archetype) {
         cell.appendChild(label);
     }
 
-    let allElements = [button_move, key, name, wounds, strain, xp, addButton];
+    let allElements = [button_move, key, name, wounds, strain, xp, careerskills, addButton];
     allElements = allElements.concat(chars);
     for (let e of allElements) {
         e.classList.add("toggleEdit");
@@ -265,6 +274,7 @@ function populateArchetypeRow(row, archetype_key, archetype) {
         wounds.valueAsNumber = archetype.wound_threshold;
         strain.valueAsNumber = archetype.strain_threshold;
         xp.valueAsNumber = archetype.experience;
+        careerskills.valueAsNumber = archetype.free_careerskills;
         for (let i = 0; i < characteristics.length; i++)
             chars[i].valueAsNumber = archetype.characteristics[i];
         for (let skillSelection of archetype.skills)
@@ -346,7 +356,8 @@ function writeDataset() {
         let wounds = ul.children[0].lastChild.valueAsNumber;
         let strain = ul.children[1].lastChild.valueAsNumber;
         let xp = ul.children[2].lastChild.valueAsNumber;
-        let skillTable = ul.children[3].lastChild;
+        let careerskills = ul.children[3].lastChild.valueAsNumber;
+        let skillTable = ul.children[4].lastChild;
         let skillSelections = [];
         for (let j = 0; j < skillTable.rows.length - 1; j++)
             skillSelections.push(parseSkillSelectionConfiguration(skillTable.rows[j].cells[0].firstChild));
@@ -356,7 +367,7 @@ function writeDataset() {
         for (let j = 0; j < bottomRow.cells.length; j++)
             chars[j] = bottomRow.cells[j].firstChild.valueAsNumber;
 
-        let arch = new Archetype(name, chars, wounds, strain, xp, skillSelections, []);
+        let arch = new Archetype(name, chars, wounds, strain, xp, careerskills, skillSelections, []);
         console.log(`Adding archetype at ${key}: ${name}; ${wounds} Wounds, ${strain} Strain, ${xp} Starting XP`);
     }
 

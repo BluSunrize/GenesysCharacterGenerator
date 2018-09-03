@@ -160,8 +160,8 @@ function init(dataset_path) {
         let archetype_skills = document.getElementById("archetype_skills").children;
         character.archetype_skills = [];
         for (let i = 0; i < archetype_skills.length; i++)
-            if (archetype_skills[i].value)
-                character.archetype_skills.push(archetype_skills[i].value);
+            if (archetype_skills[i].lastChild.value)
+                character.archetype_skills.push(archetype_skills[i].lastChild.value);
         //Free Career Skill Ranks
         character.career_skills_free_ranks = [getIDedAttribute("careerskill_0_freerank"), getIDedAttribute("careerskill_1_freerank"),
             getIDedAttribute("careerskill_2_freerank"), getIDedAttribute("careerskill_3_freerank"),
@@ -253,7 +253,7 @@ function init(dataset_path) {
                 newMin = parseInt(getIDedAttribute("archetype_strain")) + characteristics[4];
             if (initialCharacterLoad)//Initial setup
                 curBoost = element.valueAsNumber - newMin;
-            if(element.valueAsNumber===0)
+            if (element.valueAsNumber === 0)
                 curBoost = 0;
             element.min = newMin;
             element.valueAsNumber = newMin + curBoost;
@@ -271,6 +271,7 @@ function init(dataset_path) {
         setIDedAttribute("archetype_wounds", selectedArchetype.wound_threshold);
         setIDedAttribute("archetype_strain", selectedArchetype.strain_threshold);
         setIDedAttribute("archetype_xp", selectedArchetype.experience);
+        setIDedAttribute("archetype_free_careerskills", selectedArchetype.free_careerskills);
         let element_list = document.getElementById("archetype_abilities");
         while (element_list.children.length > 4)
             element_list.removeChild(element_list.lastChild);
@@ -278,6 +279,14 @@ function init(dataset_path) {
             let element_li = document.createElement("li");
             element_li.innerHTML = `<b>${ability.name}:</b> ${ability.description}`;
             element_list.appendChild(element_li);
+        }
+
+        let freeRanks = 0;
+        for (let i = 0; i < 8; i++) {
+            let checkbox = document.getElementById(`careerskill_${i}_freerank`)
+            if (checkbox.checked)
+                if (++freeRanks > selectedArchetype.free_careerskills)
+                    checkbox.checked = false;
         }
 
 
@@ -300,7 +309,15 @@ function init(dataset_path) {
             dropdown.onchange = autocalcSkills;
             if (element_archetype.value === characters[selectedChar].archetype)//if same as cached archetype
                 initDropdownStateWithOld(dropdown, characters[selectedChar].archetype_skills[iSelection]);
-            element_skills.appendChild(dropdown);
+            let wrapper = document.createElement("p");
+            wrapper.innerText = " Rank(s) in ";
+            let input = document.createElement("input");
+            input.type = "number";
+            input.readOnly = true;
+            input.valueAsNumber = selection.ranks;
+            wrapper.insertBefore(input, wrapper.firstChild);
+            wrapper.appendChild(dropdown);
+            element_skills.appendChild(wrapper);
         }
         autocalcSkills();
     }
@@ -324,11 +341,13 @@ function init(dataset_path) {
     function selectCareerFreeSkill(e) {
         if (e.srcElement.checked)//was flipped on
         {
+            let selectedArchetype = archetypes[element_archetype.value];
+            let max = selectedArchetype.free_careerskills;
             let count = 0;
             for (let i = 0; i < 8; i++)
                 if (document.getElementById(`careerskill_${i}_freerank`).checked)
                     count++;
-            if (count > 4) {
+            if (count > max) {
                 e.srcElement.checked = false;
                 return;
             }
@@ -391,9 +410,11 @@ function init(dataset_path) {
             let freeRanks = {};
             // From Archetype
             let archetype_skills = document.getElementById("archetype_skills").children;
-            for (let i = 0; i < archetype_skills.length; i++)
-                if (archetype_skills[i].value)
-                    freeRanks[archetype_skills[i].value] = (freeRanks[archetype_skills[i].value] || 0) + 1;
+            for (let i = 0; i < archetype_skills.length; i++) {
+                let count = archetype_skills[i].firstChild.valueAsNumber;
+                let skill = archetype_skills[i].lastChild.value;
+                freeRanks[skill] = (freeRanks[skill] || 0) + count;
+            }
             // From Career
             for (let i = 0; i < 8; i++)
                 if (getIDedAttribute(`careerskill_${i}_freerank`)) {
