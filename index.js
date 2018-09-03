@@ -8,6 +8,7 @@ const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, Sk
 const {Archetype} = require("./js/archetype");
 
 const element_datasets = document.getElementById("datasets");
+const element_button_continue = document.getElementById("button_continue");
 const element_button_openfolder = document.getElementById("button_dataset_openfolder");
 const element_button_new = document.getElementById("button_dataset_new");
 const element_button_copy = document.getElementById("button_dataset_copy");
@@ -26,7 +27,7 @@ if (!fs.existsSync(cwd + "/dataset/default.json")) {
 }
 
 let files_dataset = fs.readdirSync(cwd + "/dataset");
-let nextCustomIndex = 1 ;
+let nextCustomIndex = 1;
 let patternUsercreated = /usercreated_(\d+)/;
 const dataset_stores = {};
 for (let ds of files_dataset)
@@ -51,6 +52,9 @@ for (let ds of files_dataset)
     }
 element_datasets.selectedIndex = 0;
 element_datasets.onchange = readDataset;
+element_button_continue.onclick = () => {
+    electron.ipcRenderer.send("continue", element_datasets.value);
+};
 element_button_openfolder.onclick = () => electron.shell.showItemInFolder(cwd + "/dataset/.");
 element_button_new.onclick = newDataset;
 element_button_copy.onclick = copyDataset;

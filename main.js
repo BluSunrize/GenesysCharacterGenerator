@@ -30,15 +30,18 @@ function createWindow() {
         mainWindow = null
     });
 
+    ipcMain.on("continue", function (event, data) {
+        switchToChargen(data);
+    });
     // switchToChargen();
 }
 
-function switchToChargen() {
+function switchToChargen(dataset) {
     mainWindow.loadFile('charactergen.html');
 
     ipcMain.on("init", function (event, data) {
         console.log("MAIN got request for init :");
-        mainWindow.webContents.send("init", "default");
+        mainWindow.webContents.send("init", dataset);
     });
 
 }
