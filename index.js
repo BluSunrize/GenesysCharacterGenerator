@@ -6,7 +6,7 @@ const Store = require("electron-store");
 const {makeDragable, wrapInRow} = require("./js/table_utils");
 const {createDefaultDataset} = require("./js/dataset");
 const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate, buildSkillSelectionConfiguration, parseSkillSelectionConfiguration} = require("./js/skill");
-const {Ability, buildAbilityConfiguration} = require("./js/ability");
+const {Ability, buildAbilityConfiguration, parseAbilityConfiguration} = require("./js/ability");
 const {Archetype} = require("./js/archetype");
 
 const element_datasets = document.getElementById("datasets");
@@ -64,6 +64,7 @@ element_button_remove.onclick = removeDataset;
 element_button_save.onclick = writeDataset;
 for (let button of document.getElementsByName("button_add_skill"))
     button.onclick = addSkill;
+document.getElementById("button_add_archetype").onclick = addArchetype;
 readDataset();
 
 document.getElementById("allow_dataset_edit").onchange = toggleEdit;
@@ -175,6 +176,12 @@ function populateSkillRow(row, skill) {
         name.value = skill.name;
         characteristic.value = skill.characteristic;
     }
+}
+
+function addArchetype(e) {
+    let row = e.srcElement.parentElement.parentElement;
+    let newRow = row.parentElement.insertRow(row.sectionRowIndex);
+    populateArchetypeRow(newRow, null);
 }
 
 function populateArchetypeRow(row, archetype_key, archetype) {
@@ -382,15 +389,19 @@ function writeDataset() {
         let skillSelections = [];
         for (let j = 0; j < skillTable.rows.length - 1; j++)
             skillSelections.push(parseSkillSelectionConfiguration(skillTable.rows[j].cells[0].firstChild));
+        let abilityTable = ul.children[5].lastChild;
+        let abilities = [];
+        for (let j = 0; j < abilityTable.rows.length - 1; j++)
+            abilities.push(parseAbilityConfiguration(abilityTable.rows[j]));
 
         let bottomRow = innerTable.rows[1];
         let chars = [];
         for (let j = 0; j < bottomRow.cells.length; j++)
             chars[j] = bottomRow.cells[j].firstChild.valueAsNumber;
 
-        let arch = new Archetype(name, chars, wounds, strain, xp, careerskills, skillSelections, []);
-        console.log(`Adding archetype at ${key}: ${name}; ${wounds} Wounds, ${strain} Strain, ${xp} Starting XP`);
+        archetypes[key] = new Archetype(name, chars, wounds, strain, xp, careerskills, skillSelections, abilities);
     }
+    dataset_store.set("archetypes", archetypes);
 
 
 }

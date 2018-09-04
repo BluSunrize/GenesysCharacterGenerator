@@ -15,8 +15,8 @@ export class Ability {
 export enum AbilityEffectType {
     TEXT = "TEXT",
     INCREASE_DEFENSE = "INCREASE_DEFENSE",
-    INCREASE_SOAK = "INCREASE_DEFENSE",
-    GAIN_CAREER_SKILL = "INCREASE_DEFENSE"
+    INCREASE_SOAK = "INCREASE_SOAK",
+    GAIN_CAREER_SKILL = "GAIN_CAREER_SKILL"
 }
 
 export class AbilityEffect {
@@ -79,8 +79,18 @@ export function buildAbilityConfiguration(ability: Ability) {
         if (ability.effect)
             dropdown.value = ability.effect.type;
     }
-
     return row;
 }
 
-module.exports = {Ability, AbilityEffect, AbilityEffectType, buildAbilityConfiguration};
+export function parseAbilityConfiguration(row: HTMLTableRowElement) {
+    let name = (<HTMLInputElement>row.cells[1].firstChild).value;
+    let desc = (<HTMLTextAreaElement>row.cells[2].firstChild).value;
+    let dropdown = <HTMLInputElement>row.cells[1].children[1];
+
+    if (dropdown.value)
+        return new Ability(name, desc, new AbilityEffect(AbilityEffectType[dropdown.value]));
+    else
+        return new Ability(name, desc)
+}
+
+module.exports = {Ability, AbilityEffect, AbilityEffectType, buildAbilityConfiguration, parseAbilityConfiguration};
