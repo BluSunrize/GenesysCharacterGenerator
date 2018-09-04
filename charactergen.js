@@ -8,6 +8,7 @@ const Archetype = require("./js/archetype");
 const Career = require("./js/career");
 const Character = require("./js/character");
 const Ability = require("./js/ability");
+const {Talent} = require("./js/talent");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
 
 let initialCharacterLoad = false;
@@ -113,15 +114,15 @@ function init(dataset_path) {
         saveDisplayAttributes();
     };
     document.getElementById("button_delete_character").onclick = () => {
-        console.log("Ask for confirm on delete");
         if (confirm("Are you sure you want to delete this character?")) {
-            console.log("doing deletion!");
             characters.splice(selectedChar, 1);
             element_characterlist.removeChild(element_characterlist.rows[selectedChar]);
             selectCharacter(-1);
         }
 
     };
+    for (let i = 1; i <= 5; i++)
+        document.getElementById("button_addtalent_" + i).onclick = () => addTalent(i);
     //Attach Change Handlers
     attachOnChangeById("character_name", updateCharacterList);
     attachOnChangeById("character_player", updateCharacterList);
@@ -152,9 +153,12 @@ function init(dataset_path) {
         }
         for (let i = 0; i < 8; i++)
             setIDedAttribute(`careerskill_${i}_freerank`, character.career_skills_free_ranks[i]);
+        for (let talent of character.talents)
+            addTalent(talent.tier, talent);
 
         updateArchetype();
         updateCareer();
+        updateTalentButtons();
     }
 
     function saveDisplayAttributes() {
@@ -181,6 +185,16 @@ function init(dataset_path) {
             getIDedAttribute("careerskill_2_freerank"), getIDedAttribute("careerskill_3_freerank"),
             getIDedAttribute("careerskill_4_freerank"), getIDedAttribute("careerskill_5_freerank"),
             getIDedAttribute("careerskill_6_freerank"), getIDedAttribute("careerskill_7_freerank")];
+        character.talents = [];
+        for (let tier = 1; tier <= 5; tier++) {
+            let table = document.getElementById("talents_tier" + tier);
+            for (let j = 0; j < table.rows.length - 1; j++) {
+                let name = table.rows[j].cells[0].children[2].value;
+                let desc = table.rows[j].cells[0].children[4].value;
+                let active = table.rows[j].cells[0].children[3].firstChild.checked;
+                character.talents.push(new Talent(name, tier, desc, active));
+            }
+        }
 
         saveCharacters();
     }
@@ -229,8 +243,7 @@ function init(dataset_path) {
         selectedChar = i;
         if (i < 0)
             element_main.classList.add("disabled");
-        else
-        {
+        else {
             element_characterlist.rows[i].classList.add("selected");
             element_main.classList.remove("disabled");
             initialCharacterLoad = true;
@@ -299,7 +312,7 @@ function init(dataset_path) {
 
         let freeRanks = 0;
         for (let i = 0; i < 8; i++) {
-            let checkbox = document.getElementById(`careerskill_${i}_freerank`)
+            let checkbox = document.getElementById(`careerskill_${i}_freerank`);
             if (checkbox.checked)
                 if (++freeRanks > selectedArchetype.free_careerskills)
                     checkbox.checked = false;
@@ -486,6 +499,11 @@ function init(dataset_path) {
                     xpSpent += 5 * j;
             }
 
+        for (let tier = 1; tier <= 5; tier++) {
+            let table = document.getElementById("talents_tier" + tier);
+            xpSpent += (table.rows.length - 1) * (tier * 5);
+        }
+
         let xpArch = parseInt(getIDedAttribute("archetype_xp"));
         let xpTotal = xpArch + getIDedAttribute("character_experience_earned");
         setIDedAttribute("total_experience", xpTotal);
@@ -498,5 +516,51 @@ function init(dataset_path) {
         if (!xpSpent)
             xpSpent = getIDedAttribute("character_experience_spent");
         setIDedAttribute("available_experience", xpTotal - xpSpent);
+    }
+
+    function addTalent(tier, talent) {
+        let table = document.getElementById("talents_tier" + tier);
+        let tr = table.insertRow(table.rows.length - 1);
+        let td = tr.insertCell();
+        let span = document.createElement("span");
+        span.innerText = "Talent";
+        td.appendChild(span);
+        span = document.createElement("span");
+        span.innerText = "Active?";
+        td.appendChild(span);
+        let name = document.createElement("input");
+        td.appendChild(name);
+        let active = document.createElement("input");
+        active.type = "checkbox";
+        let checkDiv = document.createElement("div");
+        checkDiv.appendChild(active);
+        td.appendChild(checkDiv);
+        let desc = document.createElement("textarea");
+        desc.rows = 6;
+        td.appendChild(desc);
+        let remove = document.createElement("button");
+        remove.innerText = "Remove";
+        remove.onclick = () => {
+            table.deleteRow(tr.rowIndex);
+            autocalcXPSpent();
+            updateTalentButtons();
+        };
+        td.appendChild(remove);
+
+        if (talent) {
+            name.value = talent.name;
+            active.checked = talent.active;
+            desc.value = talent.description;
+        }
+        autocalcXPSpent();
+        updateTalentButtons();
+    }
+
+    function updateTalentButtons() {
+        for (let i = 1; i < 5; i++) {
+            let table = document.getElementById("talents_tier" + i);
+            let tableNext = document.getElementById("talents_tier" + (i + 1));
+            document.getElementById("button_addtalent_" + (i + 1)).disabled = table.rows.length <= tableNext.rows.length + 1;
+        }
     }
 }

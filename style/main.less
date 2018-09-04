@@ -623,8 +623,8 @@ label.sheet-label-title {
   label.skill {
     border: 1px dotted @genesys-grey;
     border-radius: 50%;
-    font-size: 14px;
-    padding: 2px 4px;
+    font-size: 17px;
+    padding: 0 6px;
 
     &::before {
       content: '\00a0\00a0\00a0';
@@ -669,6 +669,104 @@ label.sheet-label-title {
       background-image: url("../img/skills_5.png");
     }
   }
+}
+
+#talents {
+  display: grid;
+  grid-template-columns: 146px 146px 146px 146px 146px;
+
+  table {
+    tr:not(:last-child) {
+      td {
+        display: inline-block;
+        width: 136px;
+        padding: 4px;
+        border: 1px solid @genesys-grey;
+        border-radius: 5px;
+
+        span {
+          font-size: 11px;
+          font-weight: bold;
+          float: left;
+          margin-left: 6px;
+
+          &:nth-child(2) {
+            float: right;
+          }
+        }
+
+        div {
+          background: white;
+          border: 1px solid black;
+          width: 20px;
+          height: 15px;
+          float: right;
+          padding: 2px 0 2px 5px;
+
+          input[type=checkbox] {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            margin: 0;
+            border: 1px dotted @genesys-grey;
+            border-radius: 50%;
+            font-size: 19px;
+            line-height: 9px;
+
+            &:checked::before {
+              content: "\2713";
+            }
+          }
+        }
+
+        input {
+          width: 104px;
+          border: 1px solid black;
+          padding: 2px;
+          border-right: none;
+        }
+        textarea {
+          width: 130px;
+          border: 1px solid black;
+          resize: none;
+          border-top: none;
+        }
+        button {
+          float: right;
+          position: relative;
+          top: -23px;
+          margin-bottom: -23px;
+          border: 1px solid black;
+
+          &:not(:hover) {
+            background: none;
+          }
+        }
+      }
+    }
+
+    tr:last-child td {
+      width: 136px;
+      text-align: center;
+    }
+
+    &#talents_tier1 {
+      grid-column: 1;
+    }
+    &#talents_tier2 {
+      grid-column: 2;
+    }
+    &#talents_tier3 {
+      grid-column: 3;
+    }
+    &#talents_tier4 {
+      grid-column: 4;
+    }
+    &#talents_tier5 {
+      grid-column: 5;
+    }
+  }
+
 }
 
 //Hiding things with checkboxes!

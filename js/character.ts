@@ -2,6 +2,7 @@
 
 import {Archetype} from "./archetype";
 import {Career} from "./career";
+import {Talent} from "./talent";
 
 export class Character {
     //Base Info
@@ -40,11 +41,8 @@ export class Character {
     career_skills_free_ranks: boolean[] = [false, false, false, false, false, false, false, false];
     skills_bought: { [skill: string]: number; } = {};
 
-    //Abilities
-    abilities: string[] = [];
-
     //Talents
-    talents: string[] = [];
+    talents: Talent[] = [];
 
     constructor() {
     }
