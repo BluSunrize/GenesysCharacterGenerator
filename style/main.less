@@ -166,8 +166,30 @@ input.no-background {
   }
 
   .inner-table {
-    tr:first-child td:first-child {
+    .name-cell {
       width: 40%;
+      height: 150px;
+      vertical-align: top;
+      padding-top: 30px;
+
+      p {
+        display: inline-block;
+        width: 105%;
+        margin-bottom: 0;
+        font-weight: bold;
+
+        input {
+          width: 104px;
+          float: right;
+        }
+      }
+    }
+    .archetype-characteristics {
+      margin-left: 8px;
+      margin-right: -8px;
+      td {
+        vertical-align: center;
+      }
     }
   }
 
@@ -200,7 +222,7 @@ input.no-background {
         }
       }
       .abilityrow {
-        td:first-child{
+        td:first-child {
           width: auto;
         }
       }

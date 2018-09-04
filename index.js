@@ -1,4 +1,3 @@
-
 const electron = require("electron");
 const fs = require("fs");
 const Store = require("electron-store");
@@ -199,14 +198,25 @@ function populateArchetypeRow(row, archetype_key, archetype) {
 
     let topRow = innerTable.insertRow();
     cell = topRow.insertCell();
+    cell.classList.add("name-cell");
+    let button_remove = document.createElement("button");
+    button_remove.innerText = "Remove";
+    button_remove.onclick = () => row.parentElement.deleteRow(row.rowIndex);
+    cell.appendChild(button_remove);
+    let p = document.createElement("p");
+    p.innerText = "Unique Dataset Key: ";
     let key = document.createElement("input");
     key.type = "text";
     key.placeholder = "Unique Key";
-    cell.appendChild(key);
+    p.appendChild(key);
+    cell.appendChild(p);
+    p = document.createElement("p");
+    p.innerText = "Archetype Name: ";
     let name = document.createElement("input");
     name.type = "text";
     name.placeholder = "Name";
-    cell.appendChild(name);
+    p.appendChild(name);
+    cell.appendChild(p);
 
     cell = topRow.insertCell();
     cell.rowSpan = 3;
@@ -287,7 +297,7 @@ function populateArchetypeRow(row, archetype_key, archetype) {
         cell.appendChild(label);
     }
 
-    let allElements = [button_move, key, name, wounds, strain, xp, careerskills, addButton_skills, addButton_abilities];
+    let allElements = [button_move, button_remove, key, name, wounds, strain, xp, careerskills, addButton_skills, addButton_abilities];
     allElements = allElements.concat(chars);
     for (let e of allElements) {
         e.classList.add("toggleEdit");
@@ -378,8 +388,8 @@ function writeDataset() {
     for (let i = 0; i < table.rows.length - 1; i++) {
         let innerTable = table.rows[i].cells[1].firstChild;
         let topRow = innerTable.rows[0];
-        let key = topRow.cells[0].children[0].value;
-        let name = topRow.cells[0].children[1].value;
+        let key = topRow.cells[0].children[1].lastChild.value;
+        let name = topRow.cells[0].children[2].lastChild.value;
         let ul = topRow.cells[1].firstChild;
         let wounds = ul.children[0].lastChild.valueAsNumber;
         let strain = ul.children[1].lastChild.valueAsNumber;
