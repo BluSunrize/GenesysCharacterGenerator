@@ -1,3 +1,4 @@
+
 const electron = require("electron");
 const fs = require("fs");
 const Store = require("electron-store");
@@ -5,6 +6,7 @@ const Store = require("electron-store");
 const {makeDragable, wrapInRow} = require("./js/table_utils");
 const {createDefaultDataset} = require("./js/dataset");
 const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate, buildSkillSelectionConfiguration, parseSkillSelectionConfiguration} = require("./js/skill");
+const {Ability, buildAbilityConfiguration} = require("./js/ability");
 const {Archetype} = require("./js/archetype");
 
 const element_datasets = document.getElementById("datasets");
@@ -238,14 +240,27 @@ function populateArchetypeRow(row, archetype_key, archetype) {
     const dataset_skills = dataset_stores[element_datasets.value].get("skills");
     let skills = document.createElement("table").createTBody();
     let addSelectionFunc = function (skillSelection) {
-
         skills.insertBefore(wrapInRow(buildSkillSelectionConfiguration(dataset_skills, skillSelection)), skills.lastChild);
     };
-    let addButton = document.createElement("button");
-    addButton.innerText = "Add";
-    addButton.onclick = () => addSelectionFunc(null);
-    skills.appendChild(wrapInRow(addButton));
+    let addButton_skills = document.createElement("button");
+    addButton_skills.innerText = "Add";
+    addButton_skills.onclick = () => addSelectionFunc(null);
+    skills.appendChild(wrapInRow(addButton_skills));
     li.appendChild(skills);
+    ul.appendChild(li);
+
+    li = document.createElement("li");
+    li.innerHTML = "<b>Special Abilities:</b> ";
+    let abilities = document.createElement("table").createTBody();
+    let addAbilityFunc = function (ability) {
+        abilities.insertBefore(buildAbilityConfiguration(ability), abilities.lastChild);
+    };
+    let addButton_abilities = document.createElement("button");
+    addButton_abilities.innerText = "Add";
+    addButton_abilities.onclick = () => addAbilityFunc(null);
+    abilities.appendChild(wrapInRow(addButton_abilities));
+    addButton_abilities.parentElement.colSpan = 3;
+    li.appendChild(abilities);
     ul.appendChild(li);
 
 
@@ -265,7 +280,7 @@ function populateArchetypeRow(row, archetype_key, archetype) {
         cell.appendChild(label);
     }
 
-    let allElements = [button_move, key, name, wounds, strain, xp, careerskills, addButton];
+    let allElements = [button_move, key, name, wounds, strain, xp, careerskills, addButton_skills, addButton_abilities];
     allElements = allElements.concat(chars);
     for (let e of allElements) {
         e.classList.add("toggleEdit");
@@ -283,6 +298,8 @@ function populateArchetypeRow(row, archetype_key, archetype) {
             chars[i].valueAsNumber = archetype.characteristics[i];
         for (let skillSelection of archetype.skills)
             addSelectionFunc(skillSelection);
+        for (let ability of archetype.abilities)
+            addAbilityFunc(ability);
     }
 }
 
