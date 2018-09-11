@@ -152,8 +152,15 @@ function init(dataset_path) {
             setIDedAttribute(`talent_${derrived[i]}`, character[derrived[i]][0]);
             setIDedAttribute(`equipment_${derrived[i]}`, character[derrived[i]][1]);
         }
+        //Free Ranks
         for (let i = 0; i < 8; i++)
             setIDedAttribute(`careerskill_${i}_freerank`, character.career_skills_free_ranks[i]);
+        //Talents
+        for(let i=1; i<=5; i++) {
+            let table = document.getElementById("talents_tier" + i);
+            while (table.rows.length>1)
+                table.deleteRow(0);
+        }
         for (let talent of character.talents)
             addTalent(talent.tier, talent);
 
