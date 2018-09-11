@@ -13,7 +13,6 @@ export class Ability {
 }
 
 export enum AbilityEffectType {
-    TEXT = "TEXT",
     INCREASE_DEFENSE = "INCREASE_DEFENSE",
     INCREASE_SOAK = "INCREASE_SOAK",
     GAIN_CAREER_SKILL = "GAIN_CAREER_SKILL"
@@ -59,25 +58,40 @@ export function buildAbilityConfiguration(ability: Ability) {
     let dropdown = document.createElement("select");
     dropdown.classList.add("toggleEdit");
     cell.appendChild(dropdown);
-    dropdown.appendChild(document.createElement("option"));
+    let option = document.createElement("option");
+    option.innerText = "No Effect";
+    dropdown.appendChild(option);
     for (let type in AbilityEffectType) {
-        let option = document.createElement("option");
+        option = document.createElement("option");
         option.value = type;
         option.innerText = makeReadable(type);
         dropdown.appendChild(option);
     }
 
+    let params = document.createElement("textarea");
+    params.classList.add("toggleEdit");
+    params.placeholder = "Effect parameters, separated by semicolon";
+    params.cols = 17;
+    cell.appendChild(params);
+    dropdown.onchange = () =>
+        params.style.display = dropdown.selectedIndex < 2 ? "none" : "initial";
+
     cell = row.insertCell();
     let desc = document.createElement("textarea");
     desc.classList.add("toggleEdit");
+    desc.rows = 3;
     cell.appendChild(desc);
 
     if (ability) {
-        remove.disabled = name.disabled = dropdown.disabled = desc.disabled = true;
+        remove.disabled = name.disabled = dropdown.disabled = params.disabled = desc.disabled = true;
         name.value = ability.name;
         desc.value = ability.description;
-        if (ability.effect)
+        if (ability.effect) {
             dropdown.value = ability.effect.type;
+            if (ability.effect.params)
+                params.value = ability.effect.params.join(";");
+        }
+        params.style.display = dropdown.selectedIndex < 2 ? "none" : "initial";
     }
     return row;
 }
@@ -85,10 +99,18 @@ export function buildAbilityConfiguration(ability: Ability) {
 export function parseAbilityConfiguration(row: HTMLTableRowElement) {
     let name = (<HTMLInputElement>row.cells[1].firstChild).value;
     let desc = (<HTMLTextAreaElement>row.cells[2].firstChild).value;
-    let dropdown = <HTMLInputElement>row.cells[1].children[1];
+    let dropdown = <HTMLSelectElement>row.cells[1].children[1];
+    let params = <HTMLInputElement>row.cells[1].children[2];
 
-    if (dropdown.value)
-        return new Ability(name, desc, new AbilityEffect(AbilityEffectType[dropdown.value]));
+    if (dropdown.selectedIndex>0) {
+        if (!params.value)
+            return new Ability(name, desc, new AbilityEffect(AbilityEffectType[dropdown.value]));
+        else {
+            let paramsArray = [];
+            params.value.split(";").forEach(val => paramsArray.push(val));
+            return new Ability(name, desc, new AbilityEffect(AbilityEffectType[dropdown.value], paramsArray));
+        }
+    }
     else
         return new Ability(name, desc)
 }

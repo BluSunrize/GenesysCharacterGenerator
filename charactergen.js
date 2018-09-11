@@ -7,7 +7,7 @@ const {Skill, characteristics, Characteristic, SkillCategory, buildSkillDropdown
 const Archetype = require("./js/archetype");
 const Career = require("./js/career");
 const Character = require("./js/character");
-const Ability = require("./js/ability");
+const {Ability, AbilityEffectType} = require("./js/ability");
 const {Talent} = require("./js/talent");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
 
@@ -277,11 +277,15 @@ function init(dataset_path) {
         for (let d of derrived) {
             let total = 0;
             if (d === "soak")
-                total = parseInt(getIDedAttribute(`characteristic_${d}`));
+                total = parseInt(getIDedAttribute("archetype_soak")) + parseInt(getIDedAttribute(`characteristic_${d}`));
             else if (d === "wound_threshold")
                 total = parseInt(getNamedAttribute("archetype_wounds")) + parseInt(getIDedAttribute(`characteristic_${d}`));
             else if (d === "strain_threshold")
                 total = parseInt(getNamedAttribute("archetype_strain")) + parseInt(getIDedAttribute(`characteristic_${d}`));
+            else if (d === "defense_ranged")
+                total = parseInt(getIDedAttribute("archetype_defense_ranged"));
+            else if (d === "defense_melee")
+                total = parseInt(getIDedAttribute("archetype_defense_melee"));
             total += getIDedAttribute(`talent_${d}`);
             total += getIDedAttribute(`equipment_${d}`);
             setNamedAttribute(`attr_${d}`, total);
@@ -300,6 +304,8 @@ function init(dataset_path) {
         setNamedAttribute("archetype_strain", selectedArchetype.strain_threshold);
         setIDedAttribute("archetype_xp", selectedArchetype.experience);
         setIDedAttribute("archetype_free_careerskills", selectedArchetype.free_careerskills);
+        let soakMod = 0;
+        let defenseMod = [0, 0];
         let element_list = document.getElementById("archetype_abilities");
         while (element_list.children.length > 4)
             element_list.removeChild(element_list.lastChild);
@@ -307,7 +313,19 @@ function init(dataset_path) {
             let element_li = document.createElement("li");
             element_li.innerHTML = `<b>${ability.name}:</b> ${ability.description}`;
             element_list.appendChild(element_li);
+
+            if (ability.effect && ability.effect.type !== AbilityEffectType.TEXT)
+                if (ability.effect.type === AbilityEffectType.INCREASE_DEFENSE) {
+                    defenseMod[0] += ability.effect.params ? parseInt(ability.effect.params[0]) : 1;
+                    defenseMod[1] += ability.effect.params ? parseInt(ability.effect.params[1]) : 1;
+                }
+                else if (ability.effect.type === AbilityEffectType.INCREASE_SOAK)
+                    soakMod += ability.effect.params ? parseInt(ability.effect.params[0]) : 1;
         }
+        setIDedAttribute("archetype_soak", soakMod);
+        setIDedAttribute("archetype_defense_ranged", defenseMod[0]);
+        setIDedAttribute("archetype_defense_melee", defenseMod[1]);
+
 
         let freeRanks = 0;
         for (let i = 0; i < 8; i++) {
@@ -385,14 +403,20 @@ function init(dataset_path) {
 
     function updateCareerSkills(e) {
         if (selectedChar >= 0) {
-            for (let old of characters[selectedChar].career_skills)
-                document.getElementById(`skill_${old}_career`).classList.remove("checked");
+            for (let skill of skills)
+                document.getElementById(`skill_${skill.name}_career`).classList.remove("checked");
             characters[selectedChar].career_skills = [];
             for (let i = 0; i < 8; i++) {
                 let element_careerskill = document.getElementById(`careerskill_${i}`).firstChild;
                 document.getElementById(`skill_${element_careerskill.value}_career`).classList.add("checked");
                 characters[selectedChar].career_skills.push(element_careerskill.value);
             }
+            for (let ability of archetypes[element_archetype.value].abilities)
+                if (ability.effect && ability.effect.type === AbilityEffectType.GAIN_CAREER_SKILL && ability.effect.params)
+                    for (let param of ability.effect.params) {
+                        document.getElementById(`skill_${param}_career`).classList.add("checked");
+                        characters[selectedChar].career_skills.push(param);
+                    }
 
             updateArchetypeSkillSelection();
             autocalcSkills();
@@ -453,8 +477,9 @@ function init(dataset_path) {
             for (let skill of skills) {
                 let freeRank = freeRanks[skill.name] || 0;
                 let boughtRank = characters[selectedChar].skills_bought[skill.name] || 0;
+                let isCareer = characters[selectedChar].career_skills.includes(skill.name);
                 for (let j = 1; j <= boughtRank; j++)
-                    xpSpent += 5 * (freeRank + j);
+                    xpSpent += 5 * (freeRank + j) + (!isCareer ? 5 : 0);
 
                 let skill_free = document.getElementById(`skill_${skill.name}_free`);
                 skill_free.value = freeRank;
@@ -492,8 +517,9 @@ function init(dataset_path) {
             for (let skill of skills) {
                 let freeRank = getIDedAttribute(`skill_${skill.name}_free`) || 0;
                 let boughtRank = getIDedAttribute(`skill_${skill.name}`) || 0;
+                let isCareer = document.getElementById(`skill_${skill.name}_career`).classList.contains("checked");
                 for (let j = freeRank + 1; j <= boughtRank; j++)
-                    xpSpent += 5 * j;
+                    xpSpent += 5 * j + (!isCareer ? 5 : 0);
             }
 
         for (let tier = 1; tier <= 5; tier++) {
