@@ -12,6 +12,7 @@ const {Talent} = require("./js/talent");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
 
 let initialCharacterLoad = false;
+const derrived = ["soak", "wound_threshold", "strain_threshold", "defense_ranged", "defense_melee"];
 
 electron.ipcRenderer.on("init", function (event, message) {
     console.log("initializing chargen");
@@ -30,15 +31,6 @@ function init(dataset_path) {
     const element_archetype = document.getElementById("character_archetype");
     const element_career = document.getElementById("character_career");
     let element_skilllist = document.getElementById("skilllist");
-    // let files = fs.readdirSync(cwd);
-    // console.log("files in " + cwd + ": ");
-    // console.log(files);
-    // electron.ipcRenderer.send("test", "Test message!");
-    // electron.ipcRenderer.on("test2", function (event, data) {
-    //     console.log("RENDER got a test message:");
-    //     console.log("event: " + event);
-    //     console.log("data: " + data);
-    // });
 
     //Load Skills
     const skills = dataset.skills;
@@ -135,6 +127,10 @@ function init(dataset_path) {
         attachOnChangeById(`talent_${characteristics[i]}`, autocalcCharacteristics);
         attachOnChangeById(`equipment_${characteristics[i]}`, autocalcCharacteristics);
     }
+    for (let i = 0; i < derrived.length; i++) {
+        attachOnChangeById(`talent_${derrived[i]}`, autocalcDerrived);
+        attachOnChangeById(`equipment_${derrived[i]}`, autocalcDerrived);
+    }
     for (let i = 0; i < 8; i++)
         attachOnChangeById(`careerskill_${i}_freerank`, selectCareerFreeSkill);
 
@@ -150,6 +146,11 @@ function init(dataset_path) {
             setIDedAttribute(`bought_${characteristics[i]}`, character.characteristics[i][0]);
             setIDedAttribute(`talent_${characteristics[i]}`, character.characteristics[i][1]);
             setIDedAttribute(`equipment_${characteristics[i]}`, character.characteristics[i][2]);
+        }
+        //Derrived Attributes
+        for (let i = 0; i < derrived.length; i++) {
+            setIDedAttribute(`talent_${derrived[i]}`, character[derrived[i]][0]);
+            setIDedAttribute(`equipment_${derrived[i]}`, character[derrived[i]][1]);
         }
         for (let i = 0; i < 8; i++)
             setIDedAttribute(`careerskill_${i}_freerank`, character.career_skills_free_ranks[i]);
@@ -174,6 +175,11 @@ function init(dataset_path) {
                 getIDedAttribute(`bought_${characteristics[i]}`),
                 getIDedAttribute(`talent_${characteristics[i]}`),
                 getIDedAttribute(`equipment_${characteristics[i]}`)];
+        //Derrived Attributes
+        for (let i = 0; i < derrived.length; i++)
+            character[derrived[i]] = [
+                getIDedAttribute(`talent_${derrived[i]}`),
+                getIDedAttribute(`equipment_${derrived[i]}`)];
         //Archetype Skills
         let archetype_skills = document.getElementById("archetype_skills").children;
         character.archetype_skills = [];
@@ -267,25 +273,18 @@ function init(dataset_path) {
             setIDedAttribute(`character${selectedChar}_career`, careers[event.target.value].name);
     }
 
-    const derrived = ["soak", "wound_threshold", "strain_threshold"];
-
-    function autocalcDerrived(characteristics) {
+    function autocalcDerrived() {
         for (let d of derrived) {
-            let element = document.getElementById(`character_${d}`);
-            let curBoost = element.valueAsNumber - element.min;
-            let newMin = 0;
+            let total = 0;
             if (d === "soak")
-                newMin = characteristics[0];
+                total = parseInt(getIDedAttribute(`characteristic_${d}`));
             else if (d === "wound_threshold")
-                newMin = parseInt(getIDedAttribute("archetype_wounds")) + characteristics[0];
+                total = parseInt(getNamedAttribute("archetype_wounds")) + parseInt(getIDedAttribute(`characteristic_${d}`));
             else if (d === "strain_threshold")
-                newMin = parseInt(getIDedAttribute("archetype_strain")) + characteristics[4];
-            if (initialCharacterLoad)//Initial setup
-                curBoost = element.valueAsNumber - newMin;
-            if (element.valueAsNumber === 0)
-                curBoost = 0;
-            element.min = newMin;
-            element.valueAsNumber = newMin + curBoost;
+                total = parseInt(getNamedAttribute("archetype_strain")) + parseInt(getIDedAttribute(`characteristic_${d}`));
+            total += getIDedAttribute(`talent_${d}`);
+            total += getIDedAttribute(`equipment_${d}`);
+            setNamedAttribute(`attr_${d}`, total);
         }
     }
 
@@ -297,8 +296,8 @@ function init(dataset_path) {
         setNamedAttribute("archetype_cunning", selectedArchetype.characteristics[3]);
         setNamedAttribute("archetype_willpower", selectedArchetype.characteristics[4]);
         setNamedAttribute("archetype_presence", selectedArchetype.characteristics[5]);
-        setIDedAttribute("archetype_wounds", selectedArchetype.wound_threshold);
-        setIDedAttribute("archetype_strain", selectedArchetype.strain_threshold);
+        setNamedAttribute("archetype_wounds", selectedArchetype.wound_threshold);
+        setNamedAttribute("archetype_strain", selectedArchetype.strain_threshold);
         setIDedAttribute("archetype_xp", selectedArchetype.experience);
         setIDedAttribute("archetype_free_careerskills", selectedArchetype.free_careerskills);
         let element_list = document.getElementById("archetype_abilities");
@@ -420,16 +419,14 @@ function init(dataset_path) {
 
     function autocalcCharacteristics(e) {
         if (selectedChar >= 0) {
-            let totalChars = [];
             for (let i = 0; i < characteristics.length; i++) {
                 let total = archetypes[getIDedAttribute("character_archetype")].characteristics[i];
                 total += getIDedAttribute(`bought_${characteristics[i]}`);
                 total += getIDedAttribute(`talent_${characteristics[i]}`);
                 total += getIDedAttribute(`equipment_${characteristics[i]}`);
                 setNamedAttribute(`attr_${characteristics[i]}`, total);
-                totalChars[i] = total;
             }
-            autocalcDerrived(totalChars);
+            autocalcDerrived();
             autocalcXPSpent();
         }
     }

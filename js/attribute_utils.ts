@@ -51,12 +51,14 @@ export function getNamedAttribute(name: string) {
         let thisVal;
         if (elements[i] instanceof HTMLInputElement) {
             if ((<HTMLInputElement>elements[i]).type == "checkbox")
-                return (<HTMLInputElement>elements[i]).checked;
+                thisVal = (<HTMLInputElement>elements[i]).checked;
             else if ((<HTMLInputElement>elements[i]).type == "number" || (<HTMLInputElement>elements[i]).type == "range")
-                return (<HTMLInputElement>elements[i]).valueAsNumber;
+                thisVal = (<HTMLInputElement>elements[i]).valueAsNumber;
             else
-                return (<HTMLInputElement>elements[i]).value;
+                thisVal = (<HTMLInputElement>elements[i]).value;
         }
+        else if (elements[i] instanceof HTMLSpanElement)
+            thisVal = (<HTMLSpanElement>elements[i]).innerText;
         else if (elements[i] instanceof HTMLTextAreaElement)
             thisVal = (<HTMLTextAreaElement>elements[i]).innerText;
         else if (elements[i] instanceof HTMLSelectElement)
@@ -123,7 +125,7 @@ export function syncAttributesFromObject(prefix: string, object: object) {
                 if (object[key])
                     (<HTMLInputElement>inputs[i]).valueAsNumber = object[key];
                 else
-                    (<HTMLInputElement>inputs[i]).valueAsNumber = parseInt((<HTMLInputElement>inputs[i]).min)||0;
+                    (<HTMLInputElement>inputs[i]).valueAsNumber = parseInt((<HTMLInputElement>inputs[i]).min) || 0;
             }
             else if (object[key])
                 (<HTMLInputElement>inputs[i]).value = object[key];

@@ -377,121 +377,172 @@ label.sheet-label-title {
   }
 }
 
-.sheet-stats {
-  width: auto !important;
-  display: inline-block;
+#section-attributes {
 
-  td {
-    text-align: center;
-    vertical-align: top;
-    border: none;
-    width: 153px !important;
-    height: 87px;
-
-    &:first-child,
-    &:last-child {
-      width: 150px;
-    }
-  }
-
-  // todo there must be a way to do this progmatically
-  tr td {
-    div {
-      width: 100%;
-      &:first-child {
-        height: 25px;
-        padding-top: 5px;
-      }
-      &:nth-child(2) {
-        height: 28px;
-        padding-top: 7px;
-      }
-    }
-
-    &.sheet-stat-single {
-      .stat-single();
-
-      &:first-child {
-        .stat-single();
-      }
-
-      &:last-child {
-        .stat-single();
-      }
-    }
-
-    &.sheet-stat-double {
-      .stat-double();
-
-      &:first-child {
-        .stat-double();
-      }
-
-      &:last-child {
-        .stat-double();
-      }
-    }
-  }
-
-  tr.sheet-stat-background td {
-    &.sheet-stat-single {
-      .stat-single();
-      background-size+: contain;
-
-      &:first-child {
-        .stat-single();
-        background-size+: contain;
-      }
-
-      &:last-child {
-        .stat-single();
-        background-size+: contain;
-      }
-    }
-
-    &.sheet-stat-double {
-      .stat-double();
-      background-size+: contain;
-
-      &:first-child {
-        .stat-double();
-        background-size+: contain;
-      }
-
-      &:last-child {
-        .stat-double();
-        background-size+: contain;
-      }
-    }
-  }
-
-  [type=number] {
-    font-size: 16px;
-    font-weight: bold;
-    width: 45px !important;
-    margin-bottom: 7px;
-    text-align: right;
-  }
-
-  span.sheet-subtitle label {
-    width: 70px !important;
-    color: #fff;
-    font-size: 10.5px;
-    font-weight: normal;
+  .sheet-stats {
+    width: auto !important;
     display: inline-block;
-    padding: 0;
-    margin-top: 6px;
-    font-family: @FuturistBold;
-    letter-spacing: 0.03em;
 
-    &:first-child {
-      text-align: right;
-      margin-right: 3px;
+    tr:first-child {
+      td {
+        text-align: center;
+        vertical-align: top;
+        border: none;
+        width: 153px !important;
+        height: 87px;
+
+        &:first-child,
+        &:last-child {
+          width: 150px;
+        }
+      }
+
+      // todo there must be a way to do this progmatically
+      td {
+        div {
+          width: 100%;
+          &:first-child {
+            height: 25px;
+            padding-top: 5px;
+          }
+          &:nth-child(2) {
+            height: 28px;
+            padding-top: 7px;
+          }
+        }
+
+        &.sheet-stat-single {
+          .stat-single();
+
+          &:first-child {
+            .stat-single();
+          }
+
+          &:last-child {
+            .stat-single();
+          }
+        }
+
+        &.sheet-stat-double {
+          .stat-double();
+
+          &:first-child {
+            .stat-double();
+          }
+
+          &:last-child {
+            .stat-double();
+          }
+        }
+      }
+
+      &.sheet-stat-background td {
+        &.sheet-stat-single {
+          .stat-single();
+          background-size+: contain;
+
+          &:first-child {
+            .stat-single();
+            background-size+: contain;
+          }
+
+          &:last-child {
+            .stat-single();
+            background-size+: contain;
+          }
+        }
+
+        &.sheet-stat-double {
+          .stat-double();
+          background-size+: contain;
+
+          &:first-child {
+            .stat-double();
+            background-size+: contain;
+          }
+
+          &:last-child {
+            .stat-double();
+            background-size+: contain;
+          }
+        }
+      }
+
+      span.attr,
+      input[type=number] {
+        &.attr {
+          -webkit-appearance: textfield;
+          padding: 1px 0;
+          font-family: Arial, sans-serif;
+          text-align: center;
+          background-color: white;
+          border-width: 2px;
+          border-style: inset;
+        }
+
+        font-size: 16px;
+        font-weight: bold;
+        width: 45px !important;
+        margin-bottom: 7px;
+        text-align: right;
+      }
+
+      span.sheet-subtitle label {
+        width: 70px !important;
+        color: #fff;
+        font-size: 10.5px;
+        font-weight: normal;
+        display: inline-block;
+        padding: 0;
+        margin-top: 6px;
+        font-family: @FuturistBold;
+        letter-spacing: 0.03em;
+
+        &:first-child {
+          text-align: right;
+          margin-right: 3px;
+        }
+
+        &:last-child {
+          text-align: left;
+          margin-left: 3px;
+        }
+      }
     }
+  }
+  .adjuststats {
+    display: none;
+    width: 118.6px !important;
+    height: 108px !important;
+    margin-left: 11.5%;
+    padding-left: 4px;
+    padding-right: 0;
+    margin-top: -3px;
+    font-size: 9px;
+    font-family: @FuturistReg;
+    text-align: left;
+    letter-spacing: 0.05em;
+    background: @genesys-red;
+    border: 1px solid @genesys-orange;
+    box-sizing: border-box;
+    float: left;
+    color: white;
 
-    &:last-child {
-      text-align: left;
-      margin-left: 3px;
+    ul li {
+      line-height: 22px;
+    }
+    span, input {
+      width: 1.7em !important;
+      float: right;
+      position: relative;
+      right: -7px;
+      color: white;
+      font-family: @FuturistReg;
+      font-size: 13px !important;
+
+      box-shadow: none;
+      background: none;
+      border: none;
     }
   }
 }
@@ -556,7 +607,7 @@ label.sheet-label-title {
 
   .adjuststats {
     display: none;
-    width: 88%;
+    width: 98.5px !important;
     margin-left: 6.5%;
     padding-left: 4px;
     padding-right: 0;
@@ -775,6 +826,10 @@ label.sheet-label-title {
 #detail_intellect:checked & ~ table tr td:nth-child(4) div.adjuststats,
 #detail_cunning:checked & ~ table tr td:nth-child(5) div.adjuststats,
 #detail_willpower:checked & ~ table tr td:nth-child(6) div.adjuststats,
-#detail_presence:checked & ~ table tr td:nth-child(7) div.adjuststats {
+#detail_presence:checked & ~ table tr td:nth-child(7) div.adjuststats,
+#detail_soak:checked & ~ table tr td:nth-child(1) div.adjuststats,
+#detail_wounds:checked & ~ table tr td:nth-child(2) div.adjuststats,
+#detail_strain:checked & ~ table tr td:nth-child(3) div.adjuststats,
+#detail_defense:checked & ~ table tr td:nth-child(4) div.adjuststats {
   display: block;
 }

@@ -23,13 +23,13 @@ export class Character {
 
     //Stats
     characteristics: number[][] = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
-    soak: number;
-    wound_threshold: number;
+    soak: number[] = [0,0];
+    wound_threshold: number[] = [0,0];
     wounds: number;
-    strain_threshold: number;
+    strain_threshold: number[] = [0,0];
     strain: number;
-    defense_ranged: number;
-    defense_melee: number;
+    defense_ranged: number[] = [0,0];
+    defense_melee: number[] = [0,0];
 
     //XP
     experience_earned: number = 0;
