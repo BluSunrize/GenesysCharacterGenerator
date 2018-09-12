@@ -7,6 +7,7 @@ const {createDefaultDataset} = require("./js/dataset");
 const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate, buildSkillSelectionConfiguration, parseSkillSelectionConfiguration} = require("./js/skill");
 const {Ability, buildAbilityConfiguration, parseAbilityConfiguration} = require("./js/ability");
 const {Archetype} = require("./js/archetype");
+const {Career} = require("./js/career");
 
 const element_datasets = document.getElementById("datasets");
 const element_button_continue = document.getElementById("button_continue");
@@ -15,7 +16,9 @@ const element_button_new = document.getElementById("button_dataset_new");
 const element_button_copy = document.getElementById("button_dataset_copy");
 const element_button_remove = document.getElementById("button_dataset_remove");
 const element_button_save = document.getElementById("button_dataset_save");
+const element_edit_toggle = document.getElementById("allow_dataset_edit");
 const element_archetypes = document.getElementById("archetypes");
+const element_careers = document.getElementById("careers");
 
 const cwd = (electron.app || electron.remote.app).getPath('userData');
 if (!fs.existsSync(cwd + "/dataset")) {
@@ -65,9 +68,10 @@ element_button_save.onclick = writeDataset;
 for (let button of document.getElementsByName("button_add_skill"))
     button.onclick = addSkill;
 document.getElementById("button_add_archetype").onclick = addArchetype;
+document.getElementById("button_add_career").onclick = addCareer;
 readDataset();
 
-document.getElementById("allow_dataset_edit").onchange = toggleEdit;
+element_edit_toggle.onchange = toggleEdit;
 
 function newDataset(e) {
     let key = "usercreated_" + nextCustomIndex;
@@ -293,6 +297,7 @@ function populateArchetypeRow(row, archetype_key, archetype) {
     let textRow = innerTable.insertRow();
     cell = textRow.insertCell();
     let description = document.createElement("textarea");
+    description.placeholder = "Description";
     description.classList.add("description");
     cell.appendChild(description);
 
@@ -317,6 +322,118 @@ function populateArchetypeRow(row, archetype_key, archetype) {
         for (let ability of archetype.abilities)
             addAbilityFunc(ability);
         description.value = archetype.description;
+    }
+}
+
+function addCareer() {
+    let newRow = element_careers.insertRow(element_careers.rows.length - 1);
+    populateCareerRow(newRow);
+}
+
+function populateCareerRow(row, career_key, career) {
+    let cell = row.insertCell();
+    let button_move = document.createElement("button");
+    button_move.textContent = "⭥";
+    button_move.classList.add("toggleEdit");
+    makeDragable(button_move);
+    cell.appendChild(button_move);
+
+    cell = row.insertCell();
+    let innerTable = document.createElement("table");
+    cell.appendChild(innerTable);
+
+    let innerRow = innerTable.insertRow();
+    cell = innerRow.insertCell();
+    cell.innerText = "Unique Dataset Key: ";
+    cell = innerRow.insertCell();
+    let key = document.createElement("input");
+    key.type = "text";
+    key.placeholder = "Unique Key";
+    cell.appendChild(key);
+
+    cell = innerRow.insertCell();
+    cell.innerText = "Career Name: ";
+    cell = innerRow.insertCell();
+    let name = document.createElement("input");
+    name.type = "text";
+    name.placeholder = "Name";
+    cell.appendChild(name);
+
+    let skillElements = [];
+    let addSkill = [];
+    const dataset_skills = dataset_stores[element_datasets.value].get("skills");
+    const findSkill = (skill) => {
+        for (let i in dataset_skills)
+            if (dataset_skills[i].name === skill)
+                return parseInt(i) + 1;
+        return -1;
+    };
+
+    for (let i = 0; i < 2; i++) {
+        innerRow = innerTable.insertRow();
+        for (let j = 0; j < 4; j++) {
+            cell = innerRow.insertCell();
+            let span = document.createElement("span");
+            let skills = document.createElement("select");
+            addOption(skills, "");
+            for (let skill of dataset_skills)
+                addOption(skills, skill.name);
+            let func_addSkill = function (skill) {
+                let button = document.createElement("button");
+                button.classList.add("toggleEdit");
+                button.disabled = !element_edit_toggle.checked;
+                button.value = skill;
+                button.innerText = skill + " x";
+                button.onclick = () => {
+                    span.removeChild(button);
+                    skills.item(findSkill(button.value)).style.display = "initial";
+                };
+                let removed = findSkill(skill);
+                skills.item(removed).style.display = "none";
+                span.appendChild(button);
+            };
+            skills.onchange = () => {
+                if (skills.selectedIndex > 0) {
+                    func_addSkill(skills.value);
+                    skills.selectedIndex = 0;
+                }
+            };
+
+            skillElements.push(skills);
+            addSkill[i * 4 + j] = func_addSkill;
+            cell.appendChild(span);
+            cell.appendChild(skills);
+        }
+    }
+
+    innerRow = innerTable.insertRow();
+    cell = innerRow.insertCell();
+    cell.colSpan = 4;
+    let description = document.createElement("textarea");
+    description.placeholder = "Description";
+    description.classList.add("description");
+    cell.appendChild(description);
+
+    cell = row.insertCell();
+    let button_remove = document.createElement("button");
+    button_remove.innerText = "Remove";
+    button_remove.onclick = () => row.parentElement.deleteRow(row.rowIndex);
+    cell.appendChild(button_remove);
+
+    let allElements = [button_move, button_remove, key, name, description];
+    allElements = allElements.concat(skillElements);
+    for (let e of allElements) {
+        e.classList.add("toggleEdit");
+        if (career)
+            e.disabled = true;
+    }
+    if (career) {
+        key.value = career_key;
+        name.value = career.name;
+        description.value = career.description;
+        for (let i in skillElements)
+            for (let skill of career.skills[i])
+                addSkill[i](skill);
     }
 }
 
@@ -357,6 +474,14 @@ function readDataset() {
         let row = element_archetypes.insertRow(element_archetypes.rows.length - 1);
         populateArchetypeRow(row, archetype_key, archetypes[archetype_key]);
     }
+
+    let careers = dataset_store.get("careers");
+    while (element_careers.rows.length > 1)
+        element_careers.deleteRow(0);
+    for (let career_key in careers) {
+        let row = element_careers.insertRow(element_careers.rows.length - 1);
+        populateCareerRow(row, career_key, careers[career_key]);
+    }
 }
 
 function writeDataset() {
@@ -380,9 +505,8 @@ function writeDataset() {
 
 
     let archetypes = {};
-    let table = document.getElementById("archetypes");
-    for (let i = 0; i < table.rows.length - 1; i++) {
-        let innerTable = table.rows[i].cells[1].firstChild;
+    for (let i = 0; i < element_archetypes.rows.length - 1; i++) {
+        let innerTable = element_archetypes.rows[i].cells[1].firstChild;
         let topRow = innerTable.rows[0];
         let key = topRow.cells[0].children[1].lastChild.value;
         let name = topRow.cells[0].children[2].lastChild.value;
@@ -411,5 +535,20 @@ function writeDataset() {
     }
     dataset_store.set("archetypes", archetypes);
 
-
+    let careers = {};
+    for (let i = 0; i < element_careers.rows.length - 1; i++) {
+        let innerTable = element_careers.rows[i].cells[1].firstChild;
+        let key = innerTable.rows[0].cells[1].firstChild.value;
+        let name = innerTable.rows[0].cells[3].firstChild.value;
+        let skills = [[], [], [], [], [], [], [], []];
+        for (let i = 0; i < 2; i++)
+            for (let j = 0; j < 4; j++) {
+                let span = innerTable.rows[1 + i].cells[j].firstChild;
+                for (let k = 0; k < span.children.length; k++)
+                    skills[i * 4 + j].push(span.children[k].value);
+            }
+        let desc = innerTable.rows[3].cells[0].firstChild.value;
+        careers[key] = new Career(name, desc, skills);
+    }
+    dataset_store.set("careers", careers);
 }

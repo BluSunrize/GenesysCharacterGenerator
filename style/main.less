@@ -236,6 +236,39 @@ input.no-background {
   }
 }
 
+#careers{
+  width: 100%;
+  border-collapse: collapse;
+
+  & > tbody > tr {
+    &:not(:last-child) > td {
+      border: 1px dashed @genesys-grey;
+      margin-bottom: 4px;
+      &:first-child {
+        border-left: 1px solid black;
+      }
+      &:last-child {
+        border-right: 1px solid black;
+      }
+    }
+    &:first-child > td {
+      border-top: 1px solid black;
+    }
+    &:last-child > td {
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+  }
+
+  .description{
+    width: 614px;
+    min-height: 50px;
+    resize: vertical;
+  }
+
+}
+
 /* CHARACTERGEN */
 .characterlist {
   tr.selected {

@@ -394,6 +394,7 @@ function init(dataset_path) {
 
     function updateCareer(e) {
         let selectedCareer = careers[element_career.options[element_career.selectedIndex].value];
+        setIDedAttribute("career_description", selectedCareer.description);
         for (let i = 0; i < Math.min(8, selectedCareer.skills.length); i++) {
             let element_careerskill = document.getElementById(`careerskill_${i}`);
             while (element_careerskill.firstChild)
