@@ -1,11 +1,6 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain, LoadURLOptions} = require('electron');
 
-// var arch_human = new Archetype("human", [2,2,2,2,2,2], 10, 10, 110, ["athletics", "ranged (light)"], ["Once per session as an out-ofturn incidental, a Human may move one Story Point from the Game Master's pool to the players' pool."]);
-//
-// dataset_default.set(arch_human.name, arch_human);
-
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;

@@ -19,12 +19,14 @@ const element_archetypes = document.getElementById("archetypes");
 
 const cwd = (electron.app || electron.remote.app).getPath('userData');
 if (!fs.existsSync(cwd + "/dataset")) {
-    console.log("NO DATASET FOLDEEEEEEEEEEERRRRR!!!");
+    console.log("No 'dataset' folder, creating...");
     fs.mkdirSync(cwd + "/dataset");
+    console.log(" - Done");
 }
 if (!fs.existsSync(cwd + "/dataset/default.json")) {
-    console.log("NO DEFAULT DATASET!!!!");
+    console.log("No default dataset, creating...");
     fs.writeFileSync(cwd + "/dataset/default.json", createDefaultDataset());
+    console.log(" - Done");
 }
 
 let files_dataset = fs.readdirSync(cwd + "/dataset");
@@ -34,7 +36,6 @@ const dataset_stores = {};
 for (let ds of files_dataset)
     if (ds.endsWith(".json")) {
         ds = ds.substring(0, ds.length - 5);
-        console.log(" adding dataset: " + ds);
         let element_option = document.createElement("option");
         let dataset_store = new Store({"name": "dataset/" + ds});
         let name = dataset_store.get("name");
@@ -94,6 +95,7 @@ function copyDataset(e) {
 
     let store = dataset_store.store;
     store.name += " (Copy)";
+    store.characters = [];
     fs.writeFileSync(cwd + "/dataset/" + key + ".json", JSON.stringify(store, null, "\t"));
 
     addOption(element_datasets, key, store.name);
@@ -272,11 +274,11 @@ function populateArchetypeRow(row, archetype_key, archetype) {
     ul.appendChild(li);
 
 
-    let bottomRow = innerTable.insertRow();
-    bottomRow.classList.add("archetype-characteristics");
+    let characteristicRow = innerTable.insertRow();
+    characteristicRow.classList.add("archetype-characteristics");
     let chars = [];
     for (let i = 0; i < characteristics.length; i++) {
-        cell = bottomRow.insertCell();
+        cell = characteristicRow.insertCell();
         chars.push(document.createElement("input"));
         chars[i].type = "number";
         chars[i].min = 1;
@@ -288,7 +290,13 @@ function populateArchetypeRow(row, archetype_key, archetype) {
         cell.appendChild(label);
     }
 
-    let allElements = [button_move, button_remove, key, name, wounds, strain, xp, careerskills, addButton_skills, addButton_abilities];
+    let textRow = innerTable.insertRow();
+    cell = textRow.insertCell();
+    let description = document.createElement("textarea");
+    description.classList.add("description");
+    cell.appendChild(description);
+
+    let allElements = [button_move, button_remove, key, name, wounds, strain, xp, careerskills, addButton_skills, addButton_abilities, description];
     allElements = allElements.concat(chars);
     for (let e of allElements) {
         e.classList.add("toggleEdit");
@@ -308,13 +316,12 @@ function populateArchetypeRow(row, archetype_key, archetype) {
             addSelectionFunc(skillSelection);
         for (let ability of archetype.abilities)
             addAbilityFunc(ability);
+        description.value = archetype.description;
     }
 }
 
 function readDataset() {
-    console.log("reading selected dataset: " + element_datasets.value);
     let dataset_store = dataset_stores[element_datasets.value];
-    console.log(dataset_store);
 
     let toggleEdit = document.getElementById("allow_dataset_edit");
     toggleEdit.checked = false;
@@ -353,7 +360,6 @@ function readDataset() {
 }
 
 function writeDataset() {
-    console.log("writing selected dataset: " + element_datasets.value);
     let dataset_store = dataset_stores[element_datasets.value];
 
     let name = document.getElementById("name").value;
@@ -367,7 +373,6 @@ function writeDataset() {
         for (let i = 1; i < table.rows.length - 1; i++) {
             let name = table.rows[i].cells[1].firstChild.value;
             let char = table.rows[i].cells[2].firstChild.value;
-            console.log("saving skill " + name + ", " + char + " in " + SkillCategory[cat]);
             skills.push(new Skill(name, Characteristic[char], SkillCategory[cat]))
         }
     }
@@ -400,7 +405,9 @@ function writeDataset() {
         for (let j = 0; j < bottomRow.cells.length; j++)
             chars[j] = bottomRow.cells[j].firstChild.valueAsNumber;
 
-        archetypes[key] = new Archetype(name, chars, wounds, strain, xp, careerskills, skillSelections, abilities);
+        let desc = innerTable.rows[2].cells[0].firstChild.value;
+
+        archetypes[key] = new Archetype(name, desc, chars, wounds, strain, xp, careerskills, skillSelections, abilities);
     }
     dataset_store.set("archetypes", archetypes);
 

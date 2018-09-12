@@ -178,7 +178,8 @@ export class SkillSelection {
     constructor(skills: string[], predicate?: SkillSelectionPredicate, ranks?: number) {
         this.skills = skills;
         this.predicate = predicate ? predicate : SkillSelectionPredicate.FROM_LIST;
-        this.ranks = ranks;
+        if (ranks)
+            this.ranks = ranks;
     }
 
     getSkills(skills: Skill[], character: Character) {

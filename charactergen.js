@@ -325,6 +325,7 @@ function init(dataset_path) {
         setNamedAttribute("archetype_presence", selectedArchetype.characteristics[5]);
         setNamedAttribute("archetype_wounds", selectedArchetype.wound_threshold);
         setNamedAttribute("archetype_strain", selectedArchetype.strain_threshold);
+        setIDedAttribute("archetype_description", selectedArchetype.description);
         setIDedAttribute("archetype_xp", selectedArchetype.experience);
         setIDedAttribute("archetype_free_careerskills", selectedArchetype.free_careerskills);
         let soakMod = 0;

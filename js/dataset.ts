@@ -58,10 +58,27 @@ export function createDefaultDataset(): string {
     defaultSet.skills.push(new Skill("Knowledge", Characteristic.INT, SkillCategory.KNOWLEDGE));
 
     //Archetypes
-    defaultSet.archetypes["human"] = new Archetype("Average Human", [2, 2, 2, 2, 2, 2], 10, 10, 110, 4, [new SkillSelection([], SkillSelectionPredicate.ANY_NON_CAREER), new SkillSelection([], SkillSelectionPredicate.ANY_NON_CAREER)], [new Ability("Ready for Anything", "Once per session as an out-ofturn incidental, a Human may move one Story Point from the Game Master's pool to the players' pool.")]);
-    defaultSet.archetypes["laborer"] = new Archetype("The Laborer", [3, 2, 2, 2, 1, 2], 12, 8, 100, 4, [new SkillSelection(["Athletics"])], [new Ability("Tough as Nails", "Once per session, your character may spend a Story Point as an out-of-turn incidental immediately after suffering a Critical Injury and determining the result. If they do so, they count the result rolled as \"01\".")]);
-    defaultSet.archetypes["intellectual"] = new Archetype("The Intellectual", [2, 1, 3, 2, 2, 2], 8, 12, 100, 4, [new SkillSelection([], SkillSelectionPredicate.ANY_KNOWLEDGE)], [new Ability("Brilliant!", "Once per session, your character may spend a Story Point as an incidental. If they do so, during the next check they make during that turn, you count their ranks in the skill being used as equal to their Intellect.")]);
-    defaultSet.archetypes["aristocrat"] = new Archetype("The Aristocrat", [1, 2, 2, 2, 2, 3], 10, 10, 100, 4, [new SkillSelection(["Cool"])], [new Ability("Forceful Personality", "Once per session, your character may spend a Story Point as an incidental. If they do so, during the next skill check they make during that turn, you character doubles the strain they inflict or the strain they heal (you choose before making the check).")]);
+    defaultSet.archetypes["human"] = new Archetype("Average Human",
+        "The average human archetype is our baseline for character creation, and portrays the most customizable example of a person. You should choose this archetype if you prefer to play “generalist” characters, who are never going to be terrible at anything.",
+        [2, 2, 2, 2, 2, 2],
+        10, 10, 110, 4,
+        [new SkillSelection([], SkillSelectionPredicate.ANY_NON_CAREER), new SkillSelection([], SkillSelectionPredicate.ANY_NON_CAREER)],
+        [new Ability("Ready for Anything", "Once per session as an out-ofturn incidental, a Human may move one Story Point from the Game Master's pool to the players' pool.")]);
+    defaultSet.archetypes["laborer"] = new Archetype("The Laborer",
+        "The laborer archetype represents a character who has a background in some form of manual labor, and who is generally strong and tough. You should choose this archetype if you're planning on making a character who focuses on fighting, especially fighting in melee combat. You should also choose this archetype if your character has a background of manual labor and hard work.",
+        [3, 2, 2, 2, 1, 2], 12, 8, 100, 4,
+        [new SkillSelection(["Athletics"])],
+        [new Ability("Tough as Nails", "Once per session, your character may spend a Story Point as an out-of-turn incidental immediately after suffering a Critical Injury and determining the result. If they do so, they count the result rolled as \"01\".")]);
+    defaultSet.archetypes["intellectual"] = new Archetype("The Intellectual",
+        "The intellectual archetype represents a character who has a background grounded in some sort of intellectual pursuit. This pursuit could be science, medicine, teaching, or even magic. You should choose this archetype if you want to make a character who focuses on one of those intellectual pursuits. You should also choose this archetype if your character comes from a highly educated background.",
+        [2, 1, 3, 2, 2, 2], 8, 12, 100, 4,
+        [new SkillSelection([], SkillSelectionPredicate.ANY_KNOWLEDGE)],
+        [new Ability("Brilliant!", "Once per session, your character may spend a Story Point as an incidental. If they do so, during the next check they make during that turn, you count their ranks in the skill being used as equal to their Intellect.")]);
+    defaultSet.archetypes["aristocrat"] = new Archetype("The Aristocrat",
+        "The aristocrat archetype represents any character who has the gift of a silver tongue. This could be a noble of some sort, a politician, a bard, or even a salesperson or merchant. You should use this archetype if you want to build a character who fits one of these molds. You should also choose this archetype if your character is good at communicating.",
+        [1, 2, 2, 2, 2, 3], 10, 10, 100, 4,
+        [new SkillSelection(["Cool"])],
+        [new Ability("Forceful Personality", "Once per session, your character may spend a Story Point as an incidental. If they do so, during the next skill check they make during that turn, you character doubles the strain they inflict or the strain they heal (you choose before making the check).")]);
 
     //Careers
     defaultSet.careers["Entertainer"] = new Career("Entertainer", [["Charm"], ["Coordination"], ["Deception"], ["Discipline"], ["Leadership"], ["Melee", "Melee-Light"], ["Skulduggery"], ["Stealth"]]);
@@ -84,8 +101,7 @@ export function createDefaultDataset(): string {
     return JSON.stringify(defaultSet, null, "\t");
 }
 
-export function fromStore(store: ElectronStore): Dataset
-{
+export function fromStore(store: ElectronStore): Dataset {
     let dataset = new Dataset(store.get("name"));
     dataset.skills = store.get("skills");
     dataset.archetypes = store.get("archetypes");

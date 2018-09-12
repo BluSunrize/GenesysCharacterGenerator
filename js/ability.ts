@@ -72,14 +72,16 @@ export function buildAbilityConfiguration(ability: Ability) {
     params.classList.add("toggleEdit");
     params.placeholder = "Effect parameters, separated by semicolon";
     params.cols = 17;
+    params.style.display = "none";
     cell.appendChild(params);
     dropdown.onchange = () =>
-        params.style.display = dropdown.selectedIndex < 2 ? "none" : "initial";
+        params.style.display = dropdown.selectedIndex < 1 ? "none" : "initial";
 
     cell = row.insertCell();
     let desc = document.createElement("textarea");
     desc.classList.add("toggleEdit");
     desc.rows = 3;
+    desc.style.resize = "vertical";
     cell.appendChild(desc);
 
     if (ability) {
@@ -91,7 +93,7 @@ export function buildAbilityConfiguration(ability: Ability) {
             if (ability.effect.params)
                 params.value = ability.effect.params.join(";");
         }
-        params.style.display = dropdown.selectedIndex < 2 ? "none" : "initial";
+        params.style.display = dropdown.selectedIndex < 1 ? "none" : "initial";
     }
     return row;
 }

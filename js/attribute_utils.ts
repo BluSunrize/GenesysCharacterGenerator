@@ -27,6 +27,8 @@ export function setNamedAttribute(name: string, value: any) {
         }
         else if (elements[i] instanceof HTMLSpanElement)
             (<HTMLSpanElement>elements[i]).innerText = value;
+        else if (elements[i] instanceof HTMLParagraphElement)
+            (<HTMLParagraphElement>elements[i]).innerText = value;
         else if (elements[i] instanceof HTMLLabelElement)
             (<HTMLLabelElement>elements[i]).innerText = value;
         else if (elements[i] instanceof HTMLTextAreaElement)
@@ -81,6 +83,8 @@ export function setIDedAttribute(id: string, value: any) {
     }
     else if (element instanceof HTMLSpanElement)
         (<HTMLSpanElement>element).innerText = value;
+    else if (element instanceof HTMLParagraphElement)
+        (<HTMLParagraphElement>element).innerText = value;
     else if (element instanceof HTMLLabelElement)
         (<HTMLLabelElement>element).innerText = value;
     else if (element instanceof HTMLTextAreaElement)
