@@ -110,7 +110,8 @@
     <h3 class="sheet-full-header">Career</h3>
     <div class="segment-blue">
         <br>
-        <i>Choose a Career and pick </i><b><span id="archetype_free_careerskills"></span></b><i> Career Skills to gain a free rank in.</i>
+        <i>Choose a Career and pick </i><b><span id="archetype_free_careerskills"></span></b><i> Career Skills to gain a
+        free rank in.</i>
         <table>
             <tr>
                 <td>
@@ -169,7 +170,7 @@
                     <div>
                         <span name="attr_soak" class="attr">0</span>
                         <!--<input id="character_soak" type="number" min="-1" value="0" style="width: 50px !important;"-->
-                                <!--onkeypress="if(event.preventDefault) event.preventDefault();">-->
+                        <!--onkeypress="if(event.preventDefault) event.preventDefault();">-->
                     </div>
                 </td>
                 <td class="sheet-stat-double">
@@ -177,7 +178,7 @@
                     <div>
                         <span name="attr_wound_threshold" class="attr sheet-left">0</span>
                         <!--<input class="sheet-left" id="character_wound_threshold" type="number" min="-1" value="0"-->
-                                <!--onkeypress="if(event.preventDefault) event.preventDefault();">-->
+                        <!--onkeypress="if(event.preventDefault) event.preventDefault();">-->
                         <input id="character_wounds" type="number" min="0" value="0"></div>
                     <div><span class="sheet-subtitle">
                             <label>Threshold</label>
@@ -189,7 +190,7 @@
                     <div>
                         <span name="attr_strain_threshold" class="attr sheet-left">0</span>
                         <!--<input class="sheet-left" id="character_strain_threshold" type="number" min="-1" value="0"-->
-                                <!--onkeypress="if(event.preventDefault) event.preventDefault();">-->
+                        <!--onkeypress="if(event.preventDefault) event.preventDefault();">-->
                         <input id="character_strain" type="number" min="0" value="0"></div>
                     <div><span class="sheet-subtitle">
                             <label>Threshold</label>
@@ -200,9 +201,9 @@
                     <div><label class="sheet-label-title" for="detail_defense">DEFENSE &#x25BC;</label></div>
                     <div>
                         <span name="attr_defense_ranged" class="attr sheet-left">0</span>
-                        <span name="attr_defense_melee"class="attr">0</span>
+                        <span name="attr_defense_melee" class="attr">0</span>
                         <!--<input class="sheet-left" id="character_defense_ranged" type="number" max="10" min="0"-->
-                                <!--value="0">-->
+                        <!--value="0">-->
                         <!--<input id="character_defense_melee" type="number" max="10" min="0" value="0"></div>-->
                     </div>
                     <div><span class="sheet-subtitle">
@@ -250,7 +251,8 @@
                     <div class="adjuststats">
                         <ul class="no-style">
                             <li>
-                                From Willpower: <span name="attr_willpower" id="characteristic_strain_threshold">2</span>
+                                From Willpower: <span name="attr_willpower"
+                                                      id="characteristic_strain_threshold">2</span>
                             </li>
                             <li>
                                 From Archetype: <span name="archetype_strain">10</span>
@@ -267,13 +269,16 @@
                     <div class="adjuststats">
                         <ul class="no-style">
                             <li>
-                                From Archetype: <span id="archetype_defense_ranged">2</span> <span id="archetype_defense_melee">2</span>
+                                From Archetype: <span id="archetype_defense_ranged">2</span> <span
+                                    id="archetype_defense_melee">2</span>
                             </li>
                             <li>
-                                From Talents: <input type="number" id="talent_defense_ranged" value="0"> <input type="number" id="talent_defense_melee" value="0">
+                                From Talents: <input type="number" id="talent_defense_ranged" value="0"> <input
+                                    type="number" id="talent_defense_melee" value="0">
                             </li>
                             <li>
-                                From Equipment: <input type="number" id="equipment_defense_ranged" value="0"> <input type="number" id="equipment_defense_melee" value="0">
+                                From Equipment: <input type="number" id="equipment_defense_ranged" value="0"> <input
+                                    type="number" id="equipment_defense_melee" value="0">
                             </li>
                         </ul>
                     </div>
@@ -494,6 +499,46 @@
                 </td>
             </tr>
         </table>
+    </div>
+
+
+    <h3 class="sheet-full-header">Weapons</h3>
+    <div id="weapons" class="segment-blue">
+        <table>
+            <thead>
+            <tr>
+                <td>
+                    Weapon
+                </td>
+                <td>
+                    Skill
+                </td>
+                <td>
+                    Damage
+                </td>
+                <td>
+                    Crit
+                </td>
+                <td>
+                    Range
+                </td>
+                <td>
+                    Special
+                </td>
+            </tr>
+            </thead>
+            <tbody id="tbody_weapons">
+            <tr>
+                <td colspan="6">
+                    <button id="button_addweapon">
+                        Add
+                    </button>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
     </div>
 </div>
 

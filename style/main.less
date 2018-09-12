@@ -817,7 +817,32 @@ label.sheet-label-title {
       grid-column: 5;
     }
   }
+}
 
+#weapons {
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    -webkit-column-break-inside: avoid;
+
+    .skilltable();
+
+    td:nth-child(2){
+      width: 20%;
+    }
+    td:nth-child(3),
+    td:nth-child(4) {
+      width: 10%;
+    }
+    td:last-child {
+      width: 25%;
+    }
+
+    input[type=number] {
+      width: 70px;
+    }
+  }
 }
 
 //Hiding things with checkboxes!

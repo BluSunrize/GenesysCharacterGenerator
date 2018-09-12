@@ -2,7 +2,7 @@ const electron = require("electron");
 const fs = require("fs");
 const Store = require("electron-store");
 
-const {makeDragable, wrapInRow} = require("./js/table_utils");
+const {makeDragable, wrapInRow, addOption} = require("./js/table_utils");
 const {createDefaultDataset} = require("./js/dataset");
 const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate, buildSkillSelectionConfiguration, parseSkillSelectionConfiguration} = require("./js/skill");
 const {Ability, buildAbilityConfiguration, parseAbilityConfiguration} = require("./js/ability");
@@ -79,11 +79,8 @@ function newDataset(e) {
         careers: {}
     };
     fs.writeFileSync(cwd + "/dataset/" + key + ".json", JSON.stringify(store, null, "\t"));
-    let element_option = document.createElement("option");
     dataset_stores[key] = new Store({"name": "dataset/" + key});
-    element_option.value = key;
-    element_option.innerText = store.name;
-    element_datasets.appendChild(element_option);
+    addOption(element_datasets, key, store.name);
     element_datasets.value = key;
     readDataset();
 }
@@ -99,11 +96,8 @@ function copyDataset(e) {
     store.name += " (Copy)";
     fs.writeFileSync(cwd + "/dataset/" + key + ".json", JSON.stringify(store, null, "\t"));
 
-    let element_option = document.createElement("option");
+    addOption(element_datasets, key, store.name);
     dataset_stores[key] = new Store({"name": "dataset/" + key});
-    element_option.value = key;
-    element_option.innerText = store.name;
-    element_datasets.appendChild(element_option);
     element_datasets.value = key;
     readDataset();
 }
@@ -152,11 +146,8 @@ function populateSkillRow(row, skill) {
 
     cell = row.insertCell();
     let characteristic = document.createElement("select");
-    for (let char in Characteristic) {
-        let option = document.createElement("option");
-        option.value = option.innerText = Characteristic[char];
-        characteristic.appendChild(option);
-    }
+    for (let char in Characteristic)
+        addOption(characteristic, Characteristic[char]);
     cell.appendChild(characteristic);
 
     cell = row.insertCell();

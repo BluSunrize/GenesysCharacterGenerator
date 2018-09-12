@@ -57,4 +57,15 @@ export function wrapInRow(element: HTMLElement)
     }
 }
 
-module.exports = {makeDragable, wrapInRow};
+export function addOption(select: HTMLSelectElement, value: string, text?: string)
+{
+    let option = document.createElement("option");
+    option.value = value;
+    if(text)
+        option.innerText = text;
+    else
+        option.innerText = value;
+    select.add(option);
+}
+
+module.exports = {makeDragable, wrapInRow, addOption};

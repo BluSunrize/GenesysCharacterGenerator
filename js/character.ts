@@ -3,6 +3,7 @@
 import {Archetype} from "./archetype";
 import {Career} from "./career";
 import {Talent} from "./talent";
+import {Weapon} from "./weapon";
 
 export class Character {
     //Base Info
@@ -43,6 +44,9 @@ export class Character {
 
     //Talents
     talents: Talent[] = [];
+
+    //Inventory
+    weapons: Weapon[] = [];
 
     constructor() {
     }

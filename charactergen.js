@@ -9,7 +9,9 @@ const Career = require("./js/career");
 const Character = require("./js/character");
 const {Ability, AbilityEffectType} = require("./js/ability");
 const {Talent} = require("./js/talent");
+const {Weapon} = require("./js/weapon");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
+const {addOption} = require("./js/table_utils");
 
 let initialCharacterLoad = false;
 const derrived = ["soak", "wound_threshold", "strain_threshold", "defense_ranged", "defense_melee"];
@@ -62,21 +64,14 @@ function init(dataset_path) {
 
     //Load Archetypes
     const archetypes = dataset.archetypes;
-    for (let key in archetypes) {
-        let option = document.createElement("option");
-        option.value = key;
-        option.innerText = archetypes[key].name;
-        element_archetype.appendChild(option);
-    }
+    for (let key in archetypes)
+        addOption(element_archetype, key, archetypes[key].name);
     updateArchetype(); //Set defaults
 
     //Load Careers
     const careers = dataset.careers;
     for (let key in careers) {
-        let option = document.createElement("option");
-        option.value = key;
-        option.innerText = careers[key].name;
-        element_career.appendChild(option);
+        addOption(element_career, key, careers[key].name);
     }
 
     //Load Characters
@@ -115,6 +110,7 @@ function init(dataset_path) {
     };
     for (let i = 1; i <= 5; i++)
         document.getElementById("button_addtalent_" + i).onclick = () => addTalent(i);
+    document.getElementById("button_addweapon").onclick = () => addWeapon();
     //Attach Change Handlers
     attachOnChangeById("character_name", updateCharacterList);
     attachOnChangeById("character_player", updateCharacterList);
@@ -156,13 +152,19 @@ function init(dataset_path) {
         for (let i = 0; i < 8; i++)
             setIDedAttribute(`careerskill_${i}_freerank`, character.career_skills_free_ranks[i]);
         //Talents
-        for(let i=1; i<=5; i++) {
+        for (let i = 1; i <= 5; i++) {
             let table = document.getElementById("talents_tier" + i);
-            while (table.rows.length>1)
+            while (table.rows.length > 1)
                 table.deleteRow(0);
         }
         for (let talent of character.talents)
             addTalent(talent.tier, talent);
+        //Inventory
+        let table = document.getElementById("tbody_weapons");
+        while (table.rows.length > 1)
+            table.deleteRow(0);
+        for (let weapon of character.weapons)
+            addWeapon(weapon);
 
         updateArchetype();
         updateCareer();
@@ -198,6 +200,7 @@ function init(dataset_path) {
             getIDedAttribute("careerskill_2_freerank"), getIDedAttribute("careerskill_3_freerank"),
             getIDedAttribute("careerskill_4_freerank"), getIDedAttribute("careerskill_5_freerank"),
             getIDedAttribute("careerskill_6_freerank"), getIDedAttribute("careerskill_7_freerank")];
+        //Talents
         character.talents = [];
         for (let tier = 1; tier <= 5; tier++) {
             let table = document.getElementById("talents_tier" + tier);
@@ -208,6 +211,19 @@ function init(dataset_path) {
                 character.talents.push(new Talent(name, tier, desc, active));
             }
         }
+        //Inventory
+        character.weapons = [];
+        let table = document.getElementById("tbody_weapons");
+        for (let i = 0; i < table.rows.length - 1; i++) {
+            let name = table.rows[i].cells[0].firstChild.value;
+            let skill = table.rows[i].cells[1].firstChild.value;
+            let dam = table.rows[i].cells[2].firstChild.valueAsNumber;
+            let crit = table.rows[i].cells[3].firstChild.valueAsNumber;
+            let range = table.rows[i].cells[4].firstChild.value;
+            let special = table.rows[i].cells[5].firstChild.value;
+            character.weapons.push(new Weapon(name, skill, dam, crit, range, special));
+        }
+
 
         saveCharacters();
     }
@@ -591,6 +607,54 @@ function init(dataset_path) {
             let table = document.getElementById("talents_tier" + i);
             let tableNext = document.getElementById("talents_tier" + (i + 1));
             document.getElementById("button_addtalent_" + (i + 1)).disabled = table.rows.length <= tableNext.rows.length + 1;
+        }
+    }
+
+    let ranges = ["Engaged", "Short", "Medium", "Long", "Extreme", "Strategic"];
+
+    function addWeapon(weapon) {
+        let tbody = document.getElementById("tbody_weapons");
+        let tr = tbody.insertRow(tbody.rows.length - 1);
+        let td = tr.insertCell();
+        let name = document.createElement("input");
+        name.type = "text";
+        td.appendChild(name);
+
+        td = tr.insertCell();
+        let skill = document.createElement("select");
+        for(let s of skills)
+            if(s.category===SkillCategory.COMBAT || s.category===SkillCategory.POWER)
+                addOption(skill, s.name);
+        td.appendChild(skill);
+
+        td = tr.insertCell();
+        let damage = document.createElement("input");
+        damage.type = "number";
+        td.appendChild(damage);
+
+        td = tr.insertCell();
+        let crit = document.createElement("input");
+        crit.type = "number";
+        td.appendChild(crit);
+
+        td = tr.insertCell();
+        let range = document.createElement("select");
+        for (let r of ranges)
+            addOption(range, r);
+        td.appendChild(range);
+
+        td = tr.insertCell();
+        let special = document.createElement("textarea");
+        td.appendChild(special);
+
+        if(weapon)
+        {
+            name.value = weapon.name;
+            skill.value = weapon.skill;
+            damage.valueAsNumber = weapon.damage;
+            crit.valueAsNumber = weapon.crit;
+            range.value = weapon.range;
+            special.value = weapon.special;
         }
     }
 }
