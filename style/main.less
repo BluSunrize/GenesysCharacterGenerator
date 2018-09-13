@@ -338,6 +338,17 @@ input.no-background {
   }
 }
 
+#character table {
+  width: 100%;
+  td:first-child{
+    width: 44%;
+    .inputWithTitle(100px);
+  }
+  td:not(first-child){
+    .inputWithTitle(70px);
+  }
+}
+
 #archetype_abilities li {
   margin-bottom: 4px;
 
@@ -803,6 +814,45 @@ label.sheet-label-title {
   }
 }
 
+#weapons {
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    -webkit-column-break-inside: avoid;
+
+    .skilltable();
+    thead {
+      font-family: @FuturistReg;
+    }
+
+    td:nth-child(2) {
+      width: 20%;
+    }
+    td:nth-child(3),
+    td:nth-child(4) {
+      width: 10%;
+    }
+    td:last-child {
+      width: 25%;
+    }
+
+    input[type=number] {
+      width: 70px;
+    }
+  }
+}
+
+#inventory {
+  table {
+    width: 100%;
+    td {
+      width: 50%;
+      .inputWithTitle(44px);
+    }
+  }
+}
+
 #talents {
   display: grid;
   grid-template-columns: 146px 146px 146px 146px 146px;
@@ -860,6 +910,7 @@ label.sheet-label-title {
         textarea {
           width: 130px;
           border: 1px solid black;
+          font-size: small;
           resize: none;
           border-top: none;
         }
@@ -871,7 +922,7 @@ label.sheet-label-title {
           border: 1px solid black;
 
           &:not(:hover) {
-            background: none;
+            background: white;
           }
         }
       }
@@ -896,32 +947,6 @@ label.sheet-label-title {
     }
     &#talents_tier5 {
       grid-column: 5;
-    }
-  }
-}
-
-#weapons {
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    -webkit-column-break-inside: avoid;
-
-    .skilltable();
-
-    td:nth-child(2) {
-      width: 20%;
-    }
-    td:nth-child(3),
-    td:nth-child(4) {
-      width: 10%;
-    }
-    td:last-child {
-      width: 25%;
-    }
-
-    input[type=number] {
-      width: 70px;
     }
   }
 }

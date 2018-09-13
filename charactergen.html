@@ -18,47 +18,55 @@
     <button id="button_save_character">Save</button>
     <button id="button_delete_character">Remove</button>
     <h3 class="sheet-full-header">Character</h3>
-    <div class="segment-blue">
+    <div id="character" class="segment-blue">
         <table>
             <tr>
-                <td> Character Name:</td>
-                <td><input type="text" id="character_name"></td>
+                <td><label class="inner-title">Character Name:</label>
+                    <input type="text" id="character_name"></td>
             </tr>
             <tr>
-                <td>Player Name:</td>
-                <td><input type="text" id="character_player"></td>
+                <td><label class="inner-title">Player Name:</label>
+                    <input type="text" id="character_player"></td>
             </tr>
             <tr>
-                <td>Campaign Name:</td>
-                <td><input type="text" id="character_campaign"></td>
+                <td><label class="inner-title">Campaign Name:</label>
+                    <input type="text" id="character_campaign"></td>
             </tr>
             <tr>
-                <td>Gender:</td>
-                <td><input type="text" id="character_gender"></td>
+                <td><label class="inner-title">Gender:</label>
+                    <input type="text" id="character_gender"></td>
             </tr>
             <tr>
-                <td>Age:</td>
-                <td><input type="text" id="character_age"></td>
+                <td><label class="inner-title">Age:</label>
+                    <input type="text" id="character_age"></td>
             </tr>
             <tr>
-                <td>Height:</td>
-                <td><input type="text" id="character_height"></td>
+                <td><label class="inner-title">Height:</label>
+                    <input type="text" id="character_height"></td>
             </tr>
             <tr>
-                <td>Build:</td>
-                <td><input type="text" id="character_build"></td>
+                <td><label class="inner-title">Build:</label>
+                    <input type="text" id="character_build"></td>
+                <td rowspan="3"><label class="inner-title">Strength:</label>
+                    <textarea id="character_strength" rows="4"></textarea></td>
+                <td rowspan="3"><label class="inner-title">Flaw:</label>
+                    <textarea id="character_flaw" rows="4"></textarea></td>
             </tr>
             <tr>
-                <td>Hair:</td>
-                <td><input type="text" id="character_hair"></td>
+                <td><label class="inner-title">Hair:</label>
+                    <input type="text" id="character_hair"></td>
             </tr>
             <tr>
-                <td>Eyes:</td>
-                <td><input type="text" id="character_eyes"></td>
+                <td><label class="inner-title">Eyes:</label>
+                    <input type="text" id="character_eyes"></td>
             </tr>
             <tr>
-                <td>Notable Features:</td>
-                <td><textarea id="character_features"></textarea></td>
+                <td><label class="inner-title">Notable Features:</label>
+                    <textarea id="character_features" rows="4"></textarea></td>
+                <td><label class="inner-title">Desire:</label>
+                    <textarea id="character_desire" rows="4"></textarea></td>
+                <td><label class="inner-title">Fear:</label>
+                    <textarea id="character_fear" rows="4"></textarea></td>
             </tr>
         </table>
     </div>
@@ -141,7 +149,8 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <p id="career_description"></p>
+                    <p id="career_description"
+                       style="font-size: small; border: 1px dashed grey; padding: 2px;"></p>
                 </td>
             </tr>
         </table>
@@ -465,6 +474,63 @@
     <div id="skilllist" class="segment-blue">
     </div>
 
+    <h3 class="sheet-full-header">Weapons</h3>
+    <div id="weapons" class="segment-blue">
+        <table>
+            <thead>
+            <tr>
+                <td>
+                    Weapon
+                </td>
+                <td>
+                    Skill
+                </td>
+                <td>
+                    Damage
+                </td>
+                <td>
+                    Crit
+                </td>
+                <td>
+                    Range
+                </td>
+                <td>
+                    Special
+                </td>
+            </tr>
+            </thead>
+            <tbody id="tbody_weapons">
+            <tr>
+                <td colspan="6">
+                    <button id="button_addweapon">
+                        Add
+                    </button>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="sheet-full-header">Equipment Log</h3>
+    <div id="inventory" class="segment-blue">
+        <table>
+            <tr>
+                <td><label class="inner-title">Money:</label><input id="character_inventory_money"></td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="inner-title">Weapons & Armor:</label>
+                    <textarea id="character_inventory_armor" rows="9"></textarea>
+                </td>
+                <td>
+                    <label class="inner-title">Personal Gear:</label>
+                    <textarea id="character_inventory_gear" rows="9"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <h3 class="sheet-full-header">Talents</h3>
     <div id="talents" class="segment-blue">
         <table id="talents_tier1">
@@ -512,46 +578,6 @@
                 </td>
             </tr>
         </table>
-    </div>
-
-
-    <h3 class="sheet-full-header">Weapons</h3>
-    <div id="weapons" class="segment-blue">
-        <table>
-            <thead>
-            <tr>
-                <td>
-                    Weapon
-                </td>
-                <td>
-                    Skill
-                </td>
-                <td>
-                    Damage
-                </td>
-                <td>
-                    Crit
-                </td>
-                <td>
-                    Range
-                </td>
-                <td>
-                    Special
-                </td>
-            </tr>
-            </thead>
-            <tbody id="tbody_weapons">
-            <tr>
-                <td colspan="6">
-                    <button id="button_addweapon">
-                        Add
-                    </button>
-                </td>
-            </tr>
-
-            </tbody>
-        </table>
-
     </div>
 </div>
 

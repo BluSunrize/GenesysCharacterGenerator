@@ -2,11 +2,11 @@
   height: 40px;
   min-width: 4*@fontsize;
   font-size: @fontsize;
-  background:  @genesys-lightblue;
+  background: @genesys-lightblue;
   border-color: @genesys-blue;
   border-radius: 10px;
 
-  &:hover:not(:disabled){
+  &:hover:not(:disabled) {
     font-weight: bold;
     background: white;
   }
@@ -56,4 +56,33 @@
     }
   }
 
+}
+
+.inputWithTitle(@padding) {
+  label.inner-title {
+    position: absolute;
+    padding-top: 3px;
+    padding-left: 5px;
+    text-transform: uppercase;
+    font-family: @FuturistReg;
+    font-size: 13px;
+
+    & + input {
+      width: calc(100% - @padding - 15px);
+      height: 18px;
+      padding-left: @padding;
+      border: 1px solid black;
+    }
+
+    & + textarea {
+      width: calc(100% - 21px);
+      padding-left: 4px;
+      padding-top: 24px;
+      resize: vertical;
+      border: 1px solid black;
+
+      background: white linear-gradient(to bottom, white, black 20px, white 22px);
+      box-shadow: inset calc(-@padding * 0.8) 20px white;
+    }
+  }
 }

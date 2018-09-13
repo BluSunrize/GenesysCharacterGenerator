@@ -142,9 +142,9 @@ export function syncAttributesFromObject(prefix: string, object: object) {
         if (textAreas[i].id.indexOf(prefix) === 0) {
             let key = textAreas[i].id.substr(prefix.length);
             if (object[key])
-                (<HTMLTextAreaElement>textAreas[i]).innerText = object[key];
+                (<HTMLTextAreaElement>textAreas[i]).value = object[key];
             else
-                (<HTMLTextAreaElement>textAreas[i]).innerText = "";
+                (<HTMLTextAreaElement>textAreas[i]).value = "";
         }
 
     let selections = document.getElementsByTagName("select");
@@ -173,7 +173,7 @@ export function syncAttributesToObject(prefix: string, object: object) {
     for (let i = 0; i < textAreas.length; i++)
         if (textAreas[i].id.indexOf(prefix) === 0) {
             let key = textAreas[i].id.substr(prefix.length);
-            object[key] = (<HTMLTextAreaElement>textAreas[i]).innerText;
+            object[key] = (<HTMLTextAreaElement>textAreas[i]).value;
         }
 
     let selections = document.getElementsByTagName("select");

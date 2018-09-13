@@ -17,20 +17,24 @@ export class Character {
     hair: string;
     eyes: string;
     features: string;
+    strength: string;
+    flaw: string;
+    desire: string;
+    fear: string;
 
     //Initial Selection
     archetype: Archetype;
     career: Career;
 
     //Stats
-    characteristics: number[][] = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
-    soak: number[] = [0,0];
-    wound_threshold: number[] = [0,0];
+    characteristics: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
+    soak: number[] = [0, 0];
+    wound_threshold: number[] = [0, 0];
     wounds: number;
-    strain_threshold: number[] = [0,0];
+    strain_threshold: number[] = [0, 0];
     strain: number;
-    defense_ranged: number[] = [0,0];
-    defense_melee: number[] = [0,0];
+    defense_ranged: number[] = [0, 0];
+    defense_melee: number[] = [0, 0];
 
     //XP
     experience_earned: number = 0;
@@ -47,6 +51,9 @@ export class Character {
 
     //Inventory
     weapons: Weapon[] = [];
+    inventory_money: string;
+    inventory_armor: string;
+    inventory_gear: string;
 
     constructor() {
     }
