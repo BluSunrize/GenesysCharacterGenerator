@@ -36,8 +36,10 @@ body {
 
 .left {
   grid-column: 1;
-  height: 600px;
-  overflow-y: auto;
+  .scrollable {
+    height: 600px;
+    overflow-y: auto;
+  }
 }
 
 #main {
@@ -130,11 +132,48 @@ input.no-background {
 }
 
 /* INDEX */
+#navigation_bar {
+  position: sticky;
+  top: 24px;
+
+  li {
+    border: 1px dashed @genesys-orange;
+    border-radius: 5px;
+    width: 140px;
+    height: 30px;
+    padding-top: 12px;
+    margin-top: 5px;
+    text-align: center;
+
+    a {
+      color: @genesys-orange;
+      text-decoration: none;
+      font-family: "ForgottenFuturistRg-Regular", sans-serif;
+      font-size: 15px;
+    }
+  }
+}
+
 #dataset-header {
   text-align: center;
 
   button {
     .button-rounded(13.3px);
+  }
+}
+
+.save-button-stickied {
+  position: fixed;
+  top: 223px;
+  left: 9px;
+
+  border: 1px dashed #f8a23e;
+  border-radius: 5px !important;
+  width: 140px !important;
+  height: 44px !important;
+
+  &:focus {
+    outline: none;
   }
 }
 
@@ -236,7 +275,7 @@ input.no-background {
   }
 }
 
-#careers{
+#careers {
   width: 100%;
   border-collapse: collapse;
 
@@ -260,8 +299,11 @@ input.no-background {
       border-bottom: 1px solid black;
     }
   }
+  td > table td {
+    width: 25%;
+  }
 
-  .description{
+  .description {
     width: 614px;
     min-height: 50px;
     resize: vertical;
@@ -867,7 +909,7 @@ label.sheet-label-title {
 
     .skilltable();
 
-    td:nth-child(2){
+    td:nth-child(2) {
       width: 20%;
     }
     td:nth-child(3),

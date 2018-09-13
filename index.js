@@ -65,6 +65,13 @@ element_button_new.onclick = newDataset;
 element_button_copy.onclick = copyDataset;
 element_button_remove.onclick = removeDataset;
 element_button_save.onclick = writeDataset;
+document.addEventListener("scroll", function (event) {
+    if(window.scrollY>128)
+        element_button_save.classList.add("save-button-stickied")
+    else
+        element_button_save.classList.remove("save-button-stickied")
+});
+
 for (let button of document.getElementsByName("button_add_skill"))
     button.onclick = addSkill;
 document.getElementById("button_add_archetype").onclick = addArchetype;
@@ -448,7 +455,7 @@ function readDataset() {
         element_button_remove.title = "The default dataset can not be removed";
     } else {
         element_button_save.disabled = element_button_remove.disabled = toggleEdit.disabled = false;
-        element_button_save.title = element_button_remove.title = toggleEdit.title = document.getElementById("label_allow_dataset_edit").title = null;
+        element_button_save.title = element_button_remove.title = toggleEdit.title = document.getElementById("label_allow_dataset_edit").title = "";
     }
 
     document.getElementById("name").value = dataset_store.get("name");

@@ -7,6 +7,25 @@
     <link href="./style/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<div class="left">
+    <div id="navigation_bar">
+        <ul class="no-style">
+            <li onclick="document.getElementById('navto_header').click()">
+                <a id="navto_header" href="#dataset-header">Top</a>
+            </li>
+            <li onclick="document.getElementById('navto_skills').click()">
+                <a id="navto_skills" href="#header_skills">Skilllist</a>
+            </li>
+            <li onclick="document.getElementById('navto_archetype').click()">
+                <a id="navto_archetype" href="#header_archetypes">Archetypes</a>
+            </li>
+            <li onclick="document.getElementById('navto_careers').click()">
+                <a id="navto_careers" href="#header_careers">Careers</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 <div id="main">
     <div id="dataset-header" class="segment-orange">
         <p>
@@ -29,7 +48,7 @@
         </p>
     </div>
 
-    <h3 class="sheet-full-header">Skills</h3>
+    <h3 class="sheet-full-header" id="header_skills">Skills</h3>
     <div id="skilllist" class="segment-blue">
         <table id="skills_general">
             <thead>
@@ -113,7 +132,7 @@
     </div>
 
 
-    <h3 class="sheet-full-header">Archetypes</h3>
+    <h3 class="sheet-full-header" id="header_archetypes">Archetypes</h3>
     <div class="segment-blue">
         <table id="archetypes">
             <tr>
@@ -125,7 +144,7 @@
     </div>
 
 
-    <h3 class="sheet-full-header">Careers</h3>
+    <h3 class="sheet-full-header" id="header_careers">Careers</h3>
     <div class="segment-blue">
         <table id="careers">
             <tr>
