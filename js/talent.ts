@@ -1,17 +1,19 @@
 'use strict';
 
+export const TalentActivation: string[] = ["Passive","Action","Maneuver","Incidental","Incidental OoT"];
+
 export class Talent {
     name: string;
     tier: number;
     description: string;
-    active: boolean;
+    activation: string;
 
-    constructor(name: string, tier: number, description: string, active: boolean) {
+    constructor(name: string, tier: number, description: string, activation: string) {
         this.name = name;
         this.tier = tier;
         this.description = description;
-        this.active = active;
+        this.activation = activation;
     }
 }
 
-module.exports = {Talent};
+module.exports = {Talent, TalentActivation};

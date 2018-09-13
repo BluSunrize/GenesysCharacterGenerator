@@ -8,7 +8,7 @@ const Archetype = require("./js/archetype");
 const Career = require("./js/career");
 const Character = require("./js/character");
 const {Ability, AbilityEffectType} = require("./js/ability");
-const {Talent} = require("./js/talent");
+const {Talent, TalentActivation} = require("./js/talent");
 const {Weapon} = require("./js/weapon");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
 const {addOption} = require("./js/table_utils");
@@ -206,10 +206,10 @@ function init(dataset_path) {
         for (let tier = 1; tier <= 5; tier++) {
             let table = document.getElementById("talents_tier" + tier);
             for (let j = 0; j < table.rows.length - 1; j++) {
-                let name = table.rows[j].cells[0].children[2].value;
-                let desc = table.rows[j].cells[0].children[4].value;
-                let active = table.rows[j].cells[0].children[3].firstChild.checked;
-                character.talents.push(new Talent(name, tier, desc, active));
+                let name = table.rows[j].cells[0].children[1].value;
+                let desc = table.rows[j].cells[0].children[3].value;
+                let activation = table.rows[j].cells[0].children[2].value;
+                character.talents.push(new Talent(name, tier, desc, activation));
             }
         }
         //Inventory
@@ -436,7 +436,7 @@ function init(dataset_path) {
                 let element_careerskill = document.getElementById(`careerskill_${i}`).firstChild;
                 let element_isCareer = document.getElementById(`skill_${element_careerskill.value}_career`);
                 element_isCareer.checked = true;
-                element_isCareer.disabled= true;
+                element_isCareer.disabled = true;
                 characters[selectedChar].career_skills.push(element_careerskill.value);
             }
             for (let ability of archetypes[element_archetype.value].abilities)
@@ -444,7 +444,7 @@ function init(dataset_path) {
                     for (let param of ability.effect.params) {
                         let element_isCareer = document.getElementById(`skill_${param}_career`);
                         element_isCareer.checked = true;
-                        element_isCareer.disabled= true;
+                        element_isCareer.disabled = true;
                         characters[selectedChar].career_skills.push(param);
                     }
             for (let skill of characters[selectedChar].extra_career_skills) {
@@ -598,24 +598,14 @@ function init(dataset_path) {
         let table = document.getElementById("talents_tier" + tier);
         let tr = table.insertRow(table.rows.length - 1);
         let td = tr.insertCell();
-        let span = document.createElement("span");
-        span.innerText = "Talent";
-        td.appendChild(span);
-        span = document.createElement("span");
-        span.innerText = "Active?";
-        td.appendChild(span);
-        let name = document.createElement("input");
-        td.appendChild(name);
-        let active = document.createElement("input");
-        active.type = "checkbox";
-        let checkDiv = document.createElement("div");
-        checkDiv.appendChild(active);
-        td.appendChild(checkDiv);
-        let desc = document.createElement("textarea");
-        desc.rows = 6;
-        td.appendChild(desc);
+        // let span = document.createElement("span");
+        // span.innerText = "Talent";
+        // td.appendChild(span);
+        // span = document.createElement("span");
+        // span.innerText = "Active?";
+        // td.appendChild(span);
         let remove = document.createElement("button");
-        remove.innerText = "Remove";
+        remove.innerText = "x";
         remove.onclick = () => {
             table.deleteRow(tr.rowIndex);
             autocalcXPSpent();
@@ -623,9 +613,26 @@ function init(dataset_path) {
         };
         td.appendChild(remove);
 
+        let name = document.createElement("input");
+        td.appendChild(name);
+        // let active = document.createElement("input");
+        // active.type = "checkbox";
+        // let checkDiv = document.createElement("div");
+        // checkDiv.appendChild(active);
+        // td.appendChild(checkDiv);
+
+        let activation = document.createElement("select");
+        for (let type of TalentActivation)
+            addOption(activation, type);
+        td.appendChild(activation);
+
+        let desc = document.createElement("textarea");
+        desc.rows = 7;
+        td.appendChild(desc);
+
         if (talent) {
             name.value = talent.name;
-            active.checked = talent.active;
+            activation.value = talent.activation;
             desc.value = talent.description;
         }
         autocalcXPSpent();

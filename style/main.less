@@ -866,64 +866,38 @@ label.sheet-label-title {
         border: 1px solid @genesys-grey;
         border-radius: 5px;
 
-        span {
-          font-size: 11px;
-          font-weight: bold;
-          float: left;
-          margin-left: 6px;
-
-          &:nth-child(2) {
-            float: right;
-          }
-        }
-
-        div {
-          background: white;
-          border: 1px solid black;
-          width: 20px;
-          height: 15px;
-          float: right;
-          padding: 2px 0 2px 5px;
-
-          input[type=checkbox] {
-            -webkit-appearance: none;
-            width: 15px;
-            height: 15px;
-            margin: 0;
-            border: 1px dotted @genesys-grey;
-            border-radius: 50%;
-            font-size: 19px;
-            line-height: 9px;
-
-            &:checked::before {
-              content: "\2713";
-            }
-          }
-        }
-
-        input {
-          width: 104px;
-          border: 1px solid black;
-          padding: 2px;
-          border-right: none;
-        }
-        textarea {
-          width: 130px;
-          border: 1px solid black;
-          font-size: small;
-          resize: none;
-          border-top: none;
-        }
         button {
           float: right;
           position: relative;
-          top: -23px;
+          top: -5px;
+          right: -5px;
           margin-bottom: -23px;
           border: 1px solid black;
+          border-radius: 5px;
+          background: white;
+        }
 
-          &:not(:hover) {
-            background: white;
-          }
+        input {
+          width: 130px;
+          border: 1px solid black;
+          padding: 2px;
+        }
+        select {
+          float: right;
+          background: white;
+          border: 1px solid black;
+          border-top: none;
+          z-index: 1;
+          position: relative;
+        }
+        textarea {
+          width: 130px;
+          margin-top: -18px;
+          padding-top: 18px;
+          border: 1px solid black;
+          font-size: smaller;
+          resize: none;
+          border-top: none;
         }
       }
     }
