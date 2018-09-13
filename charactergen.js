@@ -56,10 +56,11 @@ function init(dataset_path) {
         let cell = row.insertCell(-1);
         cell.innerText = `${skill.name} (${skill.characteristic})`;
         cell = row.insertCell(-1);
-        cell.innerHTML = `<label id="skill_${skill.name}_career" class="skill"></label>`;
+        cell.innerHTML = `<input id="skill_${skill.name}_career" type="checkbox" class="skill">`;
+        document.getElementById(`skill_${skill.name}_career`).onchange = updateSkillCareer;
         cell = row.insertCell(-1);
         cell.innerHTML = `<input id="skill_${skill.name}_free" type="number" class="skill"><input id="skill_${skill.name}"type="range" class="skill" min="0" max="5" value="0">`;
-        document.getElementById("skill_" + skill.name).onchange = updateSkillRank;
+        document.getElementById(`skill_${skill.name}`).onchange = updateSkillRank;
     }
 
     //Load Archetypes
@@ -429,30 +430,56 @@ function init(dataset_path) {
     function updateCareerSkills(e) {
         if (selectedChar >= 0) {
             for (let skill of skills)
-                document.getElementById(`skill_${skill.name}_career`).classList.remove("checked");
+                document.getElementById(`skill_${skill.name}_career`).checked = false;
             characters[selectedChar].career_skills = [];
             for (let i = 0; i < 8; i++) {
                 let element_careerskill = document.getElementById(`careerskill_${i}`).firstChild;
-                document.getElementById(`skill_${element_careerskill.value}_career`).classList.add("checked");
+                let element_isCareer = document.getElementById(`skill_${element_careerskill.value}_career`);
+                element_isCareer.checked = true;
+                element_isCareer.disabled= true;
                 characters[selectedChar].career_skills.push(element_careerskill.value);
             }
             for (let ability of archetypes[element_archetype.value].abilities)
                 if (ability.effect && ability.effect.type === AbilityEffectType.GAIN_CAREER_SKILL && ability.effect.params)
                     for (let param of ability.effect.params) {
-                        document.getElementById(`skill_${param}_career`).classList.add("checked");
+                        let element_isCareer = document.getElementById(`skill_${param}_career`);
+                        element_isCareer.checked = true;
+                        element_isCareer.disabled= true;
                         characters[selectedChar].career_skills.push(param);
                     }
+            for (let skill of characters[selectedChar].extra_career_skills) {
+                document.getElementById(`skill_${skill}_career`).checked = true;
+                characters[selectedChar].career_skills.push(skill);
+            }
+
 
             updateArchetypeSkillSelection();
             autocalcSkills();
         }
     }
 
+    function updateSkillCareer(e) {
+        let skill = e.srcElement.id.slice("skill_".length, e.srcElement.id.length - "_career".length);
+        if (e.srcElement.checked) {
+            characters[selectedChar].skills_bought_noncareer[skill] = characters[selectedChar].skills_bought[skill];
+            if (!characters[selectedChar].extra_career_skills.includes(skill))
+                characters[selectedChar].extra_career_skills.push(skill);
+        }
+        else {
+            characters[selectedChar].skills_bought_noncareer[skill] = undefined;
+            characters[selectedChar].extra_career_skills.splice(characters[selectedChar].extra_career_skills.indexOf(skill));
+            autocalcXPSpent();
+        }
+    }
+
     function updateSkillRank(e) {
         if (selectedChar >= 0) {
+            let skill = e.srcElement.id.substr("skill_".length);
             let free = document.getElementById(e.srcElement.id + "_free").value;
-            let val = e.srcElement.value;
-            characters[selectedChar].skills_bought[e.srcElement.id.substr("skill_".length)] = val - free;
+            let bought = e.srcElement.value - free;
+            characters[selectedChar].skills_bought[skill] = bought;
+            if (characters[selectedChar].skills_bought_noncareer[skill] && bought < characters[selectedChar].skills_bought_noncareer[skill])
+                characters[selectedChar].skills_bought_noncareer[skill] = bought <= 0 ? undefined : bought;
         }
         updateSkillRender(e.srcElement);
         autocalcXPSpent();
@@ -498,21 +525,16 @@ function init(dataset_path) {
                         freeRanks[element_careerskill.value] = (freeRanks[element_careerskill.value] || 0) + 1;
                 }
 
-            let xpSpent = 0;
             for (let skill of skills) {
                 let freeRank = freeRanks[skill.name] || 0;
                 let boughtRank = characters[selectedChar].skills_bought[skill.name] || 0;
-                let isCareer = characters[selectedChar].career_skills.includes(skill.name);
-                for (let j = 1; j <= boughtRank; j++)
-                    xpSpent += 5 * (freeRank + j) + (!isCareer ? 5 : 0);
-
                 let skill_free = document.getElementById(`skill_${skill.name}_free`);
                 skill_free.value = freeRank;
                 let skill_slider = document.getElementById(`skill_${skill.name}`);
                 skill_slider.value = freeRank + boughtRank;
                 updateSkillRender(skill_slider);
             }
-            autocalcXPSpent(xpSpent);
+            autocalcXPSpent();
         }
     }
 
@@ -542,9 +564,15 @@ function init(dataset_path) {
             for (let skill of skills) {
                 let freeRank = getIDedAttribute(`skill_${skill.name}_free`) || 0;
                 let boughtRank = getIDedAttribute(`skill_${skill.name}`) || 0;
-                let isCareer = document.getElementById(`skill_${skill.name}_career`).classList.contains("checked");
+                let isCareer = document.getElementById(`skill_${skill.name}_career`).checked;
+
                 for (let j = freeRank + 1; j <= boughtRank; j++)
-                    xpSpent += 5 * j + (!isCareer ? 5 : 0);
+                    xpSpent += 5 * j;
+                if (boughtRank > 0)
+                    if (!isCareer)
+                        xpSpent += 5 * (boughtRank - freeRank);
+                    else if (characters[selectedChar].skills_bought_noncareer[skill.name])
+                        xpSpent += 5 * characters[selectedChar].skills_bought_noncareer[skill.name];
             }
 
         for (let tier = 1; tier <= 5; tier++) {
@@ -624,8 +652,8 @@ function init(dataset_path) {
 
         td = tr.insertCell();
         let skill = document.createElement("select");
-        for(let s of skills)
-            if(s.category===SkillCategory.COMBAT || s.category===SkillCategory.POWER)
+        for (let s of skills)
+            if (s.category === SkillCategory.COMBAT || s.category === SkillCategory.POWER)
                 addOption(skill, s.name);
         td.appendChild(skill);
 
@@ -649,8 +677,7 @@ function init(dataset_path) {
         let special = document.createElement("textarea");
         td.appendChild(special);
 
-        if(weapon)
-        {
+        if (weapon) {
             name.value = weapon.name;
             skill.value = weapon.skill;
             damage.valueAsNumber = weapon.damage;

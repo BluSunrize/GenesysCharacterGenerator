@@ -44,7 +44,9 @@ export class Character {
     archetype_skills: string[] = [];
     career_skills: string[] = [];
     career_skills_free_ranks: boolean[] = [false, false, false, false, false, false, false, false];
+    extra_career_skills: string[] = [];
     skills_bought: { [skill: string]: number; } = {};
+    skills_bought_noncareer: { [skill: string]: number; } = {};
 
     //Talents
     talents: Talent[] = [];

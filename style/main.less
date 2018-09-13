@@ -340,11 +340,11 @@ input.no-background {
 
 #character table {
   width: 100%;
-  td:first-child{
+  td:first-child {
     width: 44%;
     .inputWithTitle(100px);
   }
-  td:not(first-child){
+  td:not(first-child) {
     .inputWithTitle(70px);
   }
 }
@@ -763,23 +763,23 @@ label.sheet-label-title {
     }
   }
 
-  label.skill {
+  input[type=checkbox].skill {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    margin: 3px 0 -1px;
     border: 1px dotted @genesys-grey;
     border-radius: 50%;
-    font-size: 17px;
-    padding: 0 6px;
+    font-size: 26px;
+    line-height: 18px;
+    padding-left: 1px;
+    color: black;
 
-    &::before {
-      content: '\00a0\00a0\00a0';
-    }
-    &.checked {
-      padding-left: 0;
-      padding-right: 0;
-      &::before {
-        content: '\00a0\2713\00a0';
-      }
+    &:checked::before {
+      content: "\2713";
     }
   }
+
   input[type=number].skill {
     display: none;
   }
