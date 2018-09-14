@@ -13,6 +13,16 @@ export enum Characteristic {
     PR = "PR"
 }
 
+export function getIndexOfCharacteristic(val: Characteristic): number {
+    let i = 0;
+    for (let c in Characteristic)
+        if (c === val)
+            break;
+        else
+            i++;
+    return i;
+}
+
 export enum SkillCategory {
     GENERAL = "General",
     COMBAT = "Combat",
@@ -214,6 +224,7 @@ module.exports = {
     Skill,
     characteristics,
     Characteristic,
+    getIndexOfCharacteristic,
     SkillCategory,
     buildSkillDropdown,
     SkillSelectionPredicate,

@@ -3,7 +3,7 @@ const fs = require("fs");
 const Store = require("electron-store");
 
 const {Dataset, createDefaultDataset, fromStore} = require("./js/dataset");
-const {Skill, characteristics, Characteristic, SkillCategory, buildSkillDropdown, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
+const {Skill, characteristics, Characteristic, getIndexOfCharacteristic, SkillCategory, buildSkillDropdown, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
 const Archetype = require("./js/archetype");
 const Career = require("./js/career");
 const Character = require("./js/character");
@@ -51,16 +51,19 @@ function init(dataset_path) {
         h.innerText = "Rank";
         elements_skilltable[cat] = table.createTBody();
     }
+
     for (let skill of skills) {
         let row = elements_skilltable[skill.category].insertRow(-1);
         let cell = row.insertCell(-1);
-        cell.innerText = `${skill.name} (${skill.characteristic})`;
+        cell.innerHTML = `${skill.name} (<span id="skill_${skill.name}_characteristic">${skill.characteristic}</span>)`;
         cell = row.insertCell(-1);
         cell.innerHTML = `<input id="skill_${skill.name}_career" type="checkbox" class="skill">`;
         document.getElementById(`skill_${skill.name}_career`).onchange = updateSkillCareer;
         cell = row.insertCell(-1);
         cell.innerHTML = `<input id="skill_${skill.name}_free" type="number" class="skill"><input id="skill_${skill.name}"type="range" class="skill" min="0" max="5" value="0">`;
         document.getElementById(`skill_${skill.name}`).onchange = updateSkillRank;
+        document.getElementById(`skill_${skill.name}`).onmouseenter = (ev) => diceDisplay_prep(ev, skill);
+        document.getElementById(`skill_${skill.name}`).onmouseleave = diceDisplay_hide;
     }
 
     //Load Archetypes
@@ -472,6 +475,8 @@ function init(dataset_path) {
         }
     }
 
+    /* SKILL TABLE METHODS */
+
     function updateSkillRank(e) {
         if (selectedChar >= 0) {
             let skill = e.srcElement.id.substr("skill_".length);
@@ -491,7 +496,53 @@ function init(dataset_path) {
             element.value = document.getElementById(element.id + "_free").value;
         if (element.value > 0)
             element.classList.add("rank" + element.value);
+        if(diceDisplayTimeout)
+            diceDisplay_show(element);
     }
+
+    /* Dice Display functionality */
+
+    const diceDisplay = document.createElement("div");
+    diceDisplay.id = "dicedisplay";
+    document.getElementById("main").appendChild(diceDisplay);
+    let diceDisplayPos = [0, 0];
+    let diceDisplayTimeout;
+
+    function diceDisplay_show(rankElement) {
+        let char = getIDedAttribute(`${rankElement.id}_characteristic`);
+        let i = getIndexOfCharacteristic(Characteristic[char]);
+        let charValue = archetypes[getIDedAttribute("character_archetype")].characteristics[i];
+        charValue += getIDedAttribute(`bought_${characteristics[i]}`);
+        charValue += getIDedAttribute(`talent_${characteristics[i]}`);
+        charValue += getIDedAttribute(`equipment_${characteristics[i]}`);
+        let diceCount = Math.max(rankElement.value, charValue);
+        let upgrade = Math.min(rankElement.value, charValue);
+        diceDisplay.style.left = diceDisplayPos[0] + "px";
+        diceDisplay.style.top = diceDisplayPos[1] + "px";
+        let content = "";
+        for (let i = 0; i < diceCount; i++)
+            if (i < upgrade)
+                content += '<div class="proficiency">⬣</div>';
+            else
+                content += '<div class="ability">♦</div>';
+        diceDisplay.innerHTML = content;
+        diceDisplay.style.display = "inline-flex";
+    }
+
+    function diceDisplay_prep(mouseEvent, skill) {
+        diceDisplayPos = [mouseEvent.pageX - mouseEvent.offsetX + 22, mouseEvent.pageY - mouseEvent.offsetY + 19];
+        diceDisplayTimeout = setTimeout(diceDisplay_show, 1000, mouseEvent.srcElement);
+    }
+
+    function diceDisplay_hide() {
+        if (diceDisplayTimeout) {
+            clearTimeout(diceDisplayTimeout);
+            diceDisplayTimeout = undefined;
+        }
+        setTimeout(() => diceDisplay.style.display = "none", 500);
+    }
+
+    /* AUTO-CALC METHODS */
 
     function autocalcCharacteristics(e) {
         if (selectedChar >= 0) {

@@ -925,6 +925,43 @@ label.sheet-label-title {
   }
 }
 
+#dicedisplay {
+  background-color: @genesys-lightblue;
+  position: absolute;
+  min-width: 106px !important;
+  border: 1px black solid;
+  text-align: center;
+
+  .ability {
+    color: black;
+    font-size: 30px;
+    line-height: 22px;
+    width: 19px;
+    padding-left: 2px;
+    &:after{
+      content: "♦";
+      color: #41ad49;
+      position: relative;
+      left: -13.5px;
+      top: -2px;
+      font-size: 24px;
+    }
+  }
+  .proficiency {
+    color: black;
+    width: 21px !important;
+    font-size: 22px;
+    &:after{
+      content: "⬣";
+      color: #fff200;
+      position: relative;
+      left: -17.5px;
+      top: -1px;
+      font-size: 19px;
+    }
+  }
+}
+
 //Hiding things with checkboxes!
 #detail_brawn:checked & ~ table tr td:nth-child(2) div.adjuststats,
 #detail_agility:checked & ~ table tr td:nth-child(3) div.adjuststats,
