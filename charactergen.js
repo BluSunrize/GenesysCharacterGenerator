@@ -62,7 +62,7 @@ function init(dataset_path) {
         cell = row.insertCell(-1);
         cell.innerHTML = `<input id="skill_${skill.name}_free" type="number" class="skill"><input id="skill_${skill.name}"type="range" class="skill" min="0" max="5" value="0">`;
         document.getElementById(`skill_${skill.name}`).onchange = updateSkillRank;
-        document.getElementById(`skill_${skill.name}`).onmouseenter = (ev) => diceDisplay_prep(ev, skill);
+        document.getElementById(`skill_${skill.name}`).onmouseenter = (ev) => diceDisplay_prep(ev);
         document.getElementById(`skill_${skill.name}`).onmouseleave = diceDisplay_hide;
     }
 
@@ -508,7 +508,13 @@ function init(dataset_path) {
     let diceDisplayPos = [0, 0];
     let diceDisplayTimeout;
 
-    function diceDisplay_show(rankElement) {
+    function diceDisplay_show(param) {
+        let rankElement;
+        if(param instanceof HTMLInputElement)
+            rankElement = param;
+        else
+            rankElement = document.getElementById(`skill_${param}`);
+
         let char = getIDedAttribute(`${rankElement.id}_characteristic`);
         let i = getIndexOfCharacteristic(Characteristic[char]);
         let charValue = archetypes[getIDedAttribute("character_archetype")].characteristics[i];
@@ -531,7 +537,7 @@ function init(dataset_path) {
 
     function diceDisplay_prep(mouseEvent, skill) {
         diceDisplayPos = [mouseEvent.pageX - mouseEvent.offsetX + 22, mouseEvent.pageY - mouseEvent.offsetY + 19];
-        diceDisplayTimeout = setTimeout(diceDisplay_show, 1000, mouseEvent.srcElement);
+        diceDisplayTimeout = setTimeout(diceDisplay_show, 1000, skill?skill:mouseEvent.srcElement);
     }
 
     function diceDisplay_hide() {
@@ -713,6 +719,9 @@ function init(dataset_path) {
         for (let s of skills)
             if (s.category === SkillCategory.COMBAT || s.category === SkillCategory.POWER)
                 addOption(skill, s.name);
+        console.log("added weapon: skill element: ");
+        skill.onmouseenter = (ev) => diceDisplay_prep(ev, skill.value);
+        skill.onmouseleave = diceDisplay_hide;
         td.appendChild(skill);
 
         td = tr.insertCell();
