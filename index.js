@@ -55,18 +55,21 @@ for (let ds of files_dataset)
         if (res)
             nextCustomIndex = Math.max(nextCustomIndex, parseInt(res[1]) + 1);
     }
-element_datasets.selectedIndex = 0;
+let lastSession = new Store({"name": "lastSession"});
+let lastDataset = lastSession.get("lastDataset");
+if (dataset_stores[lastDataset])
+    element_datasets.value = lastDataset;
+else
+    element_datasets.selectedIndex = 0;
 element_datasets.onchange = readDataset;
-element_button_continue.onclick = () => {
-    electron.ipcRenderer.send("continue", element_datasets.value);
-};
+element_button_continue.onclick = () => electron.ipcRenderer.send("continue", element_datasets.value);
 element_button_openfolder.onclick = () => electron.shell.showItemInFolder(cwd + "/dataset/.");
 element_button_new.onclick = newDataset;
 element_button_copy.onclick = copyDataset;
 element_button_remove.onclick = removeDataset;
 element_button_save.onclick = writeDataset;
 document.addEventListener("scroll", function (event) {
-    if(window.scrollY>128)
+    if (window.scrollY > 128)
         element_button_save.classList.add("save-button-stickied")
     else
         element_button_save.classList.remove("save-button-stickied")
@@ -445,6 +448,8 @@ function populateCareerRow(row, career_key, career) {
 }
 
 function readDataset() {
+    lastSession.set("lastDataset", element_datasets.value);
+
     let dataset_store = dataset_stores[element_datasets.value];
 
     let toggleEdit = document.getElementById("allow_dataset_edit");

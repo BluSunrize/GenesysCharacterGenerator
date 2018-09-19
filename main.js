@@ -35,7 +35,6 @@ function switchToChargen(dataset) {
     mainWindow.loadFile('charactergen.html');
 
     ipcMain.on("init", function (event, data) {
-        console.log("MAIN got request for init :");
         mainWindow.webContents.send("init", dataset);
     });
 

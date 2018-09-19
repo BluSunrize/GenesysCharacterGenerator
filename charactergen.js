@@ -719,7 +719,6 @@ function init(dataset_path) {
         for (let s of skills)
             if (s.category === SkillCategory.COMBAT || s.category === SkillCategory.POWER)
                 addOption(skill, s.name);
-        console.log("added weapon: skill element: ");
         skill.onmouseenter = (ev) => diceDisplay_prep(ev, skill.value);
         skill.onmouseleave = diceDisplay_hide;
         td.appendChild(skill);
