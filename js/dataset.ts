@@ -9,6 +9,7 @@ export class Dataset {
     skills: Skill[] = [];
     archetypes: { [name: string]: Archetype; } = {};
     careers: { [name: string]: Career; } = {};
+    allowCustomCareer: boolean = false;
 
     constructor(name: string) {
         this.name = name;
@@ -138,6 +139,7 @@ export function fromStore(store: ElectronStore): Dataset {
     dataset.skills = store.get("skills");
     dataset.archetypes = store.get("archetypes");
     dataset.careers = store.get("careers");
+    dataset.allowCustomCareer = store.get("allowCustomCareer");
     return dataset;
 }
 

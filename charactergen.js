@@ -5,7 +5,7 @@ const Store = require("electron-store");
 const {Dataset, createDefaultDataset, fromStore} = require("./js/dataset");
 const {Skill, characteristics, Characteristic, getIndexOfCharacteristic, SkillCategory, buildSkillDropdown, SkillSelection, SkillSelectionPredicate} = require("./js/skill");
 const Archetype = require("./js/archetype");
-const Career = require("./js/career");
+const {Career, createCustomCareer} = require("./js/career");
 const Character = require("./js/character");
 const {Ability, AbilityEffectType} = require("./js/ability");
 const {Talent, TalentActivation} = require("./js/talent");
@@ -76,6 +76,13 @@ function init(dataset_path) {
     const careers = dataset.careers;
     for (let key in careers) {
         addOption(element_career, key, careers[key].name);
+    }
+    if(dataset.allowCustomCareer)
+    {
+        console.log("this dataset uses a custom career!");
+        let career = createCustomCareer(dataset);
+        careers["custom"] = career;
+        addOption(element_career, "custom", "Custom");
     }
 
     //Load Characters

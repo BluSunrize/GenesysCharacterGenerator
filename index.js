@@ -487,6 +487,7 @@ function readDataset() {
         populateArchetypeRow(row, archetype_key, archetypes[archetype_key]);
     }
 
+    document.getElementById("enable_custom_career").checked = dataset_store.get("allowCustomCareer");
     let careers = dataset_store.get("careers");
     while (element_careers.rows.length > 1)
         element_careers.deleteRow(0);
@@ -547,6 +548,7 @@ function writeDataset() {
     }
     dataset_store.set("archetypes", archetypes);
 
+    dataset_store.set("allowCustomCareer", document.getElementById("enable_custom_career").checked);
     let careers = {};
     for (let i = 0; i < element_careers.rows.length - 1; i++) {
         let innerTable = element_careers.rows[i].cells[1].firstChild;
