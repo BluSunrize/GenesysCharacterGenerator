@@ -77,8 +77,7 @@ function init(dataset_path) {
     for (let key in careers) {
         addOption(element_career, key, careers[key].name);
     }
-    if(dataset.allowCustomCareer)
-    {
+    if (dataset.allowCustomCareer) {
         console.log("this dataset uses a custom career!");
         let career = createCustomCareer(dataset);
         careers["custom"] = career;
@@ -503,7 +502,7 @@ function init(dataset_path) {
             element.value = document.getElementById(element.id + "_free").value;
         if (element.value > 0)
             element.classList.add("rank" + element.value);
-        if(diceDisplayTimeout)
+        if (diceDisplayTimeout)
             diceDisplay_show(element);
     }
 
@@ -517,7 +516,7 @@ function init(dataset_path) {
 
     function diceDisplay_show(param) {
         let rankElement;
-        if(param instanceof HTMLInputElement)
+        if (param instanceof HTMLInputElement)
             rankElement = param;
         else
             rankElement = document.getElementById(`skill_${param}`);
@@ -544,7 +543,7 @@ function init(dataset_path) {
 
     function diceDisplay_prep(mouseEvent, skill) {
         diceDisplayPos = [mouseEvent.pageX - mouseEvent.offsetX + 22, mouseEvent.pageY - mouseEvent.offsetY + 19];
-        diceDisplayTimeout = setTimeout(diceDisplay_show, 1000, skill?skill:mouseEvent.srcElement);
+        diceDisplayTimeout = setTimeout(diceDisplay_show, 1000, skill ? skill : mouseEvent.srcElement);
     }
 
     function diceDisplay_hide() {
@@ -660,30 +659,23 @@ function init(dataset_path) {
 
     function addTalent(tier, talent) {
         let table = document.getElementById("talents_tier" + tier);
+        let tableNext = tier === 5 ? undefined : document.getElementById("talents_tier" + (tier + 1));
         let tr = table.insertRow(table.rows.length - 1);
         let td = tr.insertCell();
-        // let span = document.createElement("span");
-        // span.innerText = "Talent";
-        // td.appendChild(span);
-        // span = document.createElement("span");
-        // span.innerText = "Active?";
-        // td.appendChild(span);
+
         let remove = document.createElement("button");
         remove.innerText = "x";
         remove.onclick = () => {
-            table.deleteRow(tr.rowIndex);
-            autocalcXPSpent();
-            updateTalentButtons();
+            if (!tableNext || tableNext.rows.length === 1 || tableNext.rows.length < (table.rows.length - 1)) {
+                table.deleteRow(tr.rowIndex);
+                autocalcXPSpent();
+                updateTalentButtons();
+            }
         };
         td.appendChild(remove);
 
         let name = document.createElement("input");
         td.appendChild(name);
-        // let active = document.createElement("input");
-        // active.type = "checkbox";
-        // let checkDiv = document.createElement("div");
-        // checkDiv.appendChild(active);
-        // td.appendChild(checkDiv);
 
         let activation = document.createElement("select");
         for (let type of TalentActivation)

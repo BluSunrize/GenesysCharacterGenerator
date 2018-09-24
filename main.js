@@ -7,15 +7,9 @@ let mainWindow;
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({minWidth: 1000, minHeight: 600});
+    mainWindow = new BrowserWindow({minWidth: 1000, minHeight: 600, useContentSize: true});
 
     mainWindow.loadFile('index.html');
-
-    // console.log("path: "+app.getAppPath());
-    // console.log(mainWindow.getTitle());
-    // console.log("characters: "+characters);
-
-    // Open the DevTools.
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -28,7 +22,6 @@ function createWindow() {
     ipcMain.on("continue", function (event, data) {
         switchToChargen(data);
     });
-    // switchToChargen();
 }
 
 function switchToChargen(dataset) {
@@ -39,6 +32,7 @@ function switchToChargen(dataset) {
     });
 
 }
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.

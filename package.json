@@ -1,18 +1,29 @@
 {
   "name": "genesys-character-generator",
-  "version": "0.0.5",
+  "version": "0.7.0",
   "description": "Electron App for building Characters for the Genesys RPG System",
   "main": "main.js",
-  "scripts": {
-    "start": "electron ."
-  },
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "BluSunrize",
-  "license": "GNU GPLv3",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BluSunrize/GenesysCharacterGenerator.git"
+  },
+  "dependencies": {
+    "electron-store": "^2.0.0"
+  },
   "devDependencies": {
-    "electron": "^2.0.0",
-    "electron-store": "^2.0.0",
-    "less": "^3.8.1"
+    "electron": "^2.0.10",
+    "electron-packager": "^12.1.2",
+    "less": "^3.8.1",
+    "electron-installer-debian": "^0.8.1",
+    "electron-winstaller": "^2.6.4"
+  },
+  "scripts": {
+    "start": "electron .",
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --asar --out=build --icon=img/logo.ico --prune=true --ignore='.idea|.gitignore|installers|npm-debug.log|.map|.less'",
+    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --asar --out=build --icon=img/logo.png --prune=true --ignore='.idea|.gitignore|installers|npm-debug.log|.map|.less'",
+    "create-installer-debian": "npm run package-linux; electron-installer-debian --src build/genesys-character-generator-linux-x64/ --arch amd64 --config installers/debian.json"
   }
 }
