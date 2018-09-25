@@ -11,7 +11,7 @@ const {Ability, AbilityEffectType} = require("./js/ability");
 const {Talent, TalentActivation} = require("./js/talent");
 const {Weapon} = require("./js/weapon");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
-const {addOption} = require("./js/table_utils");
+const {addOption, purgeTable} = require("./js/table_utils");
 
 let initialCharacterLoad = false;
 const derrived = ["soak", "wound_threshold", "strain_threshold", "defense_ranged", "defense_melee"];
@@ -37,6 +37,8 @@ function init(dataset_path) {
     //Load Skills
     const skills = dataset.skills;
     let elements_skilltable = {};
+    while (elements_skilltable.firstChild)
+        elements_skilltable.removeChild(elements_skilltable.firstChild);
     for (let cat in SkillCategory) {
         cat = SkillCategory[cat];
         let table = document.createElement("table");
@@ -68,12 +70,16 @@ function init(dataset_path) {
 
     //Load Archetypes
     const archetypes = dataset.archetypes;
+    while(element_archetype.firstChild)
+        element_archetype.removeChild(element_archetype.firstChild);
     for (let key in archetypes)
         addOption(element_archetype, key, archetypes[key].name);
     updateArchetype(); //Set defaults
 
     //Load Careers
     const careers = dataset.careers;
+    while(element_career.firstChild)
+        element_career.removeChild(element_career.firstChild);
     for (let key in careers) {
         addOption(element_career, key, careers[key].name);
     }
@@ -94,6 +100,7 @@ function init(dataset_path) {
         dataset_store.set("characters", characters);
     }
 
+    purgeTable(element_characterlist, 0, 0);
     let tr = document.createElement("tr");
     tr.innerHTML = "<td>+ New Character</td>";
     tr.onclick = createNewCharacter;
@@ -107,9 +114,8 @@ function init(dataset_path) {
     };
 
     //Buttons
-    document.getElementById("button_save_character").onclick = () => {
-        saveDisplayAttributes();
-    };
+    document.getElementById("button_back").onclick = () => electron.ipcRenderer.send("goto_index");
+    document.getElementById("button_save_character").onclick = () => saveDisplayAttributes();
     document.getElementById("button_delete_character").onclick = () => {
         if (confirm("Are you sure you want to delete this character?")) {
             characters.splice(selectedChar, 1);
@@ -164,15 +170,13 @@ function init(dataset_path) {
         //Talents
         for (let i = 1; i <= 5; i++) {
             let table = document.getElementById("talents_tier" + i);
-            while (table.rows.length > 1)
-                table.deleteRow(0);
+            purgeTable(table, 1, 0);
         }
         for (let talent of character.talents)
             addTalent(talent.tier, talent);
         //Inventory
         let table = document.getElementById("tbody_weapons");
-        while (table.rows.length > 1)
-            table.deleteRow(0);
+        purgeTable(table, 1, 0);
         for (let weapon of character.weapons)
             addWeapon(weapon);
 

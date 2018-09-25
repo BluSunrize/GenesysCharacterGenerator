@@ -2,7 +2,7 @@ const electron = require("electron");
 const fs = require("fs");
 const Store = require("electron-store");
 
-const {makeDragable, wrapInRow, addOption} = require("./js/table_utils");
+const {makeDragable, wrapInRow, addOption, purgeTable} = require("./js/table_utils");
 const {createDefaultDataset} = require("./js/dataset");
 const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate, buildSkillSelectionConfiguration, parseSkillSelectionConfiguration} = require("./js/skill");
 const {Ability, buildAbilityConfiguration, parseAbilityConfiguration} = require("./js/ability");
@@ -62,7 +62,7 @@ if (dataset_stores[lastDataset])
 else
     element_datasets.selectedIndex = 0;
 element_datasets.onchange = readDataset;
-element_button_continue.onclick = () => electron.ipcRenderer.send("continue", element_datasets.value);
+element_button_continue.onclick = () => electron.ipcRenderer.send("goto_chargen", element_datasets.value);
 element_button_openfolder.onclick = () => electron.shell.showItemInFolder(cwd + "/dataset/.");
 element_button_new.onclick = newDataset;
 element_button_copy.onclick = copyDataset;
@@ -468,8 +468,7 @@ function readDataset() {
     let element_skills = {};
     for (let cat in SkillCategory) {
         let table = document.getElementById("skills_" + cat.toLowerCase());
-        while (table.rows.length > 2)
-            table.deleteRow(1);
+        purgeTable(table, 2, 1);
         element_skills[SkillCategory[cat]] = table;
     }
 
@@ -480,8 +479,7 @@ function readDataset() {
     }
 
     let archetypes = dataset_store.get("archetypes");
-    while (element_archetypes.rows.length > 1)
-        element_archetypes.deleteRow(0);
+    purgeTable(element_archetypes, 1, 0);
     for (let archetype_key in archetypes) {
         let row = element_archetypes.insertRow(element_archetypes.rows.length - 1);
         populateArchetypeRow(row, archetype_key, archetypes[archetype_key]);
@@ -489,8 +487,7 @@ function readDataset() {
 
     document.getElementById("enable_custom_career").checked = dataset_store.get("allowCustomCareer");
     let careers = dataset_store.get("careers");
-    while (element_careers.rows.length > 1)
-        element_careers.deleteRow(0);
+    purgeTable(element_careers, 1, 0)
     for (let career_key in careers) {
         let row = element_careers.insertRow(element_careers.rows.length - 1);
         populateCareerRow(row, career_key, careers[career_key]);

@@ -312,6 +312,16 @@ input.no-background {
 }
 
 /* CHARACTERGEN */
+#button_back {
+  .button-rounded(13px);
+  width: 100%;
+
+  & + .scrollable {
+    height: calc(100% - 40px);
+  }
+
+}
+
 .characterlist {
   tr.selected {
     background: @genesys-lightblue;

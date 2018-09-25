@@ -19,18 +19,19 @@ function createWindow() {
         mainWindow = null
     });
 
-    ipcMain.on("continue", function (event, data) {
+    ipcMain.on("goto_chargen", function (event, data) {
         switchToChargen(data);
+    });
+    ipcMain.on("goto_index", function (event, data) {
+        mainWindow.loadFile('index.html');
     });
 }
 
 function switchToChargen(dataset) {
     mainWindow.loadFile('charactergen.html');
-
     ipcMain.on("init", function (event, data) {
         mainWindow.webContents.send("init", dataset);
     });
-
 }
 
 // This method will be called when Electron has finished

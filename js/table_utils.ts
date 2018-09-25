@@ -39,33 +39,38 @@ export function makeDragable(dragElement: HTMLElement) {
     }
 }
 
-export function wrapInRow(element: HTMLElement)
-{
-    if(element.tagName==="TR")
+export function wrapInRow(element: HTMLElement) {
+    if (element.tagName === "TR")
         return element;
-    else if(element.tagName==="TD")
-    {
+    else if (element.tagName === "TD") {
         let tr = document.createElement("tr");
         tr.appendChild(element);
         return tr;
     }
-    else
-    {
+    else {
         let tr = <HTMLTableRowElement>document.createElement("tr");
         tr.insertCell().appendChild(element);
         return tr;
     }
 }
 
-export function addOption(select: HTMLSelectElement, value: string, text?: string)
-{
+export function addOption(select: HTMLSelectElement, value: string, text?: string) {
     let option = document.createElement("option");
     option.value = value;
-    if(text)
+    if (text)
         option.innerText = text;
     else
         option.innerText = value;
     select.add(option);
 }
 
-module.exports = {makeDragable, wrapInRow, addOption};
+export function purgeTable(select: any, maxLength: number, deleteIndex: number) {
+    if (select instanceof HTMLTableElement)
+        while (select.rows.length > maxLength)
+            select.deleteRow(deleteIndex);
+    else if (select instanceof HTMLTableSectionElement)
+        while (select.rows.length > maxLength)
+            select.deleteRow(deleteIndex);
+}
+
+module.exports = {makeDragable, wrapInRow, addOption, purgeTable};
