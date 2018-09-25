@@ -20,7 +20,7 @@ const element_edit_toggle = document.getElementById("allow_dataset_edit");
 const element_archetypes = document.getElementById("archetypes");
 const element_careers = document.getElementById("careers");
 
-const cwd = (electron.app || electron.remote.app).getPath('userData');
+const cwd = (electron.app || electron.remote.app).getAppPath();
 if (!fs.existsSync(cwd + "/dataset")) {
     console.log("No 'dataset' folder, creating...");
     fs.mkdirSync(cwd + "/dataset");
@@ -40,7 +40,7 @@ for (let ds of files_dataset)
     if (ds.endsWith(".json")) {
         ds = ds.substring(0, ds.length - 5);
         let element_option = document.createElement("option");
-        let dataset_store = new Store({"name": "dataset/" + ds});
+        let dataset_store = new Store({"cwd":cwd, "name": "dataset/" + ds});
         let name = dataset_store.get("name");
         if (name) {
             dataset_stores[ds] = dataset_store;
@@ -55,7 +55,7 @@ for (let ds of files_dataset)
         if (res)
             nextCustomIndex = Math.max(nextCustomIndex, parseInt(res[1]) + 1);
     }
-let lastSession = new Store({"name": "lastSession"});
+let lastSession = new Store({"cwd":cwd, "name": "lastSession"});
 let lastDataset = lastSession.get("lastDataset");
 if (dataset_stores[lastDataset])
     element_datasets.value = lastDataset;
@@ -94,7 +94,7 @@ function newDataset(e) {
         careers: {}
     };
     fs.writeFileSync(cwd + "/dataset/" + key + ".json", JSON.stringify(store, null, "\t"));
-    dataset_stores[key] = new Store({"name": "dataset/" + key});
+    dataset_stores[key] = new Store({"cwd":cwd, "name": "dataset/" + key});
     addOption(element_datasets, key, store.name);
     element_datasets.value = key;
     readDataset();
@@ -113,7 +113,7 @@ function copyDataset(e) {
     fs.writeFileSync(cwd + "/dataset/" + key + ".json", JSON.stringify(store, null, "\t"));
 
     addOption(element_datasets, key, store.name);
-    dataset_stores[key] = new Store({"name": "dataset/" + key});
+    dataset_stores[key] = new Store({"cwd":cwd, "name": "dataset/" + key});
     element_datasets.value = key;
     readDataset();
 }

@@ -5,3 +5,5 @@ node_modules
 /style/*.css
 /style/*.css.map
 /build
+/dataset
+lastSession.json

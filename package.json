@@ -22,8 +22,8 @@
   },
   "scripts": {
     "start": "electron .",
-    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --asar --out=build --icon=img/logo.ico --prune=true --ignore='.idea|.gitignore|installers|npm-debug.log|.map|.less'",
-    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --asar --out=build --icon=img/logo.png --prune=true --ignore='.idea|.gitignore|installers|npm-debug.log|.map|.less'",
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --asar --out=build --icon=img/logo.ico --prune=true --ignore='.idea|.gitignore|installers|npm-debug.log|.map|.less|dataset|lastSession.json'",
+    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --asar --out=build --icon=img/logo.png --prune=true --ignore='.idea|.gitignore|installers|npm-debug.log|.map|.less|dataset|lastSession.json'",
     "create-installer-debian": "npm run package-linux; electron-installer-debian --src build/genesys-character-generator-linux-x64/ --arch amd64 --config installers/debian.json"
   }
 }

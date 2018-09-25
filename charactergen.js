@@ -24,7 +24,8 @@ console.log("send init request");
 electron.ipcRenderer.send("init");
 
 function init(dataset_path) {
-    const dataset_store = new Store({"name": "dataset/" + dataset_path});
+    const cwd = (electron.app || electron.remote.app).getAppPath();
+    const dataset_store = new Store({"cwd":cwd, "name": "dataset/" + dataset_path});
     const dataset = fromStore(dataset_store);
 
     //Key HTML Elements
