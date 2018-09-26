@@ -11,7 +11,7 @@ const {Ability, AbilityEffectType} = require("./js/ability");
 const {Talent, TalentActivation} = require("./js/talent");
 const {Weapon} = require("./js/weapon");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
-const {addOption, purgeTable} = require("./js/table_utils");
+const {makeDragable, addOption, purgeTable} = require("./js/table_utils");
 
 let initialCharacterLoad = false;
 const derrived = ["soak", "wound_threshold", "strain_threshold", "defense_ranged", "defense_melee"];
@@ -25,7 +25,7 @@ electron.ipcRenderer.send("init");
 
 function init(dataset_path) {
     const cwd = (electron.app || electron.remote.app).getAppPath();
-    const dataset_store = new Store({"cwd":cwd, "name": "dataset/" + dataset_path});
+    const dataset_store = new Store({"cwd": cwd, "name": "dataset/" + dataset_path});
     const dataset = fromStore(dataset_store);
 
     //Key HTML Elements
@@ -38,8 +38,8 @@ function init(dataset_path) {
     //Load Skills
     const skills = dataset.skills;
     let elements_skilltable = {};
-    while (elements_skilltable.firstChild)
-        elements_skilltable.removeChild(elements_skilltable.firstChild);
+    while (element_skilllist.firstChild)
+        element_skilllist.removeChild(element_skilllist.firstChild);
     for (let cat in SkillCategory) {
         cat = SkillCategory[cat];
         let table = document.createElement("table");
@@ -71,7 +71,7 @@ function init(dataset_path) {
 
     //Load Archetypes
     const archetypes = dataset.archetypes;
-    while(element_archetype.firstChild)
+    while (element_archetype.firstChild)
         element_archetype.removeChild(element_archetype.firstChild);
     for (let key in archetypes)
         addOption(element_archetype, key, archetypes[key].name);
@@ -79,7 +79,7 @@ function init(dataset_path) {
 
     //Load Careers
     const careers = dataset.careers;
-    while(element_career.firstChild)
+    while (element_career.firstChild)
         element_career.removeChild(element_career.firstChild);
     for (let key in careers) {
         addOption(element_career, key, careers[key].name);
@@ -178,6 +178,9 @@ function init(dataset_path) {
         //Inventory
         let table = document.getElementById("tbody_weapons");
         purgeTable(table, 1, 0);
+        for (let ability of archetypes[element_archetype.value].abilities)
+            if (ability.effect && ability.effect.type === AbilityEffectType.GAIN_NATURAL_WEAPON && ability.effect.params)
+                addWeapon(new Weapon(ability.name, ability.effect.params[0], ability.effect.params[1], ability.effect.params[2], ability.effect.params[3], ability.effect.params[4]), true);
         for (let weapon of character.weapons)
             addWeapon(weapon);
 
@@ -229,15 +232,16 @@ function init(dataset_path) {
         //Inventory
         character.weapons = [];
         let table = document.getElementById("tbody_weapons");
-        for (let i = 0; i < table.rows.length - 1; i++) {
-            let name = table.rows[i].cells[0].firstChild.value;
-            let skill = table.rows[i].cells[1].firstChild.value;
-            let dam = table.rows[i].cells[2].firstChild.valueAsNumber;
-            let crit = table.rows[i].cells[3].firstChild.valueAsNumber;
-            let range = table.rows[i].cells[4].firstChild.value;
-            let special = table.rows[i].cells[5].firstChild.value;
-            character.weapons.push(new Weapon(name, skill, dam, crit, range, special));
-        }
+        for (let i = 0; i < table.rows.length - 1; i++)
+            if (table.rows[i].cells[6].innerText !== "Natural") {
+                let name = table.rows[i].cells[0].firstChild.value;
+                let skill = table.rows[i].cells[1].firstChild.value;
+                let dam = table.rows[i].cells[2].firstChild.valueAsNumber;
+                let crit = table.rows[i].cells[3].firstChild.valueAsNumber;
+                let range = table.rows[i].cells[4].firstChild.value;
+                let special = table.rows[i].cells[5].firstChild.value;
+                character.weapons.push(new Weapon(name, skill, dam, crit, range, special));
+            }
 
 
         saveCharacters();
@@ -710,10 +714,18 @@ function init(dataset_path) {
 
     let ranges = ["Engaged", "Short", "Medium", "Long", "Extreme", "Strategic"];
 
-    function addWeapon(weapon) {
+    function addWeapon(weapon, natural) {
         let tbody = document.getElementById("tbody_weapons");
         let tr = tbody.insertRow(tbody.rows.length - 1);
         let td = tr.insertCell();
+        if (!natural) {
+            let button_move = document.createElement("button");
+            button_move.textContent = "⭥";
+            makeDragable(button_move);
+            td.appendChild(button_move);
+        }
+
+        td = tr.insertCell();
         let name = document.createElement("input");
         name.type = "text";
         td.appendChild(name);
@@ -746,6 +758,16 @@ function init(dataset_path) {
         td = tr.insertCell();
         let special = document.createElement("textarea");
         td.appendChild(special);
+
+        td = tr.insertCell();
+        if (natural)
+            td.innerText = "Natural";
+        else {
+            let remove = document.createElement("button");
+            remove.innerText = "Remove";
+            remove.onclick = () => tbody.deleteRow(tr.rowIndex-1);
+            td.appendChild(remove);
+        }
 
         if (weapon) {
             name.value = weapon.name;

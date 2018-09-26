@@ -15,7 +15,8 @@ export class Ability {
 export enum AbilityEffectType {
     INCREASE_DEFENSE = "INCREASE_DEFENSE",
     INCREASE_SOAK = "INCREASE_SOAK",
-    GAIN_CAREER_SKILL = "GAIN_CAREER_SKILL"
+    GAIN_CAREER_SKILL = "GAIN_CAREER_SKILL",
+    GAIN_NATURAL_WEAPON = "GAIN_NATURAL_WEAPON"
 }
 
 export class AbilityEffect {
