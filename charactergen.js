@@ -123,7 +123,6 @@ function init(dataset_path) {
             element_characterlist.removeChild(element_characterlist.rows[selectedChar]);
             selectCharacter(-1);
         }
-
     };
     for (let i = 1; i <= 5; i++)
         document.getElementById("button_addtalent_" + i).onclick = () => addTalent(i);
@@ -357,13 +356,16 @@ function init(dataset_path) {
             element_li.innerHTML = `<b>${ability.name}:</b> ${ability.description}`;
             element_list.appendChild(element_li);
 
-            if (ability.effect && ability.effect.type !== AbilityEffectType.TEXT)
+            if (ability.effect)
                 if (ability.effect.type === AbilityEffectType.INCREASE_DEFENSE) {
                     defenseMod[0] += ability.effect.params ? parseInt(ability.effect.params[0]) : 1;
                     defenseMod[1] += ability.effect.params ? parseInt(ability.effect.params[1]) : 1;
                 }
                 else if (ability.effect.type === AbilityEffectType.INCREASE_SOAK)
                     soakMod += ability.effect.params ? parseInt(ability.effect.params[0]) : 1;
+                else if (ability.effect.type === AbilityEffectType.DECREASE_CHARACTERISTIC)
+                    for (let i = 0; i < characteristics.length; i++)
+                        document.getElementById(`bought_${characteristics[i]}`).min = `-${selectedArchetype.characteristics[i]-1}`;
         }
         setIDedAttribute("archetype_soak", soakMod);
         setIDedAttribute("archetype_defense_ranged", defenseMod[0]);
@@ -626,8 +628,12 @@ function init(dataset_path) {
         for (let i = 0; i < characteristics.length; i++) {
             let baseChar = archetypes[getIDedAttribute("character_archetype")].characteristics[i];
             let boughtChar = getIDedAttribute(`bought_${characteristics[i]}`);
-            for (let j = 1; j <= boughtChar; j++)
-                xpSpent += 10 * (baseChar + j);
+            if (boughtChar < 0)
+                for (let j = 0; j > boughtChar; j--)
+                    xpSpent -= 10 * (baseChar + j);
+            else
+                for (let j = 1; j <= boughtChar; j++)
+                    xpSpent += 10 * (baseChar + j);
         }
 
         if (spentOnSkills)
@@ -655,7 +661,7 @@ function init(dataset_path) {
             let table = document.getElementById("talents_tier" + tier);
             for (let row = 0; row < table.rows.length - 1; row++) {
                 let idx = freeTalents.indexOf(table.rows[row].cells[0].children[1].value);
-                if(idx<0)
+                if (idx < 0)
                     xpSpent += tier * 5;
                 else
                     freeTalents.splice(idx, 1);
