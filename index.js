@@ -2,7 +2,7 @@ const electron = require("electron");
 const fs = require("fs");
 const Store = require("electron-store");
 
-const {makeDragable, wrapInRow, addOption, purgeTable} = require("./js/table_utils");
+const {makeDragable, wrapInRow, addSelectOption, purgeTable} = require("./js/html_utils");
 const {createDefaultDataset} = require("./js/dataset");
 const {Skill, characteristics, Characteristic, SkillCategory, SkillSelection, SkillSelectionPredicate, buildSkillSelectionConfiguration, parseSkillSelectionConfiguration} = require("./js/skill");
 const {Ability, buildAbilityConfiguration, parseAbilityConfiguration} = require("./js/ability");
@@ -95,7 +95,7 @@ function newDataset(e) {
     };
     fs.writeFileSync(cwd + "/dataset/" + key + ".json", JSON.stringify(store, null, "\t"));
     dataset_stores[key] = new Store({"cwd":cwd, "name": "dataset/" + key});
-    addOption(element_datasets, key, store.name);
+    addSelectOption(element_datasets, key, store.name);
     element_datasets.value = key;
     readDataset();
 }
@@ -112,7 +112,7 @@ function copyDataset(e) {
     store.characters = [];
     fs.writeFileSync(cwd + "/dataset/" + key + ".json", JSON.stringify(store, null, "\t"));
 
-    addOption(element_datasets, key, store.name);
+    addSelectOption(element_datasets, key, store.name);
     dataset_stores[key] = new Store({"cwd":cwd, "name": "dataset/" + key});
     element_datasets.value = key;
     readDataset();
@@ -163,7 +163,7 @@ function populateSkillRow(row, skill) {
     cell = row.insertCell();
     let characteristic = document.createElement("select");
     for (let char in Characteristic)
-        addOption(characteristic, Characteristic[char]);
+        addSelectOption(characteristic, Characteristic[char]);
     cell.appendChild(characteristic);
 
     cell = row.insertCell();
@@ -385,9 +385,9 @@ function populateCareerRow(row, career_key, career) {
             cell = innerRow.insertCell();
             let span = document.createElement("span");
             let skills = document.createElement("select");
-            addOption(skills, "");
+            addSelectOption(skills, "");
             for (let skill of dataset_skills)
-                addOption(skills, skill.name);
+                addSelectOption(skills, skill.name);
             let func_addSkill = function (skill) {
                 let button = document.createElement("button");
                 button.classList.add("toggleEdit");

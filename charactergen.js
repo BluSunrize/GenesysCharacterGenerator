@@ -11,7 +11,7 @@ const {Ability, AbilityEffectType} = require("./js/ability");
 const {Talent, TalentActivation} = require("./js/talent");
 const {Weapon} = require("./js/weapon");
 const {attachOnChangeByName, attachOnChangeById, setNamedAttribute, getNamedAttribute, setIDedAttribute, getIDedAttribute, syncAttributesToObject, syncAttributesFromObject} = require("./js/attribute_utils");
-const {makeDragable, addOption, purgeTable} = require("./js/table_utils");
+const {makeDragable, addSelectOption, purgeTable, formatText} = require("./js/html_utils");
 
 let initialCharacterLoad = false;
 const derrived = ["soak", "wound_threshold", "strain_threshold", "defense_ranged", "defense_melee"];
@@ -74,7 +74,7 @@ function init(dataset_path) {
     while (element_archetype.firstChild)
         element_archetype.removeChild(element_archetype.firstChild);
     for (let key in archetypes)
-        addOption(element_archetype, key, archetypes[key].name);
+        addSelectOption(element_archetype, key, archetypes[key].name);
     updateArchetype(); //Set defaults
 
     //Load Careers
@@ -82,13 +82,13 @@ function init(dataset_path) {
     while (element_career.firstChild)
         element_career.removeChild(element_career.firstChild);
     for (let key in careers) {
-        addOption(element_career, key, careers[key].name);
+        addSelectOption(element_career, key, careers[key].name);
     }
     if (dataset.allowCustomCareer) {
         console.log("this dataset uses a custom career!");
         let career = createCustomCareer(dataset);
         careers["custom"] = career;
-        addOption(element_career, "custom", "Custom");
+        addSelectOption(element_career, "custom", "Custom");
     }
 
     //Load Characters
@@ -353,7 +353,7 @@ function init(dataset_path) {
             element_list.removeChild(element_list.lastChild);
         for (let ability of selectedArchetype.abilities) {
             let element_li = document.createElement("li");
-            element_li.innerHTML = `<b>${ability.name}:</b> ${ability.description}`;
+            element_li.innerHTML = `<b>${ability.name}:</b> ${formatText(ability.description)}`;
             element_list.appendChild(element_li);
 
             if (ability.effect)
@@ -705,7 +705,7 @@ function init(dataset_path) {
 
         let activation = document.createElement("select");
         for (let type of TalentActivation)
-            addOption(activation, type);
+            addSelectOption(activation, type);
         td.appendChild(activation);
 
         let desc = document.createElement("textarea");
@@ -751,7 +751,7 @@ function init(dataset_path) {
         let skill = document.createElement("select");
         for (let s of skills)
             if (s.category === SkillCategory.COMBAT || s.category === SkillCategory.POWER)
-                addOption(skill, s.name);
+                addSelectOption(skill, s.name);
         skill.onmouseenter = (ev) => diceDisplay_prep(ev, skill.value);
         skill.onmouseleave = diceDisplay_hide;
         td.appendChild(skill);
@@ -769,7 +769,7 @@ function init(dataset_path) {
         td = tr.insertCell();
         let range = document.createElement("select");
         for (let r of ranges)
-            addOption(range, r);
+            addSelectOption(range, r);
         td.appendChild(range);
 
         td = tr.insertCell();

@@ -54,7 +54,7 @@ export function wrapInRow(element: HTMLElement) {
     }
 }
 
-export function addOption(select: HTMLSelectElement, value: string, text?: string) {
+export function addSelectOption(select: HTMLSelectElement, value: string, text?: string) {
     let option = document.createElement("option");
     option.value = value;
     if (text)
@@ -73,4 +73,17 @@ export function purgeTable(select: any, maxLength: number, deleteIndex: number) 
             select.deleteRow(deleteIndex);
 }
 
-module.exports = {makeDragable, wrapInRow, addOption, purgeTable};
+export function formatText(text: string) {
+    let ret = "";
+    let paragraphs = text.split("\n\n");
+    for (let i = 0; i < paragraphs.length; i++) {
+        let p = paragraphs[i];
+        p = p.replace("\n", "<br>");
+        p = p.replace(/\*\*(.*?)\*\*/, "<b>$1</b>");
+        p = p.replace(/\*(.*?)\*/, "<i>$1</i>");
+        ret += `<p class="auto-formatted">${p}</p>`;
+    }
+    return ret;
+}
+
+module.exports = {makeDragable, wrapInRow, addSelectOption, purgeTable, formatText};
