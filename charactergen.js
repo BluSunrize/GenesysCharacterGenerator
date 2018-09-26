@@ -761,7 +761,10 @@ function init(dataset_path) {
 
         td = tr.insertCell();
         if (natural)
+        {
             td.innerText = "Natural";
+            name.readOnly = skill.disabled = damage.readOnly = crit.readOnly = range.disabled = special.readOnly = true;
+        }
         else {
             let remove = document.createElement("button");
             remove.innerText = "Remove";
