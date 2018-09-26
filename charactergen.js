@@ -233,13 +233,13 @@ function init(dataset_path) {
         character.weapons = [];
         let table = document.getElementById("tbody_weapons");
         for (let i = 0; i < table.rows.length - 1; i++)
-            if (table.rows[i].cells[6].innerText !== "Natural") {
-                let name = table.rows[i].cells[0].firstChild.value;
-                let skill = table.rows[i].cells[1].firstChild.value;
-                let dam = table.rows[i].cells[2].firstChild.valueAsNumber;
-                let crit = table.rows[i].cells[3].firstChild.valueAsNumber;
-                let range = table.rows[i].cells[4].firstChild.value;
-                let special = table.rows[i].cells[5].firstChild.value;
+            if (table.rows[i].cells[7].innerText !== "Natural") {
+                let name = table.rows[i].cells[1].firstChild.value;
+                let skill = table.rows[i].cells[2].firstChild.value;
+                let dam = table.rows[i].cells[3].firstChild.valueAsNumber;
+                let crit = table.rows[i].cells[4].firstChild.valueAsNumber;
+                let range = table.rows[i].cells[5].firstChild.value;
+                let special = table.rows[i].cells[6].firstChild.value;
                 character.weapons.push(new Weapon(name, skill, dam, crit, range, special));
             }
 
@@ -647,9 +647,19 @@ function init(dataset_path) {
                         xpSpent += 5 * characters[selectedChar].skills_bought_noncareer[skill.name];
             }
 
+        let freeTalents = [];
+        for (let ability of archetypes[element_archetype.value].abilities)
+            if (ability.effect && ability.effect.type === AbilityEffectType.FREE_TALENT && ability.effect.params)
+                freeTalents = freeTalents.concat(ability.effect.params);
         for (let tier = 1; tier <= 5; tier++) {
             let table = document.getElementById("talents_tier" + tier);
-            xpSpent += (table.rows.length - 1) * (tier * 5);
+            for (let row = 0; row < table.rows.length - 1; row++) {
+                let idx = freeTalents.indexOf(table.rows[row].cells[0].children[1].value);
+                if(idx<0)
+                    xpSpent += tier * 5;
+                else
+                    freeTalents.splice(idx, 1);
+            }
         }
 
         let xpArch = parseInt(getIDedAttribute("archetype_xp"));
@@ -684,6 +694,7 @@ function init(dataset_path) {
         td.appendChild(remove);
 
         let name = document.createElement("input");
+        name.onchange = () => autocalcXPSpent();
         td.appendChild(name);
 
         let activation = document.createElement("select");
@@ -760,15 +771,14 @@ function init(dataset_path) {
         td.appendChild(special);
 
         td = tr.insertCell();
-        if (natural)
-        {
+        if (natural) {
             td.innerText = "Natural";
             name.readOnly = skill.disabled = damage.readOnly = crit.readOnly = range.disabled = special.readOnly = true;
         }
         else {
             let remove = document.createElement("button");
             remove.innerText = "Remove";
-            remove.onclick = () => tbody.deleteRow(tr.rowIndex-1);
+            remove.onclick = () => tbody.deleteRow(tr.rowIndex - 1);
             td.appendChild(remove);
         }
 
