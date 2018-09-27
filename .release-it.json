@@ -1,0 +1,13 @@
+{
+  "requireCleanWorkingDir": false,
+  "buildCommand": "npm run build-release",
+  "afterReleaseCommand": "echo Successfully released ${version} to ${dist.repo}.",
+  "npm": {
+    "publish": false
+  },
+  "github": {
+    "release": true,
+    "releaseName": "Putting out ${version}",
+    "assets": "build/upload/*"
+  }
+}
