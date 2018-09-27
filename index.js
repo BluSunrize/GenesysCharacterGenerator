@@ -20,6 +20,8 @@ const element_edit_toggle = document.getElementById("allow_dataset_edit");
 const element_archetypes = document.getElementById("archetypes");
 const element_careers = document.getElementById("careers");
 
+document.title += ` - v${electron.remote.app.getVersion()}`;
+
 const cwd = (electron.app || electron.remote.app).getAppPath();
 if (!fs.existsSync(cwd + "/dataset")) {
     console.log("No 'dataset' folder, creating...");

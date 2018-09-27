@@ -16,6 +16,7 @@ const {makeDragable, addSelectOption, purgeTable, formatText} = require("./js/ht
 let initialCharacterLoad = false;
 const derrived = ["soak", "wound_threshold", "strain_threshold", "defense_ranged", "defense_melee"];
 
+document.title += ` - v${electron.remote.app.getVersion()}`;
 electron.ipcRenderer.on("init", function (event, message) {
     console.log("initializing chargen");
     init(message);
