@@ -1,6 +1,6 @@
 {
   "name": "genesys-character-generator",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Electron App for building Characters for the Genesys RPG System",
   "main": "main.js",
   "keywords": [],
@@ -33,6 +33,6 @@
     "build-all": "npm run build-win; npm run build-linux",
     "copy-to-upload": "rm -rf build/upload; mkdir build/upload; cp build/$npm_package_version/*.zip build/upload",
     "build-release": "npm run build-all; npm run copy-to-upload",
-    "release": "release-it --dry-run"
+    "release": "release-it"
   }
 }
