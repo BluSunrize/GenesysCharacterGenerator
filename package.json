@@ -1,6 +1,6 @@
 {
   "name": "genesys-character-generator",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Electron App for building Characters for the Genesys RPG System",
   "main": "main.js",
   "keywords": [],
@@ -23,8 +23,8 @@
   },
   "scripts": {
     "start": "electron .",
-    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --asar --out=build/$npm_package_version --icon=img/logo.ico --prune=true --ignore='.idea|.gitignore|installers|npm-debug.log|.map|.less|dataset|lastSession.json'",
-    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --asar --out=build/$npm_package_version --icon=img/logo.png --prune=true --ignore='.idea|.gitignore|installers|npm-debug.log|.map|.less|dataset|lastSession.json'",
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --asar --out=build/$npm_package_version --icon=img/logo.ico --prune=true --ignore='.idea|.gitignore|build|dataset|installers|npm-debug.log|.map|.less|lastSession.json'",
+    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --asar --out=build/$npm_package_version --icon=img/logo.png --prune=true --ignore='.idea|.gitignore|build|dataset|installers|npm-debug.log|.map|.less|lastSession.json'",
     "zip-win": "cd build/$npm_package_version/$npm_package_name-win32-ia32; zip -r -q ../$npm_package_name-$npm_package_version-win.zip *; cd ../..",
     "zip-linux": "cd build/$npm_package_version/$npm_package_name-linux-x64; zip -r -q ../$npm_package_name-$npm_package_version-linux.zip *; cd ../..",
     "create-installer-debian": "electron-installer-debian --src build/genesys-character-generator-linux-x64/ --arch amd64 --config installers/debian.json",
