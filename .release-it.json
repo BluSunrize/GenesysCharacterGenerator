@@ -7,7 +7,7 @@
   },
   "github": {
     "release": true,
-    "releaseName": "Putting out ${version}",
+    "releaseName": "Release %s",
     "assets": "build/upload/*"
   }
 }
