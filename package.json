@@ -14,25 +14,27 @@
     "electron-store": "^2.0.0"
   },
   "devDependencies": {
+    "bestzip": "^2.1.1",
+    "cross-var": "^1.1.0",
     "electron": "^2.0.10",
-    "electron-installer-debian": "^0.8.1",
     "electron-packager": "^12.1.2",
     "electron-winstaller": "^2.6.4",
     "less": "^3.8.1",
-    "release-it": "^7.6.1"
+    "release-it": "^7.6.1",
+    "shx": "^0.3.2"
   },
   "scripts": {
     "start": "electron .",
-    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --asar --out=build/$npm_package_version --icon=img/logo.ico --prune=true --ignore='.idea|.gitignore|build|dataset|installers|npm-debug.log|.map|.less|lastSession.json'",
-    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --asar --out=build/$npm_package_version --icon=img/logo.png --prune=true --ignore='.idea|.gitignore|build|dataset|installers|npm-debug.log|.map|.less|lastSession.json'",
-    "zip-win": "cd build/$npm_package_version/$npm_package_name-win32-ia32; zip -r -q ../$npm_package_name-$npm_package_version-win.zip *; cd ../..",
-    "zip-linux": "cd build/$npm_package_version/$npm_package_name-linux-x64; zip -r -q ../$npm_package_name-$npm_package_version-linux.zip *; cd ../..",
-    "create-installer-debian": "electron-installer-debian --src build/genesys-character-generator-linux-x64/ --arch amd64 --config installers/debian.json",
-    "build-win": "npm run package-win; npm run zip-win",
-    "build-linux": "npm run package-linux; npm run zip-linux",
-    "build-all": "npm run build-win; npm run build-linux",
-    "copy-to-upload": "rm -rf build/upload; mkdir build/upload; cp build/$npm_package_version/*.zip build/upload",
-    "build-release": "npm run build-all; npm run copy-to-upload",
+    "init": "shx mkdir -p build && shx mkdir -p dist",
+    "package-win": "cross-var electron-packager . --overwrite --platform=win32 --arch=ia32 --asar --out=build --icon=img/logo.ico --prune=true --ignore=\".idea|.gitignore|build|dist|dataset|installers|npm-debug.log|.map|.less|lastSession.json\"",
+    "package-linux": "cross-var electron-packager . --overwrite --platform=linux --arch=x64 --asar --out=build --icon=img/logo.png --prune=true --ignore=\".idea|.gitignore|build|dist|dataset|installers|npm-debug.log|.map|.less|lastSession.json\"",
+    "zip-win": "cd build/genesys-character-generator-win32-ia32 && cross-var shx mkdir -p ../../dist/$npm_package_version && cross-var bestzip ../../dist/$npm_package_version/$npm_package_name-$npm_package_version-win.zip * && cd ../..",
+    "zip-linux": "cd build/genesys-character-generator-linux-x64 && cross-var shx mkdir -p ../../dist/$npm_package_version && cross-var bestzip ../../dist/$npm_package_version/$npm_package_name-$npm_package_version-linux.zip * && cd ../..",
+    "build-win": "npm run package-win && npm run zip-win",
+    "build-linux": "npm run package-linux && npm run zip-linux",
+    "build-all": "npm run build-win && npm run build-linux",
+    "copy-to-upload": "shx rm -rf dist/upload && shx mkdir -p dist/upload && cross-var shx cp dist/$npm_package_version/*.zip dist/upload",
+    "build-release": "npm run build-all && npm run copy-to-upload",
     "release": "release-it"
   }
 }
