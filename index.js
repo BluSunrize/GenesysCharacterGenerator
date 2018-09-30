@@ -22,7 +22,11 @@ const element_careers = document.getElementById("careers");
 
 document.title += ` - v${electron.remote.app.getVersion()}`;
 
-const cwd = (electron.app || electron.remote.app).getAppPath();
+let cwd = (electron.app || electron.remote.app).getAppPath();
+let idxAsar = cwd.indexOf("app.asar");
+if(idxAsar>=0)
+    cwd = cwd.substr(0, idxAsar-1);
+console.log("cwd: "+cwd);
 if (!fs.existsSync(cwd + "/dataset")) {
     console.log("No 'dataset' folder, creating...");
     fs.mkdirSync(cwd + "/dataset");

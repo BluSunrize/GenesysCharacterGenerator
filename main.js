@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain, LoadURLOptions} = require('electron');
+const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -17,6 +17,10 @@ function createWindow() {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null
+    });
+
+    globalShortcut.register('CommandOrControl+Shift+I', () => {
+        mainWindow.webContents.openDevTools();
     });
 
     ipcMain.on("goto_chargen", function (event, data) {

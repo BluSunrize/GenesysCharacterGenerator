@@ -25,7 +25,10 @@ console.log("send init request");
 electron.ipcRenderer.send("init");
 
 function init(dataset_path) {
-    const cwd = (electron.app || electron.remote.app).getAppPath();
+    let cwd = (electron.app || electron.remote.app).getAppPath();
+    let idxAsar = cwd.indexOf("app.asar");
+    if(idxAsar>=0)
+        cwd = cwd.substr(0, idxAsar-1);
     const dataset_store = new Store({"cwd": cwd, "name": "dataset/" + dataset_path});
     const dataset = fromStore(dataset_store);
 
