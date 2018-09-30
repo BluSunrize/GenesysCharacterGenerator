@@ -1,6 +1,6 @@
 {
   "name": "genesys-character-generator",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Electron App for building Characters for the Genesys RPG System",
   "main": "main.js",
   "keywords": [],
