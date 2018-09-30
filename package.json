@@ -26,8 +26,8 @@
   "scripts": {
     "start": "electron .",
     "init": "shx mkdir -p build && shx mkdir -p dist",
-    "package-win": "cross-var electron-packager . --overwrite --platform=win32 --arch=ia32 --asar --out=build --icon=img/logo.ico --prune=true --ignore=\".idea|.gitignore|build|dist|dataset|installers|npm-debug.log|.map|.less|lastSession.json\"",
-    "package-linux": "cross-var electron-packager . --overwrite --platform=linux --arch=x64 --asar --out=build --icon=img/logo.png --prune=true --ignore=\".idea|.gitignore|build|dist|dataset|installers|npm-debug.log|.map|.less|lastSession.json\"",
+    "package-win": "cross-var electron-packager . --overwrite --platform=win32 --arch=ia32 --asar --out=build --icon=img/logo.ico --prune=true --ignore=\".idea|.gitignore|build|dist|dataset(?!\\.(js|ts))|installers|npm-debug.log|.map|.less|lastSession.json\"",
+    "package-linux": "cross-var electron-packager . --overwrite --platform=linux --arch=x64 --asar --out=build --icon=img/logo.png --prune=true --ignore=\".idea|.gitignore|build|dist|dataset(?!\\.(js|ts))|installers|npm-debug.log|.map|.less|lastSession.json\"",
     "zip-win": "cd build/genesys-character-generator-win32-ia32 && cross-var shx mkdir -p ../../dist/$npm_package_version && cross-var bestzip ../../dist/$npm_package_version/$npm_package_name-$npm_package_version-win.zip * && cd ../..",
     "zip-linux": "cd build/genesys-character-generator-linux-x64 && cross-var shx mkdir -p ../../dist/$npm_package_version && cross-var bestzip ../../dist/$npm_package_version/$npm_package_name-$npm_package_version-linux.zip * && cd ../..",
     "build-win": "npm run package-win && npm run zip-win",
